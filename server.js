@@ -2,6 +2,8 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const session = require("express-session");
 
+const hashUtils = require("./Utils/Hash");
+
 const database = require("./database/database");
 const users = require("./database/users");
 
@@ -25,9 +27,7 @@ const port = process.env.PORT || 3000;
 app.set("view engine", "ejs");
 
 app.get("/login", async (req, res) => {
-	console.log(process.env.DB_USER);
 	res.render("login", { title: "Login System" });
-	console.log(await users.getAllUsers());
 });
 
 app.post("/login", async (req, res) => {
@@ -42,14 +42,28 @@ app.post("/login", async (req, res) => {
 		res.send("No such user found");
 		res.end();
 	} else {
-		console.log(result[0].PASSWORD);
-		if (result[0].PASSWORD === password) {
+		if (await hashUtils.verify(password, result[0].PASSWORD)) {
 			res.send("User Logged In");
 		} else {
 			res.send("Wrong password");
 		}
 		res.end();
 	}
+});
+
+app.get("/register", async (req, res) => {
+	res.render("register");
+});
+
+app.post("/register", async (req, res) => {
+	console.log("Made a register request");
+	var username = req.body.username;
+	var password = req.body.password;
+
+	result = await users.createUser({ username: username, password: password });
+	console.log(result);
+	res.send("Done");
+	res.end();
 });
 
 app.listen(port, () => {
