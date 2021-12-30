@@ -3,46 +3,50 @@
 	<head>
 		<meta charset="utf-8">
 		<title>Login Form Tutorial</title>
-		<style>
-		.login-form {
-			width: 300px;
-			margin: 0 auto;
-			font-family: Tahoma, Geneva, sans-serif;
-		}
-		.login-form h1 {
-			text-align: center;
-			color: #4d4d4d;
-			font-size: 24px;
-			padding: 20px 0 20px 0;
-		}
-		.login-form input[type="password"],
-		.login-form input[type="text"] {
-			width: 100%;
-			padding: 15px;
-			border: 1px solid #dddddd;
-			margin-bottom: 15px;
-			box-sizing:border-box;
-		}
-		.login-form input[type="submit"] {
-			width: 100%;
-			padding: 15px;
-			background-color: #535b63;
-			border: 0;
-			box-sizing: border-box;
-			cursor: pointer;
-			font-weight: bold;
-			color: #ffffff;
-		}
-		</style>
+        <link href="/css/auth.css" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+        <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
 	</head>
 	<body>
 		<div class="login-form">
 			<h1>Login Form</h1>
 			<form action="login" method="POST">
-				<input type="text" name="username" placeholder="Username" required>
-				<input type="password" name="password" placeholder="Password" required>
-				<input type="submit">
+
+                <div class="field">
+                  <label class="label">Username</label>
+                  <div class="control has-icons-left has-icons-right">
+                    <input class="input" type="text" placeholder="Enter Username" name="username" required>
+                    <span class="icon is-small is-left">
+                      <i class="fas fa-user"></i>
+                    </span>
+                  </div>
+                </div>
+                <div class="field">
+                  <label class="label">Password</label>
+                  <div class="control has-icons-left has-icons-right">
+                    <input class="input" type="password" placeholder="Enter Password" name="password" required>
+                    <span class="icon is-small is-left">
+                      <i class="fas fa-lock"></i>
+                    </span>
+                  </div>
+                </div>
+
+                <div class="field is-grouped">
+                  <p class="control">
+                    <button class="button is-primary" type="submit">
+                        Submit
+                    </button>
+                  </p>
+                  <p class="control">
+                    <a class="button is-light">
+                      Cancel
+                    </a>
+                  </p>
+                </div>
 			</form>
+            <span style="padding:2px;margin-bottom:2px;">
+            <a href="#">Forgot Password</a>
+            </span>
 		</div>
 	</body>
 </html>

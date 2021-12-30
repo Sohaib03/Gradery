@@ -1,14 +1,10 @@
 <nav class="navbar" role="navigation" aria-label="main navigation">
   <div class="navbar-brand">
-    <a class="navbar-item" href="https://bulma.io">
-      <img src="https://bulma.io/images/bulma-logo.png" width="112" height="28">
-    </a>
 
-    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
-      <span aria-hidden="true"></span>
-      <span aria-hidden="true"></span>
-      <span aria-hidden="true"></span>
-    </a>
+      <a class="navbar-item" href="https://bulma.io">
+      <img src="/img/logo.png" width="112" height="28">
+      </a>
+
   </div>
 
   <div id="navbarBasicExample" class="navbar-menu">
@@ -45,9 +41,14 @@
     </div>
 
     <div class="navbar-end">
+        <div class="navbar-item"> 
+            <span class="profile-section">
+            <%= username.toUpperCase() %>
+            </span>
+        </div>
       <div class="navbar-item">
         <div class="buttons">
-            <% if (username == "") {%>
+            <% if (username === undefined) {%>
           <a class="button is-primary">
             <strong>Sign up</strong>
           </a>
@@ -55,10 +56,7 @@
             Log in
           </a>
             <% } else { %>
-            <p>
-            <%= username %>
-            </p>
-          <a class="button is-light">
+          <a href="/auth/logout" class="button is-light">
             Log out 
           </a>
           <% } %>

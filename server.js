@@ -2,11 +2,10 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const session = require("express-session");
 
-const hashUtils = require("./Utils/Hash");
+const hashUtils = require("./utils/hash");
 
 const database = require("./database/database");
 const users = require("./database/users");
-const utils = require("nodemon/lib/utils");
 
 require("dotenv").config();
 
@@ -27,64 +26,16 @@ const port = process.env.PORT || 3000;
 
 app.set("view engine", "ejs");
 
-app.get("/home", (req, res) => {
-	res.render("home", { title: "Homepage", username: req.session.username });
-});
+app.use(express.static("public"));
 
-app.get("/login", async (req, res) => {
-	if (req.session.username) {
-		// TODO : Redirect to the logout page
-		res.redirect("/home");
+app.use("/auth", require("./routes/auth"));
+
+app.get("/home", (req, res) => {
+	if (req.session.username === undefined) {
+		res.redirect("/auth/login");
 		return;
 	}
-	res.render("login", { title: "Login System" });
-});
-
-app.post("/login", async (req, res) => {
-	console.log(req.body);
-	var username = req.body.username;
-	var password = req.body.password;
-
-	result = await users.getUser(username);
-	if (result.length == 0) {
-		res.send("No such user found");
-		res.end();
-	} else {
-		if (await hashUtils.verify(password, result[0].PASSWORD)) {
-			req.session.loggedIn = true;
-			req.session.username = username;
-			res.redirect("/home");
-		} else {
-			res.send("Wrong password");
-		}
-		res.end();
-	}
-});
-
-app.get("/register", async (req, res) => {
-	res.render("register");
-});
-
-app.post("/register", async (req, res) => {
-	console.log("Made a register request");
-	var username = req.body.username;
-	var password = req.body.password;
-
-	//  TODO : Check if the username already exists in the database
-
-	const hashedPassword = await hashUtils.hash(password);
-
-	result = await users.createUser({
-		username: username,
-		password: hashedPassword,
-	});
-
-	if (result && result.rowsAffected === 1) {
-		res.send("Done");
-	} else {
-		res.send("Error while creating account");
-	}
-	res.end();
+	res.render("home", { title: "Homepage", username: req.session.username });
 });
 
 app.listen(port, () => {
