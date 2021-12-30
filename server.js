@@ -27,7 +27,16 @@ const port = process.env.PORT || 3000;
 
 app.set("view engine", "ejs");
 
+app.get("/home", (req, res) => {
+	res.render("home", { title: "Homepage", username: req.session.username });
+});
+
 app.get("/login", async (req, res) => {
+	if (req.session.username) {
+		// TODO : Redirect to the logout page
+		res.redirect("/home");
+		return;
+	}
 	res.render("login", { title: "Login System" });
 });
 
@@ -42,7 +51,9 @@ app.post("/login", async (req, res) => {
 		res.end();
 	} else {
 		if (await hashUtils.verify(password, result[0].PASSWORD)) {
-			res.send("User Logged In");
+			req.session.loggedIn = true;
+			req.session.username = username;
+			res.redirect("/home");
 		} else {
 			res.send("Wrong password");
 		}
