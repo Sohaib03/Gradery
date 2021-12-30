@@ -16,7 +16,7 @@ async function createUser(userData) {
 	const sql = `INSERT INTO users (USERNAME, PASSWORD) VALUES (:username, :password)`;
 	const binds = { username: userData.username, password: userData.password };
 	console.log(binds);
-	return (await db.execute(sql, binds, db.options)).rows;
+	return await db.execute(sql, binds, db.options);
 }
 
 module.exports = {

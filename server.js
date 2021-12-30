@@ -6,6 +6,7 @@ const hashUtils = require("./Utils/Hash");
 
 const database = require("./database/database");
 const users = require("./database/users");
+const utils = require("nodemon/lib/utils");
 
 require("dotenv").config();
 
@@ -35,8 +36,6 @@ app.post("/login", async (req, res) => {
 	var username = req.body.username;
 	var password = req.body.password;
 
-	console.log("User :" + username + " Pass :" + password);
-
 	result = await users.getUser(username);
 	if (result.length == 0) {
 		res.send("No such user found");
@@ -60,9 +59,20 @@ app.post("/register", async (req, res) => {
 	var username = req.body.username;
 	var password = req.body.password;
 
-	result = await users.createUser({ username: username, password: password });
-	console.log(result);
-	res.send("Done");
+	//  TODO : Check if the username already exists in the database
+
+	const hashedPassword = await hashUtils.hash(password);
+
+	result = await users.createUser({
+		username: username,
+		password: hashedPassword,
+	});
+
+	if (result && result.rowsAffected === 1) {
+		res.send("Done");
+	} else {
+		res.send("Error while creating account");
+	}
 	res.end();
 });
 
