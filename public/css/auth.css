@@ -4,6 +4,13 @@
     font-family: Tahoma, Geneva, sans-serif;
 }
 
+.notification {
+    width: 300px;
+    margin-top: 20px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 .login-form h1 {
     text-align: center;
     color: #4d4d4d;

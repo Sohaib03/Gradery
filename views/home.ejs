@@ -2,4 +2,22 @@
 <%- include('./partials/navbar.ejs') %>
 <h2> Welcome : <%= username %> </h2>  
 
+    <% if (locals.notification) { %>
+        <div class="notification <%= notification.status %>">
+            <button class="delete"></button>
+            <%= notification.content %>
+        </div>
+    <% } %>
+
+    <svg>
+        <style>
+            .notification {
+                position:absolute;
+                width: 300px;
+                right: 10px;
+                bottom: 10px;
+            }
+        </style>
+    </svg>
+    <script src="/js/notification.js"></script>
 <%- include('./partials/footer.ejs') %>

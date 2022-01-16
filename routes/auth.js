@@ -1,19 +1,21 @@
 const express = require("express");
 
 const hashUtils = require("../utils/hash");
-
-const database = require("../database/database");
 const users = require("../database/users");
-
+const homeEnd = require("../endpoints/home");
 const router = express.Router();
 
 router.route("/login").get(async (req, res) => {
 	if (req.session.username) {
-		// TODO : Redirect to the logout page
 		res.redirect("/home");
 		return;
 	}
-	res.render("login", { title: "Login System" });
+	var context = {
+		title: "Login",
+		notification: req.session.notification,
+	};
+	req.session.notification = undefined;
+	res.render("login", context);
 });
 
 router.route("/login").post(async (req, res) => {
@@ -21,32 +23,57 @@ router.route("/login").post(async (req, res) => {
 	var username = req.body.username;
 	var password = req.body.password;
 
-	result = await users.getUser(username);
+	var result = await users.getUser(username);
 	if (result.length == 0) {
 		res.send("No such user found");
 		res.end();
 	} else {
 		if (await hashUtils.verify(password, result[0].PASSWORD)) {
 			req.session.loggedIn = true;
+
 			req.session.username = username;
-			res.redirect("/home");
+			// TODO : Show a toast welcoming user into the home page
+			const notification = {
+				status: " is-success is-light ",
+				content: "Welcome, " + username,
+			};
+			req.session.notification = notification;
+			return res.redirect("/home");
 		} else {
-			res.send("Wrong password");
+			req.session.notification = {
+				status: " is-danger is-light ",
+				content: "Unknown username or password",
+			};
+			return res.redirect("/auth/login");
 		}
-		res.end();
 	}
 });
 
 router.route("/register").get(async (req, res) => {
-	res.render("register");
+	if (req.session.username) {
+		res.redirect("/home");
+		return;
+	}
+	var context = {
+		notification: req.session.notification,
+	};
+	req.session.notification = undefined;
+	res.render("register", context);
 });
 
 router.route("/register").post(async (req, res) => {
-	console.log("Made a register request");
 	var username = req.body.username;
 	var password = req.body.password;
 
-	//  TODO : Check if the username already exists in the database
+	var result = await users.getUser(username);
+	if (result.length != 0) {
+		req.session.notification = {
+			status: " is-warning is-light ",
+			content:
+				"Username is already taken. Try using a different username",
+		};
+		return res.redirect("/auth/register");
+	}
 
 	const hashedPassword = await hashUtils.hash(password);
 
@@ -56,13 +83,20 @@ router.route("/register").post(async (req, res) => {
 	});
 
 	if (result && result.rowsAffected === 1) {
-		res.send("Done");
-		// TODO : Redirect to the login page
+		req.session.notification = {
+			status: " is-success is-light ",
+			content: "Account created. Please verify your email before login.",
+		};
+
+		return res.redirect("/auth/login");
 	} else {
-		// TODO : Redirect to the register page
-		res.send("Error while creating account");
+		req.session.notification = {
+			status: " is-warning is-light ",
+			content:
+				"Account was not created due to internal errors. Please try again",
+		};
+		return res.redirect("/auth/register");
 	}
-	res.end();
 });
 
 router.route("/logout").get((req, res) => {
@@ -70,6 +104,16 @@ router.route("/logout").get((req, res) => {
 		req.session.destroy();
 	}
 	res.redirect("/auth/login");
+});
+
+router.route("/allUsers").get(async (req, res) => {
+	var allUsersList = await users.getAllUsers();
+	var context = {
+		message: "Welcome to Gradery",
+		allUsersList: allUsersList,
+	};
+
+	res.render("allUsers", context);
 });
 
 module.exports = router;

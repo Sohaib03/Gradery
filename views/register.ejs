@@ -4,16 +4,62 @@
 		<meta charset="utf-8">
 		<title>Register</title>
         <link href="/css/auth.css" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+        <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+        <script src="/js/notification.js"></script>
 	</head>
 	<body>
+        <% if (locals.notification) { %>
+        <div class="notification <%= notification.status %>">
+          <button class="delete"></button>
+          <%= notification.content %>
+        </div>
+        <% } %>
 		<div class="login-form">
-			<h1>Register</h1>
+			<h1>Register Form</h1>
 			<form action="register" method="POST">
-				<input type="text" name="username" placeholder="Enter Username" required>
-				<input type="password" name="password" placeholder="Enter Password" required>
-				<input type="password" name="password2" placeholder="Enter password again" required>
-				<input type="submit">
+
+                <div class="field">
+                  <label class="label">Username</label>
+                  <div class="control has-icons-left has-icons-right">
+                    <input class="input" type="text" placeholder="Enter Username" name="username" required>
+                    <span class="icon is-small is-left">
+                      <i class="fas fa-user"></i>
+                    </span>
+                  </div>
+                </div>
+                <div class="field">
+                  <label class="label">Email</label>
+                  <div class="control has-icons-left has-icons-right">
+                    <input class="input" type="text" placeholder="Enter Email" name="email" required>
+                    <span class="icon is-small is-left">
+                        <i class="fas fa-envelope"></i>
+                    </span>
+                  </div>
+                </div>
+                <div class="field">
+                  <label class="label">Password</label>
+                  <div class="control has-icons-left has-icons-right">
+                    <input class="input" type="password" placeholder="Enter Password" name="password" required>
+                    <span class="icon is-small is-left">
+                      <i class="fas fa-lock"></i>
+                    </span>
+                  </div>
+                </div>
+
+                <div class="field is-grouped is-grouped-right">
+                  <p class="control">
+                    <button class="button is-primary" type="submit">
+                        Submit
+                    </button>
+                  </p>
+                </div>
 			</form>
+            <span style="padding:2px;margin-bottom:2px;">
+            <p>Already have an account?
+            <a href="/auth/login">Login</a>
+            </p>
+            </span>
 		</div>
 	</body>
 </html>

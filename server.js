@@ -2,10 +2,8 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const session = require("express-session");
 
-const hashUtils = require("./utils/hash");
-
+const homeEnd = require("./endpoints/home");
 const database = require("./database/database");
-const users = require("./database/users");
 
 require("dotenv").config();
 
@@ -31,11 +29,7 @@ app.use(express.static("public"));
 app.use("/auth", require("./routes/auth"));
 
 app.get("/home", (req, res) => {
-	if (req.session.username === undefined) {
-		res.redirect("/auth/login");
-		return;
-	}
-	res.render("home", { title: "Homepage", username: req.session.username });
+	return homeEnd.homeEndpoint(req, res);
 });
 
 app.listen(port, () => {
