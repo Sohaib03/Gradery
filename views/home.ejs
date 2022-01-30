@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <%- include('./partials/header.ejs') %>
 <%- include('./partials/navbar.ejs') %>
 <h2> Welcome : <%= username %> </h2>  
@@ -13,17 +14,34 @@
             <button class="delete"></button>
             <%= notification.content %>
         </div>
-    <% } %>
+      </div>
+      <footer class="card-footer">
+        <a href="#" class="card-footer-item">Save</a>
+        <a href="#" class="card-footer-item">Edit</a>
+        <a href="#" class="card-footer-item">Delete</a>
+      </footer>
+    </div>
+  </div>
 
-    <svg>
-        <style>
-            .notification {
-                position:absolute;
-                width: 300px;
-                right: 10px;
-                bottom: 10px;
-            }
-        </style>
-    </svg>
-    <script src="/js/notification.js"></script>
+  <%}%>
+</div>
+
+<% if (locals.notification) { %>
+<div class="notification <%= notification.status %>">
+  <button class="delete"></button>
+  <%= notification.content %>
+</div>
+<% } %>
+
+<svg>
+  <style>
+    .notification {
+      position: absolute;
+      width: 300px;
+      right: 10px;
+      bottom: 10px;
+    }
+  </style>
+</svg>
+<script src="/js/notification.js"></script>
 <%- include('./partials/footer.ejs') %>
