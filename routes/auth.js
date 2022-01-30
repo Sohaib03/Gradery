@@ -7,7 +7,7 @@ const router = express.Router();
 
 router.route("/login").get(async (req, res) => {
 	if (req.session.username) {
-		res.redirect("/home");
+		res.redirect("/");
 		return;
 	}
 	var context = {
@@ -32,13 +32,13 @@ router.route("/login").post(async (req, res) => {
 			req.session.loggedIn = true;
 
 			req.session.username = username;
-			// TODO : Show a toast welcoming user into the home page
+
 			const notification = {
 				status: " is-success is-light ",
 				content: "Welcome, " + username,
 			};
 			req.session.notification = notification;
-			return res.redirect("/home");
+			return res.redirect("/");
 		} else {
 			req.session.notification = {
 				status: " is-danger is-light ",
@@ -51,7 +51,7 @@ router.route("/login").post(async (req, res) => {
 
 router.route("/register").get(async (req, res) => {
 	if (req.session.username) {
-		res.redirect("/home");
+		res.redirect("/");
 		return;
 	}
 	var context = {
@@ -116,4 +116,15 @@ router.route("/allUsers").get(async (req, res) => {
 	res.render("allUsers", context);
 });
 
-module.exports = router;
+function authMiddleware(req, res, next) {
+	if (!req.session.username) {
+		res.redirect("/auth/login");
+	} else {
+		next();
+	}
+}
+
+module.exports = {
+	router,
+	authMiddleware,
+};

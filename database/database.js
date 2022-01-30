@@ -6,16 +6,14 @@ oracledb.autoCommit = true;
 const database_options = {
 	user: process.env.DB_USER,
 	password: process.env.DB_PASS,
-	connectstring: process.env.DB_CONNECTSTRING,
-	poolMin: 4,
-	poolMax: 10,
-	poolIncrement: 1,
+	connectString: process.env.DB_CONNECTSTRING,
 };
 
 async function startup() {
-	console.log(database_options);
 	console.log("Initializing database");
-	await oracledb.createPool(database_options);
+	const pool = await oracledb.createPool(database_options);
+	connection = await oracledb.getConnection();
+	connection.close();
 	console.log("Database Initialized Successfully");
 }
 

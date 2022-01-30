@@ -2,6 +2,12 @@
 <%- include('./partials/navbar.ejs') %>
 <h2> Welcome : <%= username %> </h2>  
 
+<h3> Your Teams </h3>
+
+<% for (let i=0; i<teamsInfo.length; i++){ %>
+<p> TEAM NAME : <%= teamsInfo[i].TEAM_NAME %> <p>
+<% } %>
+
     <% if (locals.notification) { %>
         <div class="notification <%= notification.status %>">
             <button class="delete"></button>

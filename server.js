@@ -4,6 +4,8 @@ const session = require("express-session");
 
 const homeEnd = require("./endpoints/home");
 const database = require("./database/database");
+const auth = require("./routes/auth");
+const teams = require("./routes/teams");
 
 require("dotenv").config();
 
@@ -26,9 +28,10 @@ app.set("view engine", "ejs");
 
 app.use(express.static("public"));
 
-app.use("/auth", require("./routes/auth"));
+app.use("/auth", auth.router);
+app.use("/teams", teams.router);
 
-app.get("/home", (req, res) => {
+app.get("/", auth.authMiddleware, (req, res) => {
 	return homeEnd.homeEndpoint(req, res);
 });
 
