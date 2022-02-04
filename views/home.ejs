@@ -5,7 +5,7 @@
 <h3> Your Teams </h3>
 
 <% for (let i=0; i<teamsInfo.length; i++){ %>
-<p> TEAM NAME : <%= teamsInfo[i].TEAM_NAME %> <p>
+<a href="/teams/code/<%= teamsInfo[i].TEAM_CODE %>"><p> TEAM NAME : <%= teamsInfo[i].TEAM_NAME %> <p> </a>
 <% } %>
 
     <% if (locals.notification) { %>

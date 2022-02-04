@@ -66,8 +66,22 @@ router.route("/join").post(auth.authMiddleware, async (req, res) => {
 });
 
 router.route("/code/:code").get(auth.authMiddleware, async (req, res) => {
-	console.log(req.params);
 	const team_code = req.params.code;
+	// Check if team_exists
+	let team_info = await teams.getTeamByCode(team_code);
+	if (team_info.length === 0) {
+		// Team Doesnt exist. Notify User
+		res.redirect("/");
+		return;
+	}
+	const team_id = team_info[0].TEAM_ID;
+	// Check if user is in given team
+	if ((await teams.checkUserInTeam(req.session.user_id, team_id)) === 0) {
+		console.log("REDIRECTING TO JOIN PAGE");
+		res.redirect("/teams/join");
+		return;
+	}
+
 	let context = {
 		title: "Join a New Team",
 		username: req.session.username,
