@@ -2,7 +2,7 @@ const express = require("express");
 
 const hashUtils = require("../utils/hash");
 const users = require("../database/users");
-const homeEnd = require("../endpoints/home");
+const homeEnd = require("../controllers/home");
 const router = express.Router();
 
 router.route("/login").get(async (req, res) => {
@@ -32,6 +32,7 @@ router.route("/login").post(async (req, res) => {
 			req.session.loggedIn = true;
 
 			req.session.username = username;
+			req.session.user_id = result[0].USERID;
 
 			const notification = {
 				status: " is-success is-light ",

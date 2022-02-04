@@ -2,7 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const session = require("express-session");
 
-const homeEnd = require("./endpoints/home");
+const homeEnd = require("./controllers/home");
 const database = require("./database/database");
 const auth = require("./routes/auth");
 const teams = require("./routes/teams");
