@@ -63,6 +63,22 @@ async function checkUserInTeam(user_id, team_id) {
 	}
 }
 
+async function getParticipantsOfTeam(team_id) {
+	const sql = `SELECT * FROM PARTICIPANT WHERE TEAM_ID=:team_id`;
+	let binds = {
+		team_id,
+	};
+	let result = (await db.execute(sql, binds, db.options)).rows;
+	let user_ids = [];
+	for (let i = 0; i < result.length; i++) {
+		user_ids.push(result[i].USER_ID);
+	}
+	const sql2 = `SELECT * FROM USERS WHERE USERID in (${user_ids})`;
+	binds = {};
+	result = (await db.execute(sql2, binds, db.options)).rows;
+	return result;
+}
+
 module.exports = {
 	getAllTeams,
 	getTeamInfo,
@@ -71,4 +87,5 @@ module.exports = {
 	addParticipant,
 	addParticipantWithCode,
 	checkUserInTeam,
+	getParticipantsOfTeam,
 };

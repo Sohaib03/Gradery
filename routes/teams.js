@@ -77,7 +77,7 @@ router.route("/code/:code").get(auth.authMiddleware, async (req, res) => {
 	const team_id = team_info[0].TEAM_ID;
 	// Check if user is in given team
 	if ((await teams.checkUserInTeam(req.session.user_id, team_id)) === 0) {
-		console.log("REDIRECTING TO JOIN PAGE");
+		// Team Exists but User has not joined team
 		res.redirect("/teams/join");
 		return;
 	}
@@ -86,6 +86,8 @@ router.route("/code/:code").get(auth.authMiddleware, async (req, res) => {
 		title: "Join a New Team",
 		username: req.session.username,
 		team_code: team_code,
+		team_name: team_info[0].TEAM_NAME,
+		participants: await teams.getParticipantsOfTeam(team_id),
 	};
 	res.render("teamHome", context);
 });

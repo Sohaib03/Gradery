@@ -4,8 +4,8 @@
 
 <h3> Your Teams </h3>
 
+<div class="cards">
 <% for (let i=0; i<teamsInfo.length; i++){ %>
-
   <div class="card">
     <header class="card-header">
       <p class="card-header-title">
@@ -23,21 +23,9 @@
       </div>
     </div>
   </div>
-
-
 <% } %>
-
-    <% if (locals.notification) { %>
-        <div class="notification <%= notification.status %>">
-            <button class="delete"></button>
-            <%= notification.content %>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <%}%>
 </div>
+
 
 <% if (locals.notification) { %>
 <div class="notification <%= notification.status %>">
@@ -48,6 +36,15 @@
 
 <svg>
   <style>
+.cards {
+    display: flex;
+    flex-wrap: wrap;
+    margin-left : -8px;
+    margin-right : -8px;
+}
+    .card {
+        margin: 8px;
+    }
     .notification {
       position: absolute;
       width: 300px;
