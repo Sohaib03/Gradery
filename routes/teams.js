@@ -83,7 +83,7 @@ router.route("/code/:code").get(auth.authMiddleware, async (req, res) => {
 	}
 
 	let context = {
-		title: "Join a New Team",
+		title: team_info[0].TEAM_NAME,
 		username: req.session.username,
 		team_code: team_code,
 		team_name: team_info[0].TEAM_NAME,

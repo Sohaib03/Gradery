@@ -3,14 +3,18 @@
 <div >
 <h3> <%= team_name %> </h3>
 <h1> Team Code : <%= team_code %> </h1>
-<h4> Participants </h4>
 
 <div> 
-    <ol>
+    <table class="table">
+        <tr> <th> Participants </th> </tr>
         <% for (let i=0; i<participants.length; i++) { %>
-        <li> <%= participants[i].USERNAME %> <li>
+        <tr><td> <%= participants[i].USERNAME %> </td></tr>
         <% } %>
-    </ol>
+    </table>
+
+    <div>
+        <<h1>General</h1>
+    </div>
 </div>
 
 </div>
