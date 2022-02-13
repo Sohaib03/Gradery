@@ -3,45 +3,62 @@ const router = express.Router();
 const auth = require("../routes/auth");
 const genUtils = require("../utils/generators");
 const teams = require("../database/teams");
+const course = require("../database/course");
+const user_middleware = require("../middlewares/user_middleware");
 
-router.route("/create").get(auth.authMiddleware, async (req, res) => {
-	let context = {
-		title: "Create a New Team",
-		username: req.session.username,
-		role: req.session.role,
-	};
-	res.render("createTeam", context);
-});
-
-router.route("/create").post(auth.authMiddleware, async (req, res) => {
-	const team_name = req.body.team_name;
-	const team_desc = req.body.team_desc;
-
-	let random_team_code = genUtils.random8Gen();
-	let team_query = await teams.getTeamByCode(random_team_code);
-	while (team_query.length != 0) {
-		random_team_code = genUtils.random8Gen();
-		team_query = await teams.getTeamByCode(random_team_code);
-	}
-
-	let r = await teams.createNewTeam(
-		req.session.user_id,
-		team_name,
-		random_team_code
+router
+	.route("/create")
+	.get(
+		auth.authMiddleware,
+		user_middleware.isInstructor,
+		async (req, res) => {
+			let allCourses = await course.getAllCourses();
+			console.log(allCourses);
+			let context = {
+				title: "Create a New Team",
+				username: req.session.username,
+				role: req.session.role,
+				allCourses,
+			};
+			res.render("createTeam", context);
+		}
 	);
-	r = await teams.addParticipantWithCode(
-		req.session.user_id,
-		random_team_code,
-		"admin"
-	);
-	console.log(r);
 
-	let context = {
-		title: "Create a New Team",
-		username: req.session.username,
-	};
-	res.render("createTeam", context);
-});
+router
+	.route("/create")
+	.post(
+		auth.authMiddleware,
+		user_middleware.isInstructor,
+		async (req, res) => {
+			const team_name = req.body.team_name;
+			const team_desc = req.body.team_desc;
+			const course = req.body.course;
+
+			let random_team_code = genUtils.random8Gen();
+			let team_query = await teams.getTeamByCode(random_team_code);
+			while (team_query.length != 0) {
+				random_team_code = genUtils.random8Gen();
+				team_query = await teams.getTeamByCode(random_team_code);
+			}
+
+			let r = await teams.createNewTeam(
+				req.session.user_id,
+				team_name,
+				random_team_code
+			);
+			r = await teams.addParticipantWithCode(
+				req.session.user_id,
+				random_team_code,
+				"admin"
+			);
+
+			let context = {
+				title: "Create a New Team",
+				username: req.session.username,
+			};
+			res.render("createTeam", context);
+		}
+	);
 
 router.route("/join").get(auth.authMiddleware, async (req, res) => {
 	let context = {

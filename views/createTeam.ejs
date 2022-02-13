@@ -5,24 +5,39 @@
 <form method="POST">
 <div class="columns">
     <div class="column is-6">
-<div class="field">
-  <label class="label"> Team Name</label>
-  <div class="control">
-    <input name="team_name" class="input" type="text" >
-  </div>
-</div>
+    <div class="field">
+        <label class="label"> Team Name</label>
+        <div class="control">
+            <input name="team_name" class="input" type="text" >
+        </div>
+    </div>
 
-<div class="field">
-  <label class="label">Team Description</label>
-  <div class="control">
-    <input name="team_desc" class="input" type="text">
-  </div>
-</div>
-                  <p class="control">
-                    <button class="button is-primary" type="submit">
-                        Submit
-                    </button>
-                  </p>
+    <div class="field">
+      <label class="label">Team Description</label>
+      <div class="control">
+        <input name="team_desc" class="input" type="text">
+      </div>
+    </div>
+
+    <div class="field">
+        <label class="label"> Select Course : </label>
+      <div class="select">
+        <select name="course">
+            <option>Select Course</option>
+
+            <% for(let i=0; i < allCourses.length; i++) { %>
+            <option > <%= allCourses[i].COURSE_ID %> </option>
+            <% } %>
+
+        </select>
+      </div>
+    </div>
+
+    <p class="control">
+        <button class="button is-primary" type="submit">
+            Submit
+        </button>
+    </p>
 </div>
 </div>
 </form>
