@@ -7,6 +7,7 @@
 
   </div>
 
+    <%= role %>
   <div id="navbarBasicExample" class="navbar-menu">
     <div class="navbar-start">
       <a href="/" class="navbar-item">
@@ -19,9 +20,11 @@
         </a>
 
         <div class="navbar-dropdown">
+            <% if (role === 0) { %>
           <a class="navbar-item" href="/teams/create">
               Create New Team
           </a>
+            <% } %>
           <a class="navbar-item" href="/teams/join">
               Join New Team
           </a>

@@ -8,6 +8,7 @@ router.route("/create").get(auth.authMiddleware, async (req, res) => {
 	let context = {
 		title: "Create a New Team",
 		username: req.session.username,
+		role: req.session.role,
 	};
 	res.render("createTeam", context);
 });
@@ -46,6 +47,7 @@ router.route("/join").get(auth.authMiddleware, async (req, res) => {
 	let context = {
 		title: "Join a New Team",
 		username: req.session.username,
+		role: req.session.role,
 	};
 	res.render("joinTeam", context);
 });
@@ -56,6 +58,7 @@ router.route("/join").post(auth.authMiddleware, async (req, res) => {
 	let context = {
 		title: "Join a New Team",
 		username: req.session.username,
+		role: req.session.role,
 	};
 	let r = await teams.addParticipantWithCode(
 		req.session.user_id,
@@ -85,6 +88,7 @@ router.route("/code/:code").get(auth.authMiddleware, async (req, res) => {
 	let context = {
 		title: team_info[0].TEAM_NAME,
 		username: req.session.username,
+		role: req.session.role,
 		team_code: team_code,
 		team_name: team_info[0].TEAM_NAME,
 		participants: await teams.getParticipantsOfTeam(team_id),

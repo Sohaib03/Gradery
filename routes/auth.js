@@ -24,6 +24,7 @@ router.route("/login").post(async (req, res) => {
 	var password = req.body.password;
 
 	var result = await users.getUser(username);
+	console.log(result);
 	if (result.length == 0) {
 		res.send("No such user found");
 		res.end();
@@ -33,6 +34,7 @@ router.route("/login").post(async (req, res) => {
 
 			req.session.username = username;
 			req.session.user_id = result[0].USERID;
+			req.session.role = result[0].ROLE;
 
 			const notification = {
 				status: " is-success is-light ",
@@ -65,6 +67,8 @@ router.route("/register").get(async (req, res) => {
 router.route("/register").post(async (req, res) => {
 	var username = req.body.username;
 	var password = req.body.password;
+	var isInstructor = req.body.isInstructor;
+	console.log(isInstructor === "on");
 
 	var result = await users.getUser(username);
 	if (result.length != 0) {
@@ -77,11 +81,16 @@ router.route("/register").post(async (req, res) => {
 	}
 
 	const hashedPassword = await hashUtils.hash(password);
-
-	result = await users.createUser({
-		username: username,
-		password: hashedPassword,
-	});
+	if (isInstructor === "on")
+		result = await users.createInstructor({
+			username: username,
+			password: hashedPassword,
+		});
+	else
+		result = await users.createStudent({
+			username: username,
+			password: hashedPassword,
+		});
 
 	if (result && result.rowsAffected === 1) {
 		req.session.notification = {

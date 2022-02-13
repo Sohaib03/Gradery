@@ -13,9 +13,11 @@ async function homeEndpoint(req, res) {
 	const context = {
 		title: "Homepage",
 		username: req.session.username,
+		role: req.session.role,
 		teamsID: userTeamIDs,
 		teamsInfo: userTeams,
 	};
+	console.log(context);
 	if (req.session.notification) {
 		context.notification = req.session.notification;
 		req.session.notification = undefined;
