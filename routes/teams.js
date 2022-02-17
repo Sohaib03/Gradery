@@ -7,6 +7,7 @@ const course = require("../database/course");
 const notification = require("../database/notification");
 const user_middleware = require("../middlewares/user_middleware");
 const discussionDB = require("../database/discussion");
+const assignments = require("../database/assignments");
 
 router
 	.route("/create")
@@ -56,10 +57,6 @@ router
 				"admin"
 			);
 
-			r = await discussionDB.createDiscussion(
-				"DEFAULT DISCUSSION",
-				"GENERAL"
-			);
 			req.session.notification = {
 				status: " is-success is-light ",
 				content: "Team Successfully Created",
@@ -80,17 +77,12 @@ router.route("/join").get(auth.authMiddleware, async (req, res) => {
 router.route("/join").post(auth.authMiddleware, async (req, res) => {
 	const team_code = req.body.team_code;
 	console.log(team_code);
-	let context = {
-		title: "Join a New Team",
-		username: req.session.username,
-		role: req.session.role,
-	};
 	let r = await teams.addParticipantWithCode(
 		req.session.user_id,
 		team_code,
 		"general"
 	);
-	res.render("joinTeam", context);
+	res.redirect("/");
 });
 
 router.route("/code/:code").get(auth.authMiddleware, async (req, res) => {
@@ -114,15 +106,28 @@ router.route("/code/:code").get(auth.authMiddleware, async (req, res) => {
 		team_info[0].TEAM_ID
 	);
 
+	let assignmentList;
+	if (req.session.role == 1) {
+		assignmentList = await assignments.getAllNewAssignmentsForStudentInTeam(
+			req.session.user_id,
+			team_id
+		);
+	} else if (req.session.role == 0) {
+		assignmentList = await assignments.getAllAssignmentsForInstructorInTeam(
+			req.session.user_id,
+			team_id
+		);
+	}
+
 	let context = {
 		title: team_info[0].TEAM_NAME,
 		username: req.session.username,
 		role: req.session.role,
 		team_code: team_code,
 		team_name: team_info[0].TEAM_NAME,
-		team_id: team_info[0].TEAM_ID,
 		participants: await teams.getParticipantsOfTeam(team_id),
 		notifications: cur_notifications,
+		assignments: assignmentList,
 	};
 	res.render("teamHome", context);
 });
