@@ -20,5 +20,8 @@
 		"nodemon": "^2.0.15",
 		"oracledb": "^5.3.0",
 		"uuid": "^8.3.2"
+	},
+	"engines": {
+		"node": "14.x"
 	}
 }
