@@ -67,17 +67,12 @@ router.route("/join").get(auth.authMiddleware, async (req, res) => {
 router.route("/join").post(auth.authMiddleware, async (req, res) => {
   const team_code = req.body.team_code;
   console.log(team_code);
-  let context = {
-    title: "Join a New Team",
-    username: req.session.username,
-    role: req.session.role,
-  };
   let r = await teams.addParticipantWithCode(
     req.session.user_id,
     team_code,
     "general"
   );
-  res.render("joinTeam", context);
+  res.redirect("/");
 });
 
 router.route("/code/:code").get(auth.authMiddleware, async (req, res) => {
@@ -101,6 +96,19 @@ router.route("/code/:code").get(auth.authMiddleware, async (req, res) => {
     team_info[0].TEAM_ID
   );
 
+  let assignmentList;
+  if (req.session.role == 1) {
+    assignmentList = await assignments.getAllNewAssignmentsForStudentInTeam(
+      req.session.user_id,
+      team_id
+    );
+  } else if (req.session.role == 0) {
+    assignmentList = await assignments.getAllAssignmentsForInstructorInTeam(
+      req.session.user_id,
+      team_id
+    );
+  }
+
   let context = {
     title: team_info[0].TEAM_NAME,
     username: req.session.username,
@@ -109,9 +117,7 @@ router.route("/code/:code").get(auth.authMiddleware, async (req, res) => {
     team_name: team_info[0].TEAM_NAME,
     participants: await teams.getParticipantsOfTeam(team_id),
     notifications: cur_notifications,
-    assignments: await assignments.getAllAssignmentsForInstructor(
-      req.session.user_id
-    ),
+    assignments: assignmentList,
   };
   res.render("teamHome", context);
 });
