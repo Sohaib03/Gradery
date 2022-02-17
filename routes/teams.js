@@ -6,6 +6,7 @@ const teams = require("../database/teams");
 const course = require("../database/course");
 const notification = require("../database/notification");
 const user_middleware = require("../middlewares/user_middleware");
+const discussionDB = require("../database/discussion");
 
 router
 	.route("/create")
@@ -53,6 +54,11 @@ router
 				req.session.user_id,
 				random_team_code,
 				"admin"
+			);
+
+			r = await discussionDB.createDiscussion(
+				"DEFAULT DISCUSSION",
+				"GENERAL"
 			);
 			req.session.notification = {
 				status: " is-success is-light ",
@@ -114,6 +120,7 @@ router.route("/code/:code").get(auth.authMiddleware, async (req, res) => {
 		role: req.session.role,
 		team_code: team_code,
 		team_name: team_info[0].TEAM_NAME,
+		team_id: team_info[0].TEAM_ID,
 		participants: await teams.getParticipantsOfTeam(team_id),
 		notifications: cur_notifications,
 	};

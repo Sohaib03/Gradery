@@ -1,24 +1,36 @@
 <%- include('./partials/header.ejs') %>
 <%- include('./partials/navbar.ejs') %>
-<div >
-<h3> <%= team_name %> </h3>
-<h1> Team Code : <%= team_code %> </h1>
 
-<div> 
-    <table class="table">
-        <tr> <th> Participants </th> </tr>
-        <% for (let i=0; i<participants.length; i++) { %>
-        <tr><td> <%= participants[i].USERNAME %> </td></tr>
-        <% } %>
-    </table>
-
-    <div>
-        <<h1>General</h1>
+<section class="hero is-primary">
+    <div class="hero-body">
+        <h3 class="title"> <%= team_name %> </h3>
+        <h1 class="subtitle"> Team Code : <%= team_code %> </h1>
     </div>
-</div>
+</section>
+
+<div class="columns">
+    <div class="column is-3">
+        <div> 
+            <table class="column table">
+                <tr> <th> Participants </th> </tr>
+                <% for (let i=0; i<participants.length; i++) { %>
+                <tr><td> <%= participants[i].USERNAME %> </td></tr>
+                <% } %>
+            </table>
+        </div>
+        <div>
+            <h2 class=" has-text-centered is-size-5 "> Discussions </h2>
+            <h1 class="m-3">General</h1>
+            <h1 class="m-3">Quiz 1</h1>
+            <h1 class="m-3">Quiz 3</h1>
+        </div>
+    </div>
+
+    <div class="column is-9">
+<div>
 <% if (role === 0) { %>
 <div class="column is-6">
-    <p> Create a New Notification </p>
+    <p class="is-size-4"> Create a New Notification </p>
     <form action="/teams/code/<%= team_code %>/notify" method="POST">
         <label class="label">Title </label>
         <input name="notif_title" class="input" type="text" >
@@ -31,15 +43,36 @@
 <% } %>
 
 <div class="column is-6">
-    <% for (let i=0; i<notifications.length; i++) { %>
+        <h class="is-size-4"> Notifications </h>
     <div class="box">
+    <% for (let i=0; i<notifications.length; i++) { %>
+        <div class="list-item">
         <p> <%= notifications[i].TITLE %> </p>
         <p><%= notifications[i].CONTENT %> </p>
         <p><%= notifications[i].TIMESTAMP %> </p>
-    </div>
+        <hr />
+        </div>
     <% } %>
+    </div>
 </div>
 
+
+    <div class="column is-6">
+        <h1 class="is-size-4"> General </h1>
+        <form action="/dis/123/<%= team_code %>/<%= team_id %>" method="POST">
+<div class="field has-addons">
+  <div class="control">
+    <input class="input" type="text" name="message" placeholder="Send a message">
+  </div>
+  <div class="control">
+      <button class="button is-primary">Send</button>
+  </div>
+</div>
+        </form>
+    </div>
+</div>
+
+        
 
 </div>
 <%- include('./partials/footer.ejs') %>
