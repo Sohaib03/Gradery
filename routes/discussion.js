@@ -13,7 +13,7 @@ router
 		const message = req.body.message;
 		const user_id = req.session.user_id;
 
-		discussionDB.createNewMessage(dis_id, user_id, message);
+		discussionDB.sendToDefaultMessage(team_id, message, user_id);
 
 		res.redirect("/teams/code/" + team_code);
 	});

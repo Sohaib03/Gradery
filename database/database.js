@@ -92,7 +92,18 @@ begin
     insert into NOTIFICATION (TITLE, CONTENT) VALUES (title, content) returning NOTIFICATION_ID into nid;
     insert into NOTIFICATION_RECEIVED_BY_TEAM (TEAM_ID, NOTIFICATION_ID) values (team_id, nid);
 end;`;
-	execute(team_notification, {}, options);
+	await execute(team_notification, {}, options);
+
+	const create_team = `
+create or replace procedure create_team(team_name in varchar2, user_id in Number, team_code in varchar2, team_desc in varchar2, course_id in varchar2)
+IS
+    tid Number;
+begin
+    insert into TEAMS (TEAM_NAME, CREATED_BY, TEAM_CODE, TEAM_DESC, COURSE_ID) values (team_name, user_id, team_code, team_desc, course_id) returning TEAM_ID into tid;
+    insert into DISCUSSION (TITLE, BODY, TEAM_ID, STATUS) VALUES ('GENERAL', 'General Discussion', tid, 1);
+end;`;
+
+	await execute(create_team, {}, options);
 
 	console.log("Procedure Initialized");
 }

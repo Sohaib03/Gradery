@@ -25,7 +25,9 @@ async function createNewTeam(
 	team_desc,
 	course_id
 ) {
-	const sql = `INSERT INTO TEAMS (TEAM_NAME, CREATED_BY, TEAM_CODE, TEAM_DESC, COURSE_ID) VALUES (:team_name, :user_id, :team_code, :team_desc, :course_id)`;
+	const sql = `begin
+        create_team(:team_name, :user_id, :team_code, :team_desc, :course_id);
+    end;`;
 	const binds = {
 		team_name,
 		user_id,

@@ -106,6 +106,10 @@ router.route("/code/:code").get(auth.authMiddleware, async (req, res) => {
 		team_info[0].TEAM_ID
 	);
 
+	const cur_discussions = await discussionDB.getDefaultDiscussion(
+		team_info[0].TEAM_ID
+	);
+
 	let assignmentList;
 	if (req.session.role == 1) {
 		assignmentList = await assignments.getAllNewAssignmentsForStudentInTeam(
@@ -125,9 +129,11 @@ router.route("/code/:code").get(auth.authMiddleware, async (req, res) => {
 		role: req.session.role,
 		team_code: team_code,
 		team_name: team_info[0].TEAM_NAME,
+		team_id: team_info[0].TEAM_ID,
 		participants: await teams.getParticipantsOfTeam(team_id),
 		notifications: cur_notifications,
 		assignments: assignmentList,
+		discussion: cur_discussions,
 	};
 	res.render("teamHome", context);
 });

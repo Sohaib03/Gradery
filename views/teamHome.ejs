@@ -6,7 +6,6 @@
         <h3 class="title"> <%= team_name %> </h3>
         <h1 class="subtitle"> Team Code : <%= team_code %> </h1>
     </div>
-<<<<<<< HEAD
 </section>
 
 <div class="columns">
@@ -29,7 +28,6 @@
 
     <div class="column is-9">
 <div>
-=======
 </div>
 
 <div>
@@ -61,7 +59,6 @@
 
 </div>
 
->>>>>>> 50ce0c35cc2ad81c3a43af8ef2b77eff86ac6f6e
 <% if (role === 0) { %>
 <div class="column is-6">
     <p class="is-size-4"> Create a New Notification </p>
@@ -93,6 +90,16 @@
 
     <div class="column is-6">
         <h1 class="is-size-4"> General </h1>
+                <div class="box">
+                <% for (let i=0; i<discussion.length; i++) { %>
+                    <div class="list-item">
+                    <p><%= discussion[i].CONTENT %> </p>
+                    <p><%= discussion[i].USERNAME%> </p>
+                    <p><%= discussion[i].TIMESTAMP %> </p>
+                    <hr />
+                    </div>
+                <% } %>
+                </div>
         <form action="/dis/123/<%= team_code %>/<%= team_id %>" method="POST">
 <div class="field has-addons">
   <div class="control">
