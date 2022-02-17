@@ -16,6 +16,36 @@
         <<h1>General</h1>
     </div>
 </div>
+
+<div>
+    <b>Assignments</b><br>
+    
+    <div class="cards">
+        <% for (let i=0; i<assignments.length; i++){ %>
+          <div class="card">
+            <header class="card-header">
+              <p class="card-header-title">
+                Assignment <%= i+1 %>
+              </p>
+              <button class="card-header-icon" aria-label="more options">
+                <span class="icon">
+                  <i class="fas fa-angle-down" aria-hidden="true"></i>
+                </span>
+              </button>
+            </header>
+            <div class="card-content">
+              <div class="content">
+                <p> Assignment ID: <%= assignments[i].ASSIGNMENT_ID %> <p>
+                <p> <b><%= assignments[i].ASSIGNMENT_TITLE %> <b><p>
+                <p> Deadline: <%= assignments[i].DEADLINE %> <p>
+              </div>
+            </div>
+          </div>
+        <% } %>
+    </div>
+
+</div>
+
 <% if (role === 0) { %>
 <div class="column is-6">
     <p> Create a New Notification </p>
