@@ -14,6 +14,7 @@ async function startup() {
 	const pool = await oracledb.createPool(database_options);
 	connection = await oracledb.getConnection();
 	connection.close();
+	await initializeProcedures();
 	console.log("Database Initialized Successfully");
 }
 
@@ -83,6 +84,19 @@ async function executeMany(sqlCommand, bindParams, options) {
 	}
 }
 
+async function initializeProcedures() {
+	const team_notification = `create or replace procedure create_team_notification(team_id in NUMBER, title in VARCHAR2, content in VARCHAR2)
+IS
+    nid Number;
+begin
+    insert into NOTIFICATION (TITLE, CONTENT) VALUES (title, content) returning NOTIFICATION_ID into nid;
+    insert into NOTIFICATION_RECEIVED_BY_TEAM (TEAM_ID, NOTIFICATION_ID) values (team_id, nid);
+end;`;
+	execute(team_notification, {}, options);
+
+	console.log("Procedure Initialized");
+}
+
 const options = {
 	outFormat: oracledb.OUT_FORMAT_OBJECT,
 };
@@ -93,4 +107,5 @@ module.exports = {
 	execute,
 	executeMany,
 	options,
+	initializeProcedures,
 };

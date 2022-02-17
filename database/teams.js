@@ -18,12 +18,20 @@ async function getTeamByCode(team_code) {
 	return (await db.execute(sql, binds, db.options)).rows;
 }
 
-async function createNewTeam(user_id, team_name, team_code) {
-	const sql = `INSERT INTO TEAMS (TEAM_NAME, CREATED_BY, TEAM_CODE) VALUES (:team_name, :user_id, :team_code)`;
+async function createNewTeam(
+	user_id,
+	team_name,
+	team_code,
+	team_desc,
+	course_id
+) {
+	const sql = `INSERT INTO TEAMS (TEAM_NAME, CREATED_BY, TEAM_CODE, TEAM_DESC, COURSE_ID) VALUES (:team_name, :user_id, :team_code, :team_desc, :course_id)`;
 	const binds = {
-		team_name: team_name,
-		user_id: user_id,
-		team_code: team_code,
+		team_name,
+		user_id,
+		team_code,
+		team_desc,
+		course_id,
 	};
 	return (await db.execute(sql, binds, db.options)).rows;
 }

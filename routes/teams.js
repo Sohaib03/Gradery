@@ -4,6 +4,7 @@ const auth = require("../routes/auth");
 const genUtils = require("../utils/generators");
 const teams = require("../database/teams");
 const course = require("../database/course");
+const notification = require("../database/notification");
 const user_middleware = require("../middlewares/user_middleware");
 
 router
@@ -13,13 +14,13 @@ router
 		user_middleware.isInstructor,
 		async (req, res) => {
 			let allCourses = await course.getAllCourses();
-			console.log(allCourses);
 			let context = {
 				title: "Create a New Team",
 				username: req.session.username,
 				role: req.session.role,
 				allCourses,
 			};
+			console.log(context);
 			res.render("createTeam", context);
 		}
 	);
@@ -32,7 +33,7 @@ router
 		async (req, res) => {
 			const team_name = req.body.team_name;
 			const team_desc = req.body.team_desc;
-			const course = req.body.course;
+			const course_id = req.body.course;
 
 			let random_team_code = genUtils.random8Gen();
 			let team_query = await teams.getTeamByCode(random_team_code);
@@ -44,19 +45,20 @@ router
 			let r = await teams.createNewTeam(
 				req.session.user_id,
 				team_name,
-				random_team_code
+				random_team_code,
+				team_desc,
+				course_id
 			);
 			r = await teams.addParticipantWithCode(
 				req.session.user_id,
 				random_team_code,
 				"admin"
 			);
-
-			let context = {
-				title: "Create a New Team",
-				username: req.session.username,
+			req.session.notification = {
+				status: " is-success is-light ",
+				content: "Team Successfully Created",
 			};
-			res.render("createTeam", context);
+			res.redirect("/");
 		}
 	);
 
@@ -102,6 +104,10 @@ router.route("/code/:code").get(auth.authMiddleware, async (req, res) => {
 		return;
 	}
 
+	const cur_notifications = await notification.getNotificationOfTeam(
+		team_info[0].TEAM_ID
+	);
+
 	let context = {
 		title: team_info[0].TEAM_NAME,
 		username: req.session.username,
@@ -109,9 +115,49 @@ router.route("/code/:code").get(auth.authMiddleware, async (req, res) => {
 		team_code: team_code,
 		team_name: team_info[0].TEAM_NAME,
 		participants: await teams.getParticipantsOfTeam(team_id),
+		notifications: cur_notifications,
 	};
 	res.render("teamHome", context);
 });
+
+router
+	.route("/code/:code/notify")
+	.post(
+		user_middleware.isInstructor,
+		auth.authMiddleware,
+		async (req, res) => {
+			const team_code = req.params.code;
+
+			// Check if team_exists
+			let team_info = await teams.getTeamByCode(team_code);
+			if (team_info.length === 0) {
+				// Team Doesnt exist. Notify User
+				res.redirect("/");
+				return;
+			}
+
+			const notif_title = req.body.notif_title;
+			const notif_content = req.body.notif_content;
+			console.log(notif_content.trim().length);
+
+			if (
+				notif_title.trim().length === 0 ||
+				notif_content.trim().length === 0
+			) {
+				res.redirect("/teams/code/" + team_code);
+				return;
+			}
+
+			await notification.sendNotificationToTeam(
+				team_info[0].TEAM_ID,
+				notif_title,
+				notif_content
+			);
+
+			console.log({ notif_title, notif_content });
+			res.redirect("/teams/code/" + team_code);
+		}
+	);
 
 module.exports = {
 	router,

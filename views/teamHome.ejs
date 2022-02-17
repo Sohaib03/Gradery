@@ -16,6 +16,30 @@
         <<h1>General</h1>
     </div>
 </div>
+<% if (role === 0) { %>
+<div class="column is-6">
+    <p> Create a New Notification </p>
+    <form action="/teams/code/<%= team_code %>/notify" method="POST">
+        <label class="label">Title </label>
+        <input name="notif_title" class="input" type="text" >
+        <label class="label">Details </label>
+        <input name="notif_content" class="input" type="text" >
+        <button class="button is-primary" type="submit"> Notify </button>
+    </form>
+</div>
+
+<% } %>
+
+<div class="column is-6">
+    <% for (let i=0; i<notifications.length; i++) { %>
+    <div class="box">
+        <p> <%= notifications[i].TITLE %> </p>
+        <p><%= notifications[i].CONTENT %> </p>
+        <p><%= notifications[i].TIMESTAMP %> </p>
+    </div>
+    <% } %>
+</div>
+
 
 </div>
 <%- include('./partials/footer.ejs') %>
