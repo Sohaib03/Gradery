@@ -65,4 +65,5 @@ module.exports = {
 	getAllCompletedAssignmentsForStudentInTeam,
 	getAllAssignmentsForInstructor,
 	getAllAssignmentsForInstructorInTeam,
+	createAssignment,
 };

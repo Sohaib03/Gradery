@@ -181,16 +181,6 @@ router
     const invitedUserName = req.body.invitedUserName;
     const invitedUserRole = req.body.invitedUserRole;
 
-    await invitation.sendInvitationToUser {
-
-    }
-
-    await notification.sendNotificationToUser(
-      invitedUserName,
-      notif_title,
-      notif_content
-    );
-
     console.log({ invitedUserName, invitedUserRole });
     res.redirect("/teams/code/" + team_code);
   });
