@@ -65,12 +65,7 @@ async function checkUserInTeam(user_id, team_id) {
 		team_id: team_id,
 	};
 	let result = (await db.execute(sql, binds, db.options)).rows;
-	console.log(result);
-	if (result.length === 0) {
-		return 0;
-	} else {
-		return 1;
-	}
+	return result;
 }
 
 async function getParticipantsOfTeam(team_id) {
