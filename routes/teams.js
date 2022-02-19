@@ -80,7 +80,7 @@ router.route("/join").post(auth.authMiddleware, async (req, res) => {
 	let r = await teams.addParticipantWithCode(
 		req.session.user_id,
 		team_code,
-		"general"
+		"student"
 	);
 	res.redirect("/");
 });
@@ -205,15 +205,33 @@ router
 
 			const invitedUserName = req.body.invitedUserName;
 			const invitedUserRole = req.body.invitedUserRole;
+			const invitedUserID = (await users.getUser(invitedUserName))[0]
+				.USER_ID;
+			const invitedBy = req.session.user_id;
 
-			await notification.sendNotificationToTeam(
+			await invitation.sendInvitation(
 				team_info[0].TEAM_ID,
-				notif_title,
-				notif_content
+				invitedUserID,
+				invitedUserRole,
+				invitedBy
 			);
-
-			console.log({ invitedUserName, invitedUserRole });
 			res.redirect("/teams/code/" + team_code);
+
+			// if (userIsAlreadyInvited) {
+			//     console.log("User is already invited");
+			//     res.redirect("/teams/code/" + team_code);
+			// } else if (userIsAlreadyInTeam) {
+			//     console.log("User is already in team");
+			//     res.redirect("/teams/code/" + team_code);
+			// } else {
+			//     await invitation.sendInvitation(
+			//         team_info[0].TEAM_ID,
+			//         invitedUserID,
+			//         invitedUserRole,
+			//         invitedBy
+			//     );
+			//     res.redirect("/teams/code/" + team_code);
+			// }
 		}
 	);
 
