@@ -106,6 +106,7 @@ router.route("/code/:code").get(auth.authMiddleware, async (req, res) => {
 		res.redirect("/teams/join");
 		return;
 	}
+	const user_role_in_team = user_team_info[0].ROLE;
 
 	const cur_notifications = await notification.getNotificationOfTeam(
 		team_info[0].TEAM_ID
@@ -115,8 +116,9 @@ router.route("/code/:code").get(auth.authMiddleware, async (req, res) => {
 		team_info[0].TEAM_ID
 	);
 
-	let assignmentList;
-	if (req.session.role == 1) {
+	let assignmentList = [];
+
+	if (user_role_in_team === "student") {
 		assignmentList = await assignments.getAllNewAssignmentsForStudentInTeam(
 			req.session.user_id,
 			team_id
@@ -127,7 +129,6 @@ router.route("/code/:code").get(auth.authMiddleware, async (req, res) => {
 			team_id
 		);
 	}
-	let pending_assignments = [];
 
 	let context = {
 		title: team_info[0].TEAM_NAME,

@@ -26,4 +26,5 @@ async function sendNotificationToUser(user_id, title, content) {
 module.exports = {
   getNotificationOfTeam,
   sendNotificationToTeam,
+  sendNotificationToUser,
 };

@@ -78,7 +78,7 @@ async function getParticipantsOfTeam(team_id) {
 	for (let i = 0; i < result.length; i++) {
 		user_ids.push(result[i].USER_ID);
 	}
-	const sql2 = `SELECT * FROM USERS WHERE USERID in (${user_ids})`;
+	const sql2 = `SELECT * FROM USERS WHERE USER_ID in (${user_ids})`;
 	binds = {};
 	result = (await db.execute(sql2, binds, db.options)).rows;
 	return result;
