@@ -60,6 +60,11 @@
 </div>
 
 <% if (role === 0) { %>
+<div class="p-5">
+    <form action="/assignment/create/<%= team_id %>/<%= team_code %>" method="get" accept-charset="utf-8">
+        <button class="button is-primary">Create Assignment</button>
+    </form>
+</div>
 <div class="column is-6">
     <p class="is-size-4"> Create a New Notification </p>
     <form action="/teams/code/<%= team_code %>/notify" method="POST">
@@ -116,4 +121,5 @@
         
 
 </div>
+<%- include('./partials/notification_below.ejs') %>
 <%- include('./partials/footer.ejs') %>

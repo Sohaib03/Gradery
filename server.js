@@ -1,11 +1,13 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const session = require("express-session");
+const upload = require("express-fileupload");
 
 const homeEnd = require("./controllers/home");
 const database = require("./database/database");
 const auth = require("./routes/auth");
 const teams = require("./routes/teams");
+const assignment = require("./routes/assignment");
 const discussion = require("./routes/discussion");
 
 require("dotenv").config();
@@ -29,9 +31,15 @@ app.set("view engine", "ejs");
 
 app.use(express.static("public"));
 
+app.use(
+	upload({
+		debug: true,
+	})
+);
 app.use("/auth", auth.router);
 app.use("/teams", teams.router);
 app.use("/dis", discussion.router);
+app.use("/assignment", assignment.router);
 
 app.get("/", auth.authMiddleware, (req, res) => {
 	return homeEnd.homeEndpoint(req, res);
