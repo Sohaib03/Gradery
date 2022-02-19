@@ -82,7 +82,7 @@ router.route("/join").post(auth.authMiddleware, async (req, res) => {
     let r = await teams.addParticipantWithCode(
         req.session.user_id,
         team_code,
-        "general"
+        "student"
     );
     res.redirect("/");
 });
@@ -202,7 +202,7 @@ router
             const invitedUserRole = req.body.invitedUserRole;
             const invitedUserID = (await users.getUser(invitedUserName))[0]
                 .USER_ID;
-            const invitedBy = req.body.user_id;
+            const invitedBy = req.session.user_id;
 
             await invitation.sendInvitation(
                 team_info[0].TEAM_ID,
@@ -227,9 +227,6 @@ router
             //     );
             //     res.redirect("/teams/code/" + team_code);
             // }
-
-            console.log({ invitedUserName, invitedUserRole });
-            res.redirect("/teams/code/" + team_code);
         }
     );
 

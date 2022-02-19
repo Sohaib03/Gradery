@@ -150,7 +150,7 @@ begin
         (title, assignment_desc, created_by, team_id_var, deadline, file_path) returning ASSIGNMENT_ID into ass_id;
     insert into ASSIGNED_TO (ASSIGNMENT_ID, STUDENT_ID, SUBMISSION_STATUS)
         select ass_id, P.USER_ID, 0 from PARTICIPANT P
-            where P.ROLE = 'general' and P.TEAM_ID = team_id_var;
+            where P.ROLE = 'student' and P.TEAM_ID = team_id_var;
 end;
     `;
 
