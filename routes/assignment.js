@@ -30,29 +30,31 @@ router
 			const title = req.body.title;
 			const desc = req.body.desc;
 			const deadline_date = req.body.deadline;
-
-			const file = req.files.file;
-			console.log({ title, desc, deadline_date, file });
-			file.mv(
-				"./uploads/" +
-					req.session.username +
-					"_" +
-					new Date().getTime() +
-					file.name,
-				(err) => {
-					if (err) {
-						req.session.notification = {
-							status: "is-danger is-light",
-							content: "Error while uploading file",
-						};
-					} else {
-						req.session.notification = {
-							status: "is-success is-light",
-							content: "Successfully Created assignment",
-						};
+			let file;
+			if (req.files) file = req.files.file;
+			const [d_date, d_time] = deadline_date.split("T");
+			console.log({ title, desc, d_date, d_time, file });
+			if (file)
+				file.mv(
+					"./uploads/" +
+						req.session.username +
+						"_" +
+						new Date().getTime() +
+						file.name,
+					(err) => {
+						if (err) {
+							req.session.notification = {
+								status: "is-danger is-light",
+								content: "Error while uploading file",
+							};
+						} else {
+							req.session.notification = {
+								status: "is-success is-light",
+								content: "Successfully Created assignment",
+							};
+						}
 					}
-				}
-			);
+				);
 
 			res.redirect("/teams/code/" + team_code);
 		}
