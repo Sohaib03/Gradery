@@ -93,6 +93,16 @@ begin
 end;`;
   await execute(team_notification, {}, options);
 
+  const user_notification = `create or replace procedure create_user_notification(user_id in NUMBER, title in VARCHAR2, content in VARCHAR2)
+  IS
+	  nid Number;
+  begin
+	  insert into NOTIFICATION (TITLE, CONTENT) VALUES (title, content) returning NOTIFICATION_ID into nid;
+	  insert into NOTIFICATION_RECEIVED_BY_USER (USERID, NOTIFICATION_ID) values (user_id, nid);
+  end;`;
+  
+  await execute(team_notification, {}, options);
+
   const create_team = `
 create or replace procedure create_team(team_name in varchar2, user_id in Number, team_code in varchar2, team_desc in varchar2, course_id in varchar2)
 IS

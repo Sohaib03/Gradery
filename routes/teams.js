@@ -5,6 +5,7 @@ const genUtils = require("../utils/generators");
 const teams = require("../database/teams");
 const course = require("../database/course");
 const notification = require("../database/notification");
+const invitation = require("../database/invitation");
 const user_middleware = require("../middlewares/user_middleware");
 const discussionDB = require("../database/discussion");
 const assignments = require("../database/assignments");
@@ -180,8 +181,12 @@ router
     const invitedUserName = req.body.invitedUserName;
     const invitedUserRole = req.body.invitedUserRole;
 
-    await notification.sendNotificationToTeam(
-      team_info[0].TEAM_ID,
+    await invitation.sendInvitationToUser {
+
+    }
+
+    await notification.sendNotificationToUser(
+      invitedUserName,
       notif_title,
       notif_content
     );

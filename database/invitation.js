@@ -1,6 +1,6 @@
 const db = require("./database");
 
-async function getNotificationOfTeam(team_id) {
+async function getInvitations(team_id) {
   const sql = `SELECT * FROM NOTIFICATION N JOIN NOTIFICATION_RECEIVED_BY_TEAM T ON N.NOTIFICATION_ID = T.NOTIFICATION_ID WHERE T.TEAM_ID = ${team_id} ORDER BY N.TIMESTAMP DESC`;
   console.log(sql);
   const binds = {};
@@ -23,8 +23,4 @@ async function sendNotificationToUser(user_id, title, content) {
   return (await db.execute(sql, binds, db.options)).rows;
 }
 
-module.exports = {
-  getNotificationOfTeam,
-  sendNotificationToTeam,
-  sendNotificationToUser,
-};
+module.exports = {};
