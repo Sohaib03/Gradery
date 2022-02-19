@@ -28,6 +28,13 @@
       <h1 class="m-3">Quiz 1</h1>
       <h1 class="m-3">Quiz 3</h1>
     </div>
+    <div class="box">
+        <h2 class="has-text-centered is-size-5"> Pending Assignments </h2>
+        <% for (let i=0; i<assignments.length; i++) { %>
+        <p> <%= assignments[i].ASSIGNMENT_TITLE  %> </p>
+        <% } %>
+
+    </div>
   </div>
 
   <div class="column is-9">
