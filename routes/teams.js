@@ -84,7 +84,13 @@ router.route("/join").post(auth.authMiddleware, async (req, res) => {
         team_code,
         "student"
     );
-    res.redirect("/");
+    res.redirect("/teams/code/" + team_code);
+});
+
+router.route("/join/:code").get(auth.authMiddleware, async (req, res) => {
+    const team_code = req.params.code;
+
+    res.redirect("/teams/code/" + req.params.code);
 });
 
 router.route("/code/:code").get(auth.authMiddleware, async (req, res) => {
@@ -211,22 +217,6 @@ router
                 invitedBy
             );
             res.redirect("/teams/code/" + team_code);
-
-            // if (userIsAlreadyInvited) {
-            //     console.log("User is already invited");
-            //     res.redirect("/teams/code/" + team_code);
-            // } else if (userIsAlreadyInTeam) {
-            //     console.log("User is already in team");
-            //     res.redirect("/teams/code/" + team_code);
-            // } else {
-            //     await invitation.sendInvitation(
-            //         team_info[0].TEAM_ID,
-            //         invitedUserID,
-            //         invitedUserRole,
-            //         invitedBy
-            //     );
-            //     res.redirect("/teams/code/" + team_code);
-            // }
         }
     );
 
