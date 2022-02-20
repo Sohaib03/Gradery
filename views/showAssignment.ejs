@@ -6,6 +6,9 @@
         <% if(is_submitted){ %>
             <p> <span class="tag is-primary">Submitted</span> </p> 
         <% } %>
+        <% if (team_role !== 'student') { %>
+        <a href="/assignment/delete/<%= ass_info.ASSIGNMENT_ID %>" class="button is-danger is-pulled-right"> Delete </a>
+        <% } %>
         </h1>
         <h1 class="is-size-5 p-2"> Description: </h1>
         <h1 class="content p-2"><%= ass_info.ASSIGNMENT_DESC %> </h1>

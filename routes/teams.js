@@ -152,13 +152,19 @@ router.route("/code/:code").get(auth.authMiddleware, async (req, res) => {
 		team_info[0].TEAM_ID
 	);
 
-	let assignmentList = [];
+	let assignmentList = [],
+		completed_ass = [];
 
 	if (user_role_in_team === "student") {
 		assignmentList = await assignments.getAllNewAssignmentsForStudentInTeam(
 			req.session.user_id,
 			team_id
 		);
+		completed_ass =
+			await assignments.getAllCompletedAssignmentsForStudentInTeam(
+				req.session.user_id,
+				team_id
+			);
 	} else if (req.session.role == 0) {
 		assignmentList = await assignments.getAllAssignmentsForInstructorInTeam(
 			req.session.user_id,
@@ -178,6 +184,7 @@ router.route("/code/:code").get(auth.authMiddleware, async (req, res) => {
 		notifications: cur_notifications,
 		assignments: assignmentList,
 		discussion: cur_discussions,
+		completed_assignments: completed_ass,
 	};
 	if (req.session.notification)
 		context.notification = req.session.notification;
