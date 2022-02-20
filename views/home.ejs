@@ -26,6 +26,19 @@
 <% } %>
 </div>
 
+<div class="column is-6">
+  <h class="is-size-4"> Notifications </h>
+  <div class="box">
+    <% for (let i = 0; i < userNotifications.length; i++) { %>
+    <div class="list-item">
+      <p> <%= userNotifications[i].TITLE %> </p>
+      <p><%= userNotifications[i].CONTENT %> </p>
+      <p><%= userNotifications[i].TIMESTAMP %> </p>
+      <hr />
+    </div>
+    <% } %>
+  </div>
+</div>
 
 <%- include('./partials/notification_below.ejs') %>
 <%- include('./partials/footer.ejs') %>

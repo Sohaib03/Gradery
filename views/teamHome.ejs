@@ -79,7 +79,7 @@
 
     </div>
 
-    <% if (role === 0) { %>
+    <% if (team_role !== "student") { %>
     <div class="p-5">
       <form action="/assignment/create/<%= team_id %>/<%= team_code %>" method="get" accept-charset="utf-8">
         <button class="button is-primary">Create Assignment</button>
@@ -138,7 +138,7 @@
     </div>
 
 
-    <% if (role === 0) { %>
+    <% if (team_role !== "student") { %>
     <div class="column is-6">
       <p class="is-size-4"> Invite User </p>
       <form action="/teams/code/<%= team_code %>/invite" method="POST">

@@ -107,8 +107,10 @@ router.route("/join").post(auth.authMiddleware, async (req, res) => {
     const team_code = req.body.team_code;
     console.log(team_code);
 
+    const user_id = req.session.user_id;
+    const team_id = (await teams.getTeamByCode(team_code))[0].TEAM_ID;
     let joiningRole = "student";
-    const invitationInfo = await invitation.getInvitationRole(user_id, team_id);
+    const invitationInfo = await invitation.getInvitation(user_id, team_id);
     if (invitationInfo.length != 0) {
         joiningRole = invitationInfo[0].ROLE;
     }
@@ -178,11 +180,11 @@ router.route("/code/:code").get(auth.authMiddleware, async (req, res) => {
         notifications: cur_notifications,
         assignments: assignmentList,
         discussion: cur_discussions,
+        team_role: user_role_in_team,
     };
     if (req.session.notification)
         context.notification = req.session.notification;
     res.render("teamHome", context);
->>>>>>> 7e9d554b51fa290ff14a40e8f3730023942080ce
 });
 
 router
@@ -258,35 +260,24 @@ router
 
 router
     .route("/code/:code/leave")
-    .post(
-        user_middleware.isInstructor,
-        auth.authMiddleware,
-        async (req, res) => {
-            const team_code = req.params.code;
+    .post(auth.authMiddleware, async (req, res) => {
+        const team_code = req.params.code;
 
-            // Check if team_exists
-            let team_info = await teams.getTeamByCode(team_code);
-            if (team_info.length === 0) {
-                // Team Doesnt exist. Notify User
-                res.redirect("/");
-                return;
-            }
-
-            const invitedUserName = req.body.invitedUserName;
-            const invitedUserRole = req.body.invitedUserRole;
-            const invitedUserID = (await users.getUser(invitedUserName))[0]
-                .USER_ID;
-            const invitedBy = req.session.user_id;
-
-            await invitation.sendInvitation(
-                invitedUserID,
-                team_info[0].TEAM_ID,
-                invitedUserRole,
-                invitedBy
-            );
-            res.redirect("/teams/code/" + team_code);
+        // Check if team_exists
+        let team_info = await teams.getTeamByCode(team_code);
+        if (team_info.length === 0) {
+            // Team Doesnt exist. Notify User
+            res.redirect("/");
+            return;
         }
-    );
+
+        let r = await teams.deleteParticipant(
+            req.session.user_id,
+            team_info[0].TEAM_ID
+        );
+
+        res.redirect("/");
+    });
 
 module.exports = {
     router,
