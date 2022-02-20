@@ -255,6 +255,38 @@ router
         }
     );
 
+router
+    .route("/code/:code/leave")
+    .post(
+        user_middleware.isInstructor,
+        auth.authMiddleware,
+        async (req, res) => {
+            const team_code = req.params.code;
+
+            // Check if team_exists
+            let team_info = await teams.getTeamByCode(team_code);
+            if (team_info.length === 0) {
+                // Team Doesnt exist. Notify User
+                res.redirect("/");
+                return;
+            }
+
+            const invitedUserName = req.body.invitedUserName;
+            const invitedUserRole = req.body.invitedUserRole;
+            const invitedUserID = (await users.getUser(invitedUserName))[0]
+                .USER_ID;
+            const invitedBy = req.session.user_id;
+
+            await invitation.sendInvitation(
+                invitedUserID,
+                team_info[0].TEAM_ID,
+                invitedUserRole,
+                invitedBy
+            );
+            res.redirect("/teams/code/" + team_code);
+        }
+    );
+
 module.exports = {
     router,
 };
