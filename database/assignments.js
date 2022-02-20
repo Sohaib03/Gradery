@@ -24,7 +24,7 @@ async function getAllCompletedAssignmentsForStudent(user_id) {
 }
 
 async function getAllCompletedAssignmentsForStudentInTeam(user_id, team_id) {
-	const sql = `SELECT * FROM ASSIGNED_TO T JOIN (SELECT ASSIGNMENT_ID FROM ASSIGNMENTS WHERE TEAM_ID = :team_id) A ON (A.ASSIGNMENT_ID = T.ASSIGNMENT_ID) WHERE STUDENT_ID = :user_id AND SUBMISSION_STATUS = 1`;
+	const sql = `SELECT T.ASSIGNMENT_ID, A.ASSIGNMENT_TITLE FROM ASSIGNED_TO T JOIN (SELECT ASSIGNMENT_ID, ASSIGNMENT_TITLE FROM ASSIGNMENTS WHERE TEAM_ID = :team_id) A ON (A.ASSIGNMENT_ID = T.ASSIGNMENT_ID) WHERE STUDENT_ID = :user_id AND SUBMISSION_STATUS = 1`;
 	const binds = { user_id: user_id, team_id: team_id };
 	return (await db.execute(sql, binds, db.options)).rows;
 }
@@ -89,6 +89,11 @@ async function getSubmissionStatus(ass_id, std_id) {
 	const binds = { ass_id, std_id };
 	return (await db.execute(sql, binds, db.options)).rows;
 }
+async function deleteAssignment(ass_id) {
+	const sql = `DELETE FROM ASSIGNMENTS WHERE ASSIGNMENT_ID=:ass_id`;
+	const binds = { ass_id };
+	return (await db.execute(sql, binds, db.options)).rows;
+}
 
 module.exports = {
 	getAllNewAssignmentsForStudent,
@@ -101,4 +106,5 @@ module.exports = {
 	getAssignmentById,
 	submitAssignment,
 	getSubmissionStatus,
+	deleteAssignment,
 };

@@ -4,6 +4,7 @@ const auth = require("../routes/auth");
 const user_middleware = require("../middlewares/user_middleware");
 const teams = require("../database/teams");
 const assignmentDB = require("../database/assignments");
+const { redirect } = require("express/lib/response");
 
 router
 	.route("/create/:team_id/:team_code")
@@ -17,6 +18,24 @@ router
 				role: req.session.role,
 			};
 			res.render("createAssignment", context);
+		}
+	);
+router
+	.route("/delete/:ass_id")
+	.get(
+		auth.authMiddleware,
+		user_middleware.isInstructor,
+		async (req, res) => {
+			const ass_id = req.params.ass_id;
+			const ass_info = await assignmentDB.getAssignmentById(ass_id);
+			if (ass_info.length === 0) {
+				redirect("/");
+				return;
+			}
+			const team_id = ass_info[0].TEAM_ID;
+			const team_info = await teams.getTeamInfo(team_id);
+			await assignmentDB.deleteAssignment(ass_id);
+			res.redirect("/teams/code/" + team_info[0].TEAM_CODE);
 		}
 	);
 
@@ -38,7 +57,10 @@ router.route("/:ass_id").get(auth.authMiddleware, async (req, res) => {
 		role: req.session.role,
 		team_role: team_role[0].ROLE,
 		ass_info: ass_info ? ass_info[0] : undefined,
-		is_submitted: submissionStatus[0].SUBMISSION_STATUS,
+		is_submitted:
+			submissionStatus.length !== 0
+				? submissionStatus[0].SUBMISSION_STATUS
+				: 0,
 	};
 	console.log(req.session.notification);
 	if (req.session.notification) {

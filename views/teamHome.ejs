@@ -41,6 +41,14 @@
         <% } %>
 
     </div>
+    <div class="box">
+        <h2 class="has-text-centered is-size-5"> Completed Assignments </h2>
+        <% for (let i=0; i<completed_assignments.length; i++) { %>
+        <p>  </p>
+        <a class="box" href="/assignment/<%= completed_assignments[i].ASSIGNMENT_ID %>"> <%= completed_assignments[i].ASSIGNMENT_TITLE  %> </a>
+        <% } %>
+
+    </div>
   </div>
 
   <div class="column is-9">
