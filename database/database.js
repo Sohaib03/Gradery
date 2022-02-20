@@ -115,10 +115,11 @@ end;`;
         r VARCHAR2(20);
         i_id NUMBER;
         i_name VARCHAR2(100);
+        t_code VARCHAR2(100);
     BEGIN
         t_id := :NEW.TEAM_ID;
         SELECT TEAM_NAME INTO t_name FROM TEAMS T WHERE T.TEAM_ID = t_id;
-
+        SELECT TEAM_CODE INTO t_code FROM TEAMS T WHERE T.TEAM_ID = t_id;
         u_id := :NEW.USER_ID;
         SELECT USERNAME INTO u_name FROM USERS U WHERE U.USER_ID = u_id;
 
@@ -128,9 +129,20 @@ end;`;
         SELECT USERNAME INTO i_name FROM USERS U WHERE U.USER_ID = i_id;
 
         title := 'Invitation to join ' || t_name;
-        content := 'Dear ' || u_name || ', you are invited by ' || i_name || ' to join ' || t_name || ' as ' || r || '. Please the team.';
+        content := 'Dear ' || u_name || ', you are invited by ' || i_name || ' to join ' || t_name || ' as ' || r || '. Please join the team by using the link: http://localhost:3000/teams/join/' || t_code;
         CREATE_USER_NOTIFICATION(u_id, title, content);
     END;`;
+
+    await execute(invitation_notification, {}, options);
+
+    const add_participant_delete_invitation = `CREATE OR REPLACE TRIGGER ADD_PARTICIPANT_DELETE_INVITATION
+    AFTER INSERT
+    ON PARTICIPANT
+    FOR EACH ROW
+    BEGIN
+        DELETE FROM INVITATION I WHERE I.USER_ID = :NEW.USER_ID AND I.TEAM_ID = :NEW.TEAM_ID ;
+    END;`;
+    await execute(add_participant_delete_invitation, {}, options);
 
     const create_team = `
 create or replace procedure create_team(team_name in varchar2, user_id in Number, team_code in varchar2, team_desc in varchar2, course_id in varchar2)

@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const auth = require("../routes/auth");
 const user_middleware = require("../middlewares/user_middleware");
+const teams = require("../database/teams");
 const assignmentDB = require("../database/assignments");
 
 router
@@ -18,6 +19,47 @@ router
 			res.render("createAssignment", context);
 		}
 	);
+
+router.route("/:ass_id").get(auth.authMiddleware, async (req, res) => {
+	const ass_id = req.params.ass_id;
+	const ass_info = await assignmentDB.getAssignmentById(ass_id);
+	const team_role = await teams.checkUserInTeam(
+		req.session.user_id,
+		ass_info[0].TEAM_ID
+	);
+	console.log({ team_role: team_role[0].ROLE });
+	let context = {
+		title: "Create Assignment",
+		username: req.session.username,
+		role: req.session.role,
+		team_role: team_role[0].ROLE,
+		ass_info: ass_info ? ass_info[0] : undefined,
+	};
+	console.log(ass_info);
+	res.render("showAssignment", context);
+});
+
+router.route("/submit/:ass_id").post(auth.authMiddleware, async (req, res) => {
+	const ass_id = req.params.ass_id;
+	const ass_info = await assignmentDB.getAssignmentById(ass_id);
+	const team_role = await teams.checkUserInTeam(
+		req.session.user_id,
+		ass_info[0].TEAM_ID
+	);
+	console.log({ team_role });
+	if (team_role[0].ROLE === "student") {
+		console.log(req.files);
+		if (req.files) {
+			const file = req.files.file;
+			console.log(file);
+			res.redirect("/assignment/" + ass_id);
+		} else {
+			res.redirect("/assignment/" + ass_id);
+		}
+	} else {
+		res.redirect("/assignment/" + ass_id);
+	}
+});
 
 router
 	.route("/create/:team_id/:team_code")

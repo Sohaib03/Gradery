@@ -3,6 +3,8 @@ const router = express.Router();
 const auth = require("../routes/auth");
 const genUtils = require("../utils/generators");
 const teams = require("../database/teams");
+const users = require("../database/users");
+const invitation = require("../database/invitation");
 const course = require("../database/course");
 const notification = require("../database/notification");
 const user_middleware = require("../middlewares/user_middleware");
@@ -65,6 +67,33 @@ router
         }
     );
 
+router.route("/join/:code").get(auth.authMiddleware, async (req, res) => {
+    const team_code = req.params.code;
+    const team_id = (await teams.getTeamByCode(team_code))[0].TEAM_ID;
+    const user_id = req.session.user_id;
+
+    console.log({ user_id, team_id });
+    const userAlreadyInTeam = !(
+        (await teams.checkUserInTeam(user_id, team_id)).length === 0
+    );
+    const userDoesntHaveInvitation = await invitation.invitationDoesntExist(
+        user_id,
+        team_id
+    );
+
+    if (userAlreadyInTeam) {
+        res.redirect("/teams/code/" + team_code);
+    } else if (userDoesntHaveInvitation) {
+        res.redirect("/");
+    } else {
+        const invitationRole = (
+            await invitation.getInvitation(user_id, team_id)
+        )[0].ROLE;
+        let r = await teams.addParticipant(user_id, team_id, invitationRole);
+        res.redirect("/teams/code/" + team_code);
+    }
+});
+
 router.route("/join").get(auth.authMiddleware, async (req, res) => {
     let context = {
         title: "Join a New Team",
@@ -77,34 +106,19 @@ router.route("/join").get(auth.authMiddleware, async (req, res) => {
 router.route("/join").post(auth.authMiddleware, async (req, res) => {
     const team_code = req.body.team_code;
     console.log(team_code);
+
+    let joiningRole = "student";
+    const invitationInfo = await invitation.getInvitationRole(user_id, team_id);
+    if (invitationInfo.length != 0) {
+        joiningRole = invitationInfo[0].ROLE;
+    }
+
     let r = await teams.addParticipantWithCode(
         req.session.user_id,
         team_code,
-        "student"
+        joiningRole
     );
     res.redirect("/teams/code/" + team_code);
-});
-
-router.route("/join/:code").get(auth.authMiddleware, async (req, res) => {
-    const team_code = req.params.code;
-    const team_id = await teams.getTeamByCode(team_code);
-    const user_id = req.session.user_id;
-
-    const userAlreadyInTeam = true;
-    const userDoesntHaveInvitation = false;
-
-    if (userAlreadyInTeam) {
-        res.redirect("/teams/code/" + team_code);
-    } else if (userDoesntHaveInvitation) {
-        res.redirect("/");
-    } else {
-        const invitationRole = await invitation.getInvitationRole(
-            user_id,
-            team_id
-        );
-        let r = await teams.addParticipant(user_id, team_id, role);
-        res.redirect("/teams/code/" + team_code);
-    }
 });
 
 router.route("/code/:code").get(auth.authMiddleware, async (req, res) => {

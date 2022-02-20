@@ -31,7 +31,8 @@
     <div class="box">
         <h2 class="has-text-centered is-size-5"> Pending Assignments </h2>
         <% for (let i=0; i<assignments.length; i++) { %>
-        <p> <%= assignments[i].ASSIGNMENT_TITLE  %> </p>
+        <p>  </p>
+        <a class="box" href="/assignment/<%= assignments[i].ASSIGNMENT_ID %>"> <%= assignments[i].ASSIGNMENT_TITLE  %></a>
         <% } %>
 
     </div>
@@ -49,7 +50,7 @@
         <div class="card">
           <header class="card-header">
             <p class="card-header-title">
-              Assignment <%= i+1 %>
+            Assignment <%= i+1 %>  <% if (assignments[i].DAYS == 0) {%> <span class="tag is-warning m-2">Less than a day</span> <% } %>
             </p>
             <button class="card-header-icon" aria-label="more options">
               <span class="icon">
@@ -59,12 +60,12 @@
           </header>
           <div class="card-content">
             <div class="content">
-              <p> Assignment ID: <%= assignments[i].ASSIGNMENT_ID %>
-              <p>
               <p> <b><%= assignments[i].ASSIGNMENT_TITLE %> <b>
                     <p>
                     <p> Deadline: <%= assignments[i].DEADLINE %>
+
                     <p>
+        <a class="button is-primary is-small" href="/assignment/<%= assignments[i].ASSIGNMENT_ID %>"> View </a>
             </div>
           </div>
         </div>
