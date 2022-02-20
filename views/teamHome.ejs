@@ -50,7 +50,7 @@
         <div class="card">
           <header class="card-header">
             <p class="card-header-title">
-            Assignment <%= i+1 %>  <% if (assignments[i].DAYS <= 0) {%> <span class="tag is-warning m-2">Less than a day</span> <% } %>
+            Assignment <%= i+1 %>  <% if (assignments[i].DAYS == 0) {%> <span class="tag is-warning m-2">Less than a day</span> <% } %>
             </p>
             <button class="card-header-icon" aria-label="more options">
               <span class="icon">

@@ -3,11 +3,15 @@
 <div class="columns is-centered">
     <div class="box column is-6 ">
         <h1 class="title is-size-4 p-5"><%= ass_info.ASSIGNMENT_TITLE %> </h1>
-        <h1 class="is-size-5"> <%= ass_info.ASSIGNMENT_DESC %> </h1>
-        <a class="is-size-5" href="/file/<%= ass_info.ASSIGNMENT_ID %>"> Download File </a>
-        <h1 class="is-size-5"> Status : <%= (ass_info.DUE ? 'DUE' : 'ONGOING') %></h1>
-        <h2 class="is-size-5"> Time Left : <%= ass_info.DAYS%> Day(s) <%= ass_info.HOURS %> Hour(s) <%= ass_info.MINS%> Min(s) </h2>
-        <form method="POST"  action="/assignment/<%= ass_info.ASSIGNMENT_ID %>">
+        <h1 class="is-size-5 p-2"> Description: </h1>
+        <h1 class="content p-2"><%= ass_info.ASSIGNMENT_DESC %> </h1>
+        <% if (ass_info.FILE_URL) { %>
+        <a class="button is-light is-primary m-2" href="/file/download/<%= ass_info.FILE_URL%>"> Download File </a>
+        <% } %>
+        <h1 class="is-size-6 p-2"> Status : <%= (ass_info.DUE ? 'DUE' : 'ONGOING') %></h1>
+        <h2 class="is-size-6 p-2"> Time Left : <%= ass_info.DAYS%> Day(s) <%= ass_info.HOURS %> Hour(s) <%= ass_info.MINS%> Min(s) </h2>
+        <% if (team_role === 'student') { %>
+        <form method="POST"  action="/assignment/submit/<%= ass_info.ASSIGNMENT_ID %>" enctype="multipart/form-data">
 
     <div id="file-js-example" class="file has-name">
       <label class="file-label">
@@ -31,9 +35,21 @@
         </button>
     </p>
         </form>
+        <% } else {%>
+        <a href="/" class="button is-primary"> Start Grading </a>
+        <% } %>
 
     </div>
     
 </div>
+<script>
+  const fileInput = document.querySelector('#file-js-example input[type=file]');
+  fileInput.onchange = () => {
+    if (fileInput.files.length > 0) {
+      const fileName = document.querySelector('#file-js-example .file-name');
+      fileName.textContent = fileInput.files[0].name;
+    }
+  }
+</script>
 
 <%- include('./partials/footer.ejs') %>

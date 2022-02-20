@@ -41,6 +41,10 @@ app.use("/teams", teams.router);
 app.use("/dis", discussion.router);
 app.use("/assignment", assignment.router);
 
+app.get("/file/download/uploads/:path", (req, res) => {
+	const file_path = "./uploads/" + req.params.path;
+	res.download(file_path);
+});
 app.get("/", auth.authMiddleware, (req, res) => {
 	return homeEnd.homeEndpoint(req, res);
 });
