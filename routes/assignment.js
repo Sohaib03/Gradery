@@ -31,7 +31,6 @@ router.route("/:ass_id").get(auth.authMiddleware, async (req, res) => {
 		ass_id,
 		req.session.user_id
 	);
-	console.log(submissionStatus[0].SUBMISSION_STATUS);
 
 	let context = {
 		title: "Create Assignment",
