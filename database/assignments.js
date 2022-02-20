@@ -78,6 +78,18 @@ end;`;
 	return (await db.execute(sql, binds, db.options)).rows;
 }
 
+async function submitAssignment(ass_id, std_id, file_path) {
+	sql = `UPDATE ASSIGNED_TO SET SUBMISSION_STATUS=1, SUBMISSION_FILE=:file_path where ASSIGNMENT_ID=:ass_id and STUDENT_ID=:std_id`;
+	const binds = { ass_id, std_id, file_path };
+	return (await db.execute(sql, binds, db.options)).rows;
+}
+
+async function getSubmissionStatus(ass_id, std_id) {
+	const sql = `SELECT * from ASSIGNED_TO where ASSIGNMENT_ID=:ass_id and STUDENT_ID=:std_id`;
+	const binds = { ass_id, std_id };
+	return (await db.execute(sql, binds, db.options)).rows;
+}
+
 module.exports = {
 	getAllNewAssignmentsForStudent,
 	getAllNewAssignmentsForStudentInTeam,
@@ -87,4 +99,6 @@ module.exports = {
 	getAllAssignmentsForInstructorInTeam,
 	createAssignment,
 	getAssignmentById,
+	submitAssignment,
+	getSubmissionStatus,
 };

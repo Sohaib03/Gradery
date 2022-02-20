@@ -182,6 +182,7 @@ router.route("/code/:code").get(auth.authMiddleware, async (req, res) => {
     if (req.session.notification)
         context.notification = req.session.notification;
     res.render("teamHome", context);
+>>>>>>> 7e9d554b51fa290ff14a40e8f3730023942080ce
 });
 
 router
