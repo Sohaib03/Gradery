@@ -150,8 +150,10 @@ router.route("/code/:code").get(auth.authMiddleware, async (req, res) => {
 		assignments: assignmentList,
 		discussion: cur_discussions,
 	};
-	if (req.session.notification)
+	if (req.session.notification) {
 		context.notification = req.session.notification;
+		req.session.notification = undefined;
+	}
 	res.render("teamHome", context);
 });
 

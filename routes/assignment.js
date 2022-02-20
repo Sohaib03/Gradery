@@ -27,15 +27,26 @@ router.route("/:ass_id").get(auth.authMiddleware, async (req, res) => {
 		req.session.user_id,
 		ass_info[0].TEAM_ID
 	);
-	console.log({ team_role: team_role[0].ROLE });
+	const submissionStatus = await assignmentDB.getSubmissionStatus(
+		ass_id,
+		req.session.user_id
+	);
+	console.log(submissionStatus[0].SUBMISSION_STATUS);
+
 	let context = {
 		title: "Create Assignment",
 		username: req.session.username,
 		role: req.session.role,
 		team_role: team_role[0].ROLE,
 		ass_info: ass_info ? ass_info[0] : undefined,
+		is_submitted: submissionStatus[0].SUBMISSION_STATUS,
 	};
-	console.log(ass_info);
+	console.log(req.session.notification);
+	if (req.session.notification) {
+		context.notification = req.session.notification;
+		req.session.notification = undefined;
+	}
+	console.log(context);
 	res.render("showAssignment", context);
 });
 
@@ -47,15 +58,35 @@ router.route("/submit/:ass_id").post(auth.authMiddleware, async (req, res) => {
 		ass_info[0].TEAM_ID
 	);
 	console.log({ team_role });
-	if (team_role[0].ROLE === "student") {
-		console.log(req.files);
-		if (req.files) {
-			const file = req.files.file;
-			console.log(file);
+	if (team_role[0].ROLE === "student" && req.files && req.files.file) {
+		const file = req.files.file;
+		let file_name =
+			"./uploads/" +
+			req.session.username +
+			"_" +
+			new Date().getTime() +
+			"_" +
+			file.name;
+
+		await file.mv(file_name, (err) => {
+			if (err) {
+				req.session.notification = {
+					status: "is-danger is-light",
+					content: "Error while uploading file",
+				};
+			} else {
+				req.session.notification = {
+					status: "is-success is-light",
+					content: "Successfully Submitted assignment",
+				};
+				assignmentDB.submitAssignment(
+					ass_id,
+					req.session.user_id,
+					file_name
+				);
+			}
 			res.redirect("/assignment/" + ass_id);
-		} else {
-			res.redirect("/assignment/" + ass_id);
-		}
+		});
 	} else {
 		res.redirect("/assignment/" + ass_id);
 	}
@@ -79,12 +110,9 @@ router
 			console.log({ title, desc, d_date, d_time, file });
 
 			if (file) {
-				file_name =
-					"./uploads/" +
-					req.session.username +
-					"_" +
-					new Date().getTime() +
-					file.name;
+				file_name = "./uploads/" + req.session.username + "_";
+				new Date().getTime() + "_";
+				file.name;
 				file.mv(file_name, (err) => {
 					if (err) {
 						req.session.notification = {

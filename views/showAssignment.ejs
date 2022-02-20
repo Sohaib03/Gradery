@@ -2,7 +2,11 @@
 <%- include('./partials/navbar.ejs') %>
 <div class="columns is-centered">
     <div class="box column is-6 ">
-        <h1 class="title is-size-4 p-5"><%= ass_info.ASSIGNMENT_TITLE %> </h1>
+        <h1 class="title is-size-4 p-5"><%= ass_info.ASSIGNMENT_TITLE %>
+        <% if(is_submitted){ %>
+            <p> <span class="tag is-primary">Submitted</span> </p> 
+        <% } %>
+        </h1>
         <h1 class="is-size-5 p-2"> Description: </h1>
         <h1 class="content p-2"><%= ass_info.ASSIGNMENT_DESC %> </h1>
         <% if (ass_info.FILE_URL) { %>
@@ -52,4 +56,5 @@
   }
 </script>
 
+<%- include('./partials/notification_below.ejs') %>
 <%- include('./partials/footer.ejs') %>
