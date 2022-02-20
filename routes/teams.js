@@ -75,20 +75,20 @@ router.route("/join").get(auth.authMiddleware, async (req, res) => {
 });
 
 router.route("/join").post(auth.authMiddleware, async (req, res) => {
-    const team_code = req.body.team_code;
-    console.log(team_code);
-    let r = await teams.addParticipantWithCode(
-        req.session.user_id,
-        team_code,
-        "student"
-    );
-    res.redirect("/teams/code/" + team_code);
+	const team_code = req.body.team_code;
+	console.log(team_code);
+	let r = await teams.addParticipantWithCode(
+		req.session.user_id,
+		team_code,
+		"student"
+	);
+	res.redirect("/teams/code/" + team_code);
 });
 
 router.route("/join/:code").get(auth.authMiddleware, async (req, res) => {
-    const team_code = req.params.code;
+	const team_code = req.params.code;
 
-    res.redirect("/teams/code/" + req.params.code);
+	res.redirect("/teams/code/" + req.params.code);
 });
 
 router.route("/code/:code").get(auth.authMiddleware, async (req, res) => {
@@ -129,6 +129,7 @@ router.route("/code/:code").get(auth.authMiddleware, async (req, res) => {
 			req.session.user_id,
 			team_id
 		);
+		console.log("Assignment ", assignmentList);
 	} else if (req.session.role == 0) {
 		assignmentList = await assignments.getAllAssignmentsForInstructorInTeam(
 			req.session.user_id,
@@ -194,36 +195,36 @@ router
 	);
 
 router
-    .route("/code/:code/invite")
-    .post(
-        user_middleware.isInstructor,
-        auth.authMiddleware,
-        async (req, res) => {
-            const team_code = req.params.code;
+	.route("/code/:code/invite")
+	.post(
+		user_middleware.isInstructor,
+		auth.authMiddleware,
+		async (req, res) => {
+			const team_code = req.params.code;
 
-            // Check if team_exists
-            let team_info = await teams.getTeamByCode(team_code);
-            if (team_info.length === 0) {
-                // Team Doesnt exist. Notify User
-                res.redirect("/");
-                return;
-            }
+			// Check if team_exists
+			let team_info = await teams.getTeamByCode(team_code);
+			if (team_info.length === 0) {
+				// Team Doesnt exist. Notify User
+				res.redirect("/");
+				return;
+			}
 
-            const invitedUserName = req.body.invitedUserName;
-            const invitedUserRole = req.body.invitedUserRole;
-            const invitedUserID = (await users.getUser(invitedUserName))[0]
-                .USER_ID;
-            const invitedBy = req.session.user_id;
+			const invitedUserName = req.body.invitedUserName;
+			const invitedUserRole = req.body.invitedUserRole;
+			const invitedUserID = (await users.getUser(invitedUserName))[0]
+				.USER_ID;
+			const invitedBy = req.session.user_id;
 
-            await invitation.sendInvitation(
-                team_info[0].TEAM_ID,
-                invitedUserID,
-                invitedUserRole,
-                invitedBy
-            );
-            res.redirect("/teams/code/" + team_code);
-        }
-    );
+			await invitation.sendInvitation(
+				team_info[0].TEAM_ID,
+				invitedUserID,
+				invitedUserRole,
+				invitedBy
+			);
+			res.redirect("/teams/code/" + team_code);
+		}
+	);
 
 module.exports = {
 	router,

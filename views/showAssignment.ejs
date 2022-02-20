@@ -1,0 +1,39 @@
+<%- include('./partials/header.ejs') %>
+<%- include('./partials/navbar.ejs') %>
+<div class="columns is-centered">
+    <div class="box column is-6 ">
+        <h1 class="title is-size-4 p-5"><%= ass_info.ASSIGNMENT_TITLE %> </h1>
+        <h1 class="is-size-5"> <%= ass_info.ASSIGNMENT_DESC %> </h1>
+        <a class="is-size-5" href="/file/<%= ass_info.ASSIGNMENT_ID %>"> Download File </a>
+        <h1 class="is-size-5"> Status : <%= (ass_info.DUE ? 'DUE' : 'ONGOING') %></h1>
+        <h2 class="is-size-5"> Time Left : <%= ass_info.DAYS%> Day(s) <%= ass_info.HOURS %> Hour(s) <%= ass_info.MINS%> Min(s) </h2>
+        <form method="POST"  action="/assignment/<%= ass_info.ASSIGNMENT_ID %>">
+
+    <div id="file-js-example" class="file has-name">
+      <label class="file-label">
+        <input class="file-input" type="file" name="file">
+        <span class="file-cta">
+          <span class="file-icon">
+            <i class="fas fa-upload"></i>
+          </span>
+          <span class="file-label">
+            Choose a file…
+          </span>
+        </span>
+        <span class="file-name">
+          No file uploaded
+        </span>
+      </label>
+    </div>
+    <p class="control">
+        <button class="button is-primary" type="submit">
+            Submit
+        </button>
+    </p>
+        </form>
+
+    </div>
+    
+</div>
+
+<%- include('./partials/footer.ejs') %>

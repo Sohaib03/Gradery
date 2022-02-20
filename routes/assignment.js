@@ -19,6 +19,19 @@ router
 		}
 	);
 
+router.route("/:ass_id").get(auth.authMiddleware, async (req, res) => {
+	const ass_id = req.params.ass_id;
+	const ass_info = await assignmentDB.getAssignmentById(ass_id);
+	let context = {
+		title: "Create Assignment",
+		username: req.session.username,
+		role: req.session.role,
+		ass_info: ass_info ? ass_info[0] : undefined,
+	};
+	console.log(ass_info);
+	res.render("showAssignment", context);
+});
+
 router
 	.route("/create/:team_id/:team_code")
 	.post(
