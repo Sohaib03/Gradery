@@ -6,9 +6,9 @@
     <h3 class="title cf"> <%= team_name %> - <%= team_desc %> </h3>
     <h1 class="subtitle cf3"> Team Code : <%= team_code %> </h1>
     <form action="/teams/code/<%= team_code %>/leave" method="POST">
-        <% if(team_role === 'admin') {%> 
-          <a class="button is-warning" href="/teams/code/<%= team_code %>/edit">Edit Team</a>
-        <%}%>
+      <% if(team_role === 'admin') {%>
+      <a class="button is-warning" href="/teams/code/<%= team_code %>/edit">Edit Team</a>
+      <%}%>
         <input class="button is-danger" type="submit" value="Leave Team">
     </form>
 
@@ -24,114 +24,83 @@
           <th> Role </th>
         </tr>
         <% for (let i=0; i<participants.length; i++) { %>
-        <tr>
-          <td> <%= participants[i].USERNAME.toUpperCase() %> </td>
-          <td> <%= participants[i].ROLE===0 ? 'Instructor' : 'Student' %> </td>
-        </tr>
-        <% } %>
+      <tr>
+        <td> <%= participants[i].USERNAME.toUpperCase() %> </td>
+        <td> <%= participants[i].ROLE===0 ? 'Instructor' : 'Student' %> </td>
+      </tr>
+      <% } %>
       </table>
-    </div>
-    <div class="p-2">
-        <h2 class="is-size-5 "> Discussions 
-        <a class="button is-small is-primary is-light is-pulled-right" href="/dis/create/<%= team_id %>">Add New</a>
-        </h2> 
-        <% for (let i=0; i<all_discussions.length; i++) { %>
-        <h1 class="p-2"><%= all_discussions[i].TITLE %>
-            <a class="button is-small is-primary is-light is-pulled-right" href="/dis/<%=all_discussions[i].DISCUSSION_ID%>/<%= team_id %>">Show</a>
-        </h1>
-        <% } %>
-    </div>
-    <div class="box">
-        <h2 class="has-text-centered is-size-5"> Pending Assignments </h2>
-        <% for (let i=0; i<assignments.length; i++) { %>
-        <p>  </p>
-        <a class="box" href="/assignment/<%= assignments[i].ASSIGNMENT_ID %>"> <%= assignments[i].ASSIGNMENT_TITLE  %></a>
-        <% } %>
+  </div>
+  <div class="p-2">
+    <h2 class="is-size-5 "> Discussions
+      <a class="button is-small is-primary is-light is-pulled-right" href="/dis/create/<%= team_id %>">Add New</a>
+    </h2>
+    <% for (let i=0; i<all_discussions.length; i++) { %>
+    <h1 class="p-2"><%= all_discussions[i].TITLE %>
+      <a class="button is-small is-primary is-light is-pulled-right" href="/dis/<%=all_discussions[i].DISCUSSION_ID%>/<%= team_id %>">Show</a>
+    </h1>
+    <% } %>
+  </div>
+  <div class="box">
+    <h2 class="has-text-centered is-size-5"> Pending Assignments </h2>
+    <% for (let i=0; i<assignments.length; i++) { %>
+    <p> </p>
+    <a class="box" href="/assignment/<%= assignments[i].ASSIGNMENT_ID %>"> <%= assignments[i].ASSIGNMENT_TITLE  %></a>
+    <% } %>
 
-        </div>
-        <div class="box">
-            <h2 class="has-text-centered is-size-5"> Completed Assignments </h2>
-            <% for (let i=0; i<completed_assignments.length; i++) { %>
-            <p> </p>
-            <a class="box" href="/assignment/<%= completed_assignments[i].ASSIGNMENT_ID %>"> <%= completed_assignments[i].ASSIGNMENT_TITLE  %> </a>
-            <% } %>
+  </div>
+  <div class="box">
+    <h2 class="has-text-centered is-size-5"> Completed Assignments </h2>
+    <% for (let i=0; i<completed_assignments.length; i++) { %>
+    <p> </p>
+    <a class="box" href="/assignment/<%= completed_assignments[i].ASSIGNMENT_ID %>"> <%= completed_assignments[i].ASSIGNMENT_TITLE  %> </a>
+    <% } %>
 
-        </div>
-    </div>
+  </div>
+  </div>
 
-    <div class="column is-9">
-        <div>
-        </div>
+  <div class="column is-5">
+    <div>
+      <b>Assignments</b><br>
 
-        <div>
-            <b>Assignments</b><br>
+      <div class="box ">
+        <% for (let i=0; i<assignments.length; i++){ %>
+        <div class="">
+          <header class="card-header">
+            <p class="card-header-title">
+              <%= assignments[i].ASSIGNMENT_TITLE %>
+            </p>
+          </header>
+          <div class="card-content">
+            <div class="content">
+              <p> Deadline: <%= assignments[i].DEADLINE %> </p>
 
-            <div class="cards">
-                <% for (let i=0; i<assignments.length; i++){ %>
-                <div class="card">
-                    <header class="card-header">
-                        <p class="card-header-title">
-                            Assignment <%= i+1 %> <% if (assignments[i].DAYS == 0) {%> <span class="tag is-warning m-2">Less than a day</span> <% } %>
-                        </p>
-                    </header>
-                    <div class="card-content">
-                        <div class="content">
-                            <p> <b><%= assignments[i].ASSIGNMENT_TITLE %> <b>
-                                        <p>
-                                        <p> Deadline: <%= assignments[i].DEADLINE %>
-
-                                        <p>
-                                            <a class="button is-primary is-small" href="/assignment/<%= assignments[i].ASSIGNMENT_ID %>"> View </a>
-                        </div>
-                    </div>
-                </div>
-                <% } %>
+              <a class="button is-primary is-small" href="/assignment/<%= assignments[i].ASSIGNMENT_ID %>"> View </a>
             </div>
-
+          </div>
         </div>
-
-        <% if (team_role !== "student") { %>
-        <div class="p-5">
-            <form action="/assignment/create/<%= team_id %>/<%= team_code %>" method="get" accept-charset="utf-8">
-                <button class="button is-primary">Create Assignment</button>
-            </form>
-        </div>
-        <div class="column is-6">
-            <p class="is-size-4"> Create a New Notification </p>
-            <form action="/teams/code/<%= team_code %>/notify" method="POST">
-                <label class="label">Title </label>
-                <input name="notif_title" class="input" type="text">
-                <label class="label">Details </label>
-                <input name="notif_content" class="input" type="text">
-                <button class="button is-primary" type="submit"> Notify </button>
-            </form>
-        </div>
-
         <% } %>
+      </div>
 
-        <div class="column is-6">
-            <h class="is-size-4"> Notifications </h>
-            <div class="box">
-                <% for (let i=0; i<notifications.length; i++) { %>
-                <div class="list-item">
-                    <p> <%= notifications[i].TITLE %> </p>
-                    <p><%= notifications[i].CONTENT %> </p>
-                    <p><%= notifications[i].TIMESTAMP %> </p>
-                    <hr />
-                </div>
-                <% } %>
-            </div>
-        </div>
+    </div>
+
+    <% if (team_role !== "student") { %>
+    <div class="p-5">
+      <form action="/assignment/create/<%= team_id %>/<%= team_code %>" method="get" accept-charset="utf-8">
+        <button class="button is-primary">Create Assignment</button>
+      </form>
+    </div>
+
+    <% } %>
 
 
-    <div class="column is-6">
+    <div class="">
       <h1 class="is-size-4"> General </h1>
       <div class="box">
         <% for (let i=0; i<discussion.length; i++) { %>
         <div class="list-item">
-          <p><%= discussion[i].CONTENT %> </p>
-          <p><%= discussion[i].USERNAME%> </p>
-          <p><%= discussion[i].TIMESTAMP %> </p>
+          <p> <span class="cf"> <%= discussion[i].USERNAME%> </span> : <%= discussion[i].CONTENT %> </p>
+          <p class="is-italic sml is-pulled-right"><%= discussion[i].TIMESTAMP %> </p>
           <hr />
         </div>
         <% } %>
@@ -145,30 +114,50 @@
             <button class="button is-primary">Send</button>
           </div>
         </div>
+        </form>
 
 
         <% if (team_role !== "student") { %>
-        <div class="column is-6">
-            <p class="is-size-4"> Invite User </p>
-            <form action="/teams/code/<%= team_code %>/invite" method="POST">
-                <label class="label">Username</label>
-                <input name="invitedUserName" class="input" type="text">
-                <label class="label">Team Role</label>
-                <div class="select is-rounded">
-                    <select name="invitedUserRole" class="input">
-                        <option value="student">Student</option>
-                        <option value="instructor">Instructor</option>
-                        <option value="admin">Admin</option>
-                    </select>
-                </div>
-                <button class="button is-primary" type="submit"> Invite </button>
-            </form>
+        <div>
+          <p class="is-size-4"> Invite User </p>
+          <form action="/teams/code/<%= team_code %>/invite" method="POST">
+            <label class="label">Username</label>
+            <input name="invitedUserName" class="input" type="text">
+            <label class="label">Team Role</label>
+            <div class="select is-rounded">
+              <select name="invitedUserRole" class="input">
+                <option value="student">Student</option>
+                <option value="instructor">Instructor</option>
+                <option value="admin">Admin</option>
+              </select>
+            </div>
+            <button class="button is-primary" type="submit"> Invite </button>
+          </form>
         </div>
-
         <% } %>
     </div>
+  </div>
+  <div class="column is-4">
+      <p class="is-size-6"> Create a New Notification </p>
+      <form action="/teams/code/notify/<%= team_code %>" method="POST">
+        <label class="label">Title </label>
+        <input name="notif_title" class="input" type="text">
+        <label class="label">Details </label>
+        <input name="notif_content" class="input" type="text">
+        <button class="button is-primary" type="submit"> Notify </button>
+      </form>
+    <h class="is-size-4"> Notifications </h>
+    <div class="box">
+      <% for (let i=0; i<notifications.length; i++) { %>
+      <div class="list-item">
+        <p> <%= notifications[i].TITLE %> </p>
+        <p><%= notifications[i].CONTENT %> </p>
+        <p><%= notifications[i].TIMESTAMP %> </p>
+        <hr />
+      </div>
+      <% } %>
+    </div>
+  </div>
 
-
-</div>
-<%- include('./partials/notification_below.ejs') %>
-<%- include('./partials/footer.ejs') %>
+  <%- include('./partials/notification_below.ejs') %>
+  <%- include('./partials/footer.ejs') %>
