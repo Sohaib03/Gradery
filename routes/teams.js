@@ -379,6 +379,10 @@ router.route("/code/:code").get(auth.authMiddleware, async (req, res) => {
     const cur_discussions = await discussionDB.getDefaultDiscussion(
         team_info[0].TEAM_ID
     );
+    const all_discussions = await discussionDB.getAllDiscussion(
+        team_info[0].TEAM_ID
+    );
+    const dis_id = await discussionDB.getTeamDiscussion(team_info[0].TEAM_ID);
 
     let assignmentList = [],
         completed_ass = [];
@@ -411,6 +415,8 @@ router.route("/code/:code").get(auth.authMiddleware, async (req, res) => {
         discussion: cur_discussions,
         team_role: user_role_in_team,
         completed_assignments: completed_ass,
+        dis_id: dis_id[0].DISCUSSION_ID,
+        all_discussions,
     };
     if (req.session.notification)
         context.notification = req.session.notification;

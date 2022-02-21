@@ -2,45 +2,51 @@
 <%- include('./partials/navbar.ejs') %>
 
 <section class="hero is-primary">
-    <div class="hero-body">
-        <h3 class="title"> <%= team_name %> - <%= team_desc %> </h3>
-        <h1 class="subtitle"> Team Code : <%= team_code %> </h1>
-        <form action="/teams/code/<%= team_code %>/leave" method="POST">
-            <% if(team_role === 'admin') {%> 
-              <a class="button is-warning" href="/teams/code/<%= team_code %>/edit">Edit Team</a>
-            <%}%>
-            <input class="button is-danger" type="submit" value="Leave Team">
-        </form>
+  <div class="hero-body">
+    <h3 class="title cf"> <%= team_name %> - <%= team_desc %> </h3>
+    <h1 class="subtitle cf3"> Team Code : <%= team_code %> </h1>
+    <form action="/teams/code/<%= team_code %>/leave" method="POST">
+        <% if(team_role === 'admin') {%> 
+          <a class="button is-warning" href="/teams/code/<%= team_code %>/edit">Edit Team</a>
+        <%}%>
+        <input class="button is-danger" type="submit" value="Leave Team">
+    </form>
 
-    </div>
+  </div>
 </section>
 
 <div class="columns">
-    <div class="column is-3">
-        <div>
-            <table class="column table">
-                <tr>
-                    <th> Participants </th>
-                </tr>
-                <% for (let i=0; i<participants.length; i++) { %>
-                <tr>
-                    <td> <%= participants[i].USERNAME %> </td>
-                </tr>
-                <% } %>
-            </table>
-        </div>
-        <div>
-            <h2 class=" has-text-centered is-size-5 "> Discussions </h2>
-            <h1 class="m-3">General</h1>
-            <h1 class="m-3">Quiz 1</h1>
-            <h1 class="m-3">Quiz 3</h1>
-        </div>
-        <div class="box">
-            <h2 class="has-text-centered is-size-5"> Pending Assignments </h2>
-            <% for (let i=0; i<assignments.length; i++) { %>
-            <p> </p>
-            <a class="box" href="/assignment/<%= assignments[i].ASSIGNMENT_ID %>"> <%= assignments[i].ASSIGNMENT_TITLE  %></a>
-            <% } %>
+  <div class="column is-3">
+    <div>
+      <table class="column table">
+        <tr>
+          <th> Participants </th>
+          <th> Role </th>
+        </tr>
+        <% for (let i=0; i<participants.length; i++) { %>
+        <tr>
+          <td> <%= participants[i].USERNAME.toUpperCase() %> </td>
+          <td> <%= participants[i].ROLE===0 ? 'Instructor' : 'Student' %> </td>
+        </tr>
+        <% } %>
+      </table>
+    </div>
+    <div class="p-2">
+        <h2 class="is-size-5 "> Discussions 
+        <a class="button is-small is-primary is-light is-pulled-right" href="/dis/create/<%= team_id %>">Add New</a>
+        </h2> 
+        <% for (let i=0; i<all_discussions.length; i++) { %>
+        <h1 class="p-2"><%= all_discussions[i].TITLE %>
+            <a class="button is-small is-primary is-light is-pulled-right" href="/dis/<%=all_discussions[i].DISCUSSION_ID%>/<%= team_id %>">Show</a>
+        </h1>
+        <% } %>
+    </div>
+    <div class="box">
+        <h2 class="has-text-centered is-size-5"> Pending Assignments </h2>
+        <% for (let i=0; i<assignments.length; i++) { %>
+        <p>  </p>
+        <a class="box" href="/assignment/<%= assignments[i].ASSIGNMENT_ID %>"> <%= assignments[i].ASSIGNMENT_TITLE  %></a>
+        <% } %>
 
         </div>
         <div class="box">
@@ -118,28 +124,26 @@
         </div>
 
 
-        <div class="column is-6">
-            <h1 class="is-size-4"> General </h1>
-            <div class="box">
-                <% for (let i=0; i<discussion.length; i++) { %>
-                <div class="list-item">
-                    <p><%= discussion[i].CONTENT %> </p>
-                    <p><%= discussion[i].USERNAME%> </p>
-                    <p><%= discussion[i].TIMESTAMP %> </p>
-                    <hr />
-                </div>
-                <% } %>
-            </div>
-            <form action="/dis/123/<%= team_code %>/<%= team_id %>" method="POST">
-                <div class="field has-addons">
-                    <div class="control">
-                        <input class="input" type="text" name="message" placeholder="Send a message">
-                    </div>
-                    <div class="control">
-                        <button class="button is-primary">Send</button>
-                    </div>
-                </div>
-            </form>
+    <div class="column is-6">
+      <h1 class="is-size-4"> General </h1>
+      <div class="box">
+        <% for (let i=0; i<discussion.length; i++) { %>
+        <div class="list-item">
+          <p><%= discussion[i].CONTENT %> </p>
+          <p><%= discussion[i].USERNAME%> </p>
+          <p><%= discussion[i].TIMESTAMP %> </p>
+          <hr />
+        </div>
+        <% } %>
+      </div>
+      <form action="/dis/<%= dis_id %>/<%= team_code %>/<%= team_id %>/1" method="POST">
+        <div class="field has-addons">
+          <div class="control">
+            <input class="input" type="text" name="message" placeholder="Send a message">
+          </div>
+          <div class="control">
+            <button class="button is-primary">Send</button>
+          </div>
         </div>
 
 

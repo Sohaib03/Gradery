@@ -1,11 +1,16 @@
 <%- include('./partials/header.ejs') %>
 <%- include('./partials/navbar.ejs') %>
-<div class="columns is-centered">
+<div class="columns is-centered cf2">
     <div class="box column is-6 ">
-        <h1 class="title is-size-4 p-5"><%= ass_info.ASSIGNMENT_TITLE %>
+        <h1 class="title is-size-4 p-2 cf"><%= ass_info.ASSIGNMENT_TITLE %>
+            <p class = "is-pulled-right">
         <% if(is_submitted){ %>
-            <p> <span class="tag is-primary">Submitted</span> </p> 
+            <span class="tag is-primary">Submitted</span>  
         <% } %>
+        <% if(score){ %>
+            <span class="tag is-warning">Graded</span>
+        <% } %>
+            </p>
         <% if (team_role !== 'student') { %>
         <a href="/assignment/delete/<%= ass_info.ASSIGNMENT_ID %>" class="button is-danger is-pulled-right"> Delete </a>
         <% } %>
@@ -15,7 +20,10 @@
         <% if (ass_info.FILE_URL) { %>
         <a class="button is-light is-primary m-2" href="/file/download/<%= ass_info.FILE_URL%>"> Download File </a>
         <% } %>
-        <h1 class="is-size-6 p-2"> Status : <%= (ass_info.DUE ? 'DUE' : 'ONGOING') %></h1>
+        <h1 class="is-size-6 p-2 cf3"> Status : <%= (ass_info.DUE ? 'DUE' : 'ONGOING') %> </h1>
+        <% if (team_role === 'student') { %>
+        <h1 class="is-size-6 p-2"> Score : <%= score %> </h1>
+        <% } %>
         <h2 class="is-size-6 p-2"> Time Left : <%= ass_info.DAYS%> Day(s) <%= ass_info.HOURS %> Hour(s) <%= ass_info.MINS%> Min(s) </h2>
         <% if (team_role === 'student') { %>
         <form method="POST"  action="/assignment/submit/<%= ass_info.ASSIGNMENT_ID %>" enctype="multipart/form-data">

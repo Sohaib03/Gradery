@@ -1,0 +1,36 @@
+<%- include('./partials/header.ejs') %>
+<%- include('./partials/navbar.ejs') %>
+<div class="p-5">
+    
+    <a class="button is-danger is-light is-small" href="/teams/code/<%= team_code %>"> Back to Team </a>
+    </div>
+    <div class="column is-6 is-centered">
+        <h1 class="is-size-4"> <%= dis_title %></h1>
+        <p class="content "> <%= dis_content %> </p>
+      <div class="box">
+        <% for (let i=0; i<discussion.length; i++) { %>
+        <div class="list-item">
+          <p><%= discussion[i].CONTENT %> </p>
+          <p><%= discussion[i].USERNAME%> </p>
+          <p><%= discussion[i].TIMESTAMP %> </p>
+          <hr />
+        </div>
+        <% } %>
+      </div>
+      <form action="/dis/<%= dis_id %>/<%= team_code %>/<%= team_id %>/0" method="POST">
+        <div class="field has-addons">
+          <div class="control">
+            <input class="input" type="text" name="message" placeholder="Send a message">
+          </div>
+          <div class="control">
+            <button class="button is-primary">Send</button>
+          </div>
+        </div>
+      </form>
+    
+
+    
+
+</div>
+
+<%- include('./partials/footer.ejs') %>

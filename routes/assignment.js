@@ -49,6 +49,7 @@ router.route("/:ass_id").get(auth.authMiddleware, async (req, res) => {
 		ass_id,
 		req.session.user_id
 	);
+	const gradingStatus = await assignmentDB.get;
 
 	let context = {
 		title: "Create Assignment",
@@ -60,6 +61,10 @@ router.route("/:ass_id").get(auth.authMiddleware, async (req, res) => {
 			submissionStatus.length !== 0
 				? submissionStatus[0].SUBMISSION_STATUS
 				: 0,
+		score:
+			submissionStatus.length !== 0
+				? submissionStatus[0].SCORE
+				: undefined,
 	};
 	console.log(req.session.notification);
 	if (req.session.notification) {
