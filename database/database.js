@@ -94,46 +94,61 @@ begin
 end;`;
     await execute(team_notification, {}, options);
 
-    const user_notification = `create or replace procedure create_user_notification(user_id in NUMBER, title in VARCHAR2, content in VARCHAR2)
-	IS
-		nid Number;
-	begin
-		insert into NOTIFICATION (TITLE, CONTENT) VALUES (title, content) returning NOTIFICATION_ID into nid;
-		insert into NOTIFICATION_RECEIVED_BY_USER (USER_ID, NOTIFICATION_ID) values (user_id, nid);
-	end;`;
+    const user_notification = `CREATE OR REPLACE FUNCTION CREATE_USER_NOTIFICATION(user_id IN NUMBER, title IN VARCHAR2, content IN VARCHAR2)
+    RETURN NUMBER IS
+    nid NUMBER;
+BEGIN
+    insert into NOTIFICATION (TITLE, CONTENT) VALUES (title, content) returning NOTIFICATION_ID into nid;
+    insert into NOTIFICATION_RECEIVED_BY_USER (USER_ID, NOTIFICATION_ID) values (user_id, nid);
+    return nid;
+END;`;
     await execute(user_notification, {}, options);
 
     const invitation_notification = `CREATE OR REPLACE TRIGGER INVITATION_NOTIFICATION
-    AFTER INSERT ON INVITATION FOR EACH ROW
-    DECLARE
-        title VARCHAR2(100);
-        content VARCHAR2(500);
-        t_id NUMBER;
-        t_name VARCHAR2(100);
-        u_id NUMBER;
-        u_name VARCHAR2(100);
-        r VARCHAR2(20);
-        i_id NUMBER;
-        i_name VARCHAR2(100);
-        t_code VARCHAR2(100);
-    BEGIN
-        t_id := :NEW.TEAM_ID;
-        SELECT TEAM_NAME INTO t_name FROM TEAMS T WHERE T.TEAM_ID = t_id;
-        SELECT TEAM_CODE INTO t_code FROM TEAMS T WHERE T.TEAM_ID = t_id;
-        u_id := :NEW.USER_ID;
-        SELECT USERNAME INTO u_name FROM USERS U WHERE U.USER_ID = u_id;
+    AFTER INSERT
+    ON INVITATION
+    FOR EACH ROW
+DECLARE
+    title   VARCHAR2(100);
+    notif_content VARCHAR2(500);
+    t_id    NUMBER;
+    t_name  VARCHAR2(100);
+    u_id    NUMBER;
+    u_name  VARCHAR2(100);
+    r       VARCHAR2(20);
+    i_id    NUMBER;
+    i_name  VARCHAR2(100);
+    t_code  VARCHAR2(100);
+    n_id    NUMBER;
+BEGIN
+    t_id := :NEW.TEAM_ID;
+    SELECT TEAM_NAME INTO t_name FROM TEAMS T WHERE T.TEAM_ID = t_id;
+    SELECT TEAM_CODE INTO t_code FROM TEAMS T WHERE T.TEAM_ID = t_id;
+    u_id := :NEW.USER_ID;
+    SELECT USERNAME INTO u_name FROM USERS U WHERE U.USER_ID = u_id;
 
-        r := :NEW.ROLE;
+    r := :NEW.ROLE;
 
-        i_id := :NEW.INVITED_BY;
-        SELECT USERNAME INTO i_name FROM USERS U WHERE U.USER_ID = i_id;
+    i_id := :NEW.INVITED_BY;
+    SELECT USERNAME INTO i_name FROM USERS U WHERE U.USER_ID = i_id;
 
-        title := 'Invitation to join ' || t_name;
-        content := 'Dear ' || u_name || ', you are invited by ' ||
-        i_name || ' to join ' || t_name || ' as ' || r ||
-        '.<br><a class="button is-small is-primary" href = "http://localhost:3000/teams/join/' || t_code || '">Accept</a><a class="button is-danger is-small">Decline</a>';
-        CREATE_USER_NOTIFICATION(u_id, title, content);
-    END;`;
+    title := 'Invitation to join ' || t_name;
+    notif_content := 'Dear ' || u_name || ', you are invited by ' ||
+               i_name || ' to join ' || t_name || ' as ' || r ||
+               '.<br>';
+    n_id := CREATE_USER_NOTIFICATION(u_id, title, '');
+    notif_content := notif_content || '<form action="/teams/join/' || t_code || '/' || n_id || '/accept" method="POST">
+    <button class="button is-primary is-small" type="submit">Accept</button>
+    <button
+        class="button is-danger is-small"
+        type="submit"
+        formaction="/teams/join/' || t_code || '/' || n_id || '/decline"
+    >
+        Decline
+    </button>
+</form>';
+    UPDATE NOTIFICATION N SET N.CONTENT = notif_content WHERE N.NOTIFICATION_ID = n_id;
+END;`;
 
     await execute(invitation_notification, {}, options);
 

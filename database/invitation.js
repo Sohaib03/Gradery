@@ -17,8 +17,16 @@ async function getInvitation(user_id, team_id) {
     binds = { user_id, team_id };
     return (await db.execute(sql, binds, db.options)).rows;
 }
+
+async function deleteInvitation(user_id, team_id) {
+    const sql = `DELETE FROM INVITATION WHERE USER_ID = :user_id AND TEAM_ID = :team_id`;
+    binds = { user_id, team_id };
+    return (await db.execute(sql, binds, db.options)).rows;
+}
+
 module.exports = {
     sendInvitation,
     getInvitation,
     invitationDoesntExist,
+    deleteInvitation,
 };

@@ -67,32 +67,74 @@ router
         }
     );
 
-router.route("/join/:code/").get(auth.authMiddleware, async (req, res) => {
-    const team_code = req.params.code;
-    const team_id = (await teams.getTeamByCode(team_code))[0].TEAM_ID;
-    const user_id = req.session.user_id;
+router
+    .route("/join/:code/:notif_id/accept")
+    .post(auth.authMiddleware, async (req, res) => {
+        const team_code = req.params.code;
+        const notif_id = req.params.notif_id;
+        const team_id = (await teams.getTeamByCode(team_code))[0].TEAM_ID;
+        const user_id = req.session.user_id;
 
-    console.log({ user_id, team_id });
-    const userAlreadyInTeam = !(
-        (await teams.checkUserInTeam(user_id, team_id)).length === 0
-    );
-    const userDoesntHaveInvitation =
-        (await invitation.invitationDoesntExist(user_id, team_id)).length === 0;
+        console.log({ user_id, team_id });
+        const userAlreadyInTeam = !(
+            (await teams.checkUserInTeam(user_id, team_id)).length === 0
+        );
+        const userDoesntHaveInvitation =
+            (await invitation.invitationDoesntExist(user_id, team_id))
+                .length === 0;
 
-    if (userAlreadyInTeam) {
-        console.log("Already in team");
-        res.redirect("/teams/code/" + team_code);
-    } else if (userDoesntHaveInvitation) {
-        console.log("User doesn't have invitation");
-        res.redirect("/");
-    } else {
-        const invitationRole = (
-            await invitation.getInvitation(user_id, team_id)
-        )[0].ROLE;
-        let r = await teams.addParticipant(user_id, team_id, invitationRole);
-        res.redirect("/teams/code/" + team_code);
-    }
-});
+        if (userAlreadyInTeam) {
+            console.log("Already in team");
+            await notification.deleteNotification(notif_id);
+            res.redirect("/teams/code/" + team_code);
+        } else if (userDoesntHaveInvitation) {
+            console.log("User doesn't have invitation");
+            await notification.deleteNotification(notif_id);
+            res.redirect("/");
+        } else {
+            const invitationRole = (
+                await invitation.getInvitation(user_id, team_id)
+            )[0].ROLE;
+            let r = await teams.addParticipant(
+                user_id,
+                team_id,
+                invitationRole
+            );
+            await notification.deleteNotification(notif_id);
+            res.redirect("/teams/code/" + team_code);
+        }
+    });
+
+router
+    .route("/join/:code/:notif_id/decline")
+    .post(auth.authMiddleware, async (req, res) => {
+        const team_code = req.params.code;
+        const notif_id = req.params.notif_id;
+        const team_id = (await teams.getTeamByCode(team_code))[0].TEAM_ID;
+        const user_id = req.session.user_id;
+
+        console.log({ user_id, team_id });
+        const userAlreadyInTeam = !(
+            (await teams.checkUserInTeam(user_id, team_id)).length === 0
+        );
+        const userDoesntHaveInvitation =
+            (await invitation.invitationDoesntExist(user_id, team_id))
+                .length === 0;
+
+        if (userAlreadyInTeam) {
+            console.log("Already in team");
+            await notification.deleteNotification(notif_id);
+            res.redirect("/teams/code/" + team_code);
+        } else if (userDoesntHaveInvitation) {
+            console.log("User doesn't have invitation");
+            await notification.deleteNotification(notif_id);
+            res.redirect("/");
+        } else {
+            await invitation.deleteInvitation(user_id, team_id);
+            await notification.deleteNotification(notif_id);
+            res.redirect("/");
+        }
+    });
 
 router.route("/join").get(auth.authMiddleware, async (req, res) => {
     let context = {
