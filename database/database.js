@@ -173,7 +173,7 @@ end;`;
 
     const create_assignment = `
 create or replace procedure create_assignment(team_id_var in Number, title in varchar2, assignment_desc in varchar2,
- created_by in varchar2, file_path in varchar2, deadline in DATE)
+ created_by in NUMBER, file_path in varchar2, deadline in DATE)
 is
     ass_id Number;
 begin
@@ -203,15 +203,15 @@ end;
 
     await execute(pending_assignments_for_new_user, {}, options);
 
-    //     const delete_assigned_assignments_of_left_user = `CREATE OR REPLACE TRIGGER DELETE_ASSIGNED_ASSIGNMENTS_OF_LEFT_USER
-    //     AFTER DELETE
-    //     ON PARTICIPANT
-    //     FOR EACH ROW
-    //     WHEN (OLD.ROLE = 'student')
-    // BEGIN
-    //     DELETE FROM ASSIGNED_TO WHERE STUDENT_ID = :OLD.USER_ID ;
-    // END;`;
-    //     await execute(delete_assigned_assignments_of_left_user, {}, options);
+    const delete_assigned_assignments_of_left_user = `CREATE OR REPLACE TRIGGER DELETE_ASSIGNED_ASSIGNMENTS_OF_LEFT_USER
+        AFTER DELETE
+        ON PARTICIPANT
+        FOR EACH ROW
+        WHEN (OLD.ROLE = 'student')
+    BEGIN
+        DELETE FROM ASSIGNED_TO WHERE STUDENT_ID = :OLD.USER_ID ;
+    END;`;
+    await execute(delete_assigned_assignments_of_left_user, {}, options);
 
     console.log("Procedure Initialized");
 }

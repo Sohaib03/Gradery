@@ -231,6 +231,7 @@ router
 router
     .route("/code/:code/invite")
     .post(auth.authMiddleware, async (req, res) => {
+        console.log("HERE BRO");
         const team_code = req.params.code;
         // Check if team_exists
         let team_info = await teams.getTeamByCode(team_code);
