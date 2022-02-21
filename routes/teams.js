@@ -349,6 +349,43 @@ router.route("/code/:code/edit").get(auth.authMiddleware, async (req, res) => {
     res.render("editTeam", context);
 });
 
+router.route("/code/:code/edit").post(auth.authMiddleware, async (req, res) => {
+    const team_code = req.params.code;
+    // Check if team_exists
+    let team_info = await teams.getTeamByCode(team_code);
+    if (team_info.length === 0) {
+        // Team Doesnt exist. Notify User
+        res.redirect("/");
+        return;
+    }
+    const team_id = team_info[0].TEAM_ID;
+    const user_team_info = await teams.checkUserInTeam(
+        req.session.user_id,
+        team_id
+    );
+    console.log(user_team_info);
+    // Check if user is in given team
+    if (user_team_info.length === 0) {
+        // Team Exists but User has not joined team
+        res.redirect("/teams/join");
+        return;
+    }
+    const user_role_in_team = user_team_info[0].ROLE;
+
+    if (user_role_in_team !== "admin") {
+        res.redirect("/teams/code/" + team_code);
+        return;
+    }
+
+    let r = await teams.setTeamInfo(
+        team_id,
+        req.body.team_name,
+        req.body.team_desc,
+        req.body.course
+    );
+    res.redirect("/teams/code/" + team_code);
+});
+
 router.route("/code/:code").get(auth.authMiddleware, async (req, res) => {
     const team_code = req.params.code;
     // Check if team_exists

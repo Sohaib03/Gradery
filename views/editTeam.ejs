@@ -2,17 +2,11 @@
 
 <section class="hero is-primary">
     <div class="hero-body">
-        <h3 class="title"><%= team_name %> - <%= team_desc %></h3>
-        <h1 class="subtitle">Team Code : <%= team_code %></h1>
-        <form action="/teams/code/<%= team_code %>/leave" method="POST">
-            <% if(team_role === 'admin') {%>
-            <a
-                class="button is-warning"
-                href="/teams/code/<%= team_code %>/edit"
-                >Edit Team</a
-            >
-            <%}%>
-            <input class="button is-danger" type="submit" value="Leave Team" />
+        <h3 class="title cf"><%= team_name %> - <%= team_desc %></h3>
+        <h1 class="subtitle cf2">Team Code : <%= team_code %></h1>
+        <form action="/teams/code/<%= team_code %>/delete" method="POST">
+            <a class="button is-warning" href="/teams/code/<%= team_code %>">Back To Team</a>
+            <input class="button is-danger" type="submit" value="Delete Team" />
         </form>
     </div>
 </section>
