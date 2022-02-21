@@ -107,7 +107,7 @@ end;`;
     AFTER INSERT ON INVITATION FOR EACH ROW
     DECLARE
         title VARCHAR2(100);
-        content VARCHAR2(200);
+        content VARCHAR2(500);
         t_id NUMBER;
         t_name VARCHAR2(100);
         u_id NUMBER;
@@ -129,7 +129,9 @@ end;`;
         SELECT USERNAME INTO i_name FROM USERS U WHERE U.USER_ID = i_id;
 
         title := 'Invitation to join ' || t_name;
-        content := 'Dear ' || u_name || ', you are invited by ' || i_name || ' to join ' || t_name || ' as ' || r || '. Please join the team by using the link: http://localhost:3000/teams/join/' || t_code;
+        content := 'Dear ' || u_name || ', you are invited by ' ||
+        i_name || ' to join ' || t_name || ' as ' || r ||
+        '.<br><a class="button is-small is-primary" href = "http://localhost:3000/teams/join/' || t_code || '">Accept</a><a class="button is-danger is-small">Decline</a>';
         CREATE_USER_NOTIFICATION(u_id, title, content);
     END;`;
 
@@ -152,6 +154,8 @@ begin
     insert into TEAMS (TEAM_NAME, CREATED_BY, TEAM_CODE, TEAM_DESC, COURSE_ID) values (team_name, user_id, team_code, team_desc, course_id) returning TEAM_ID into tid;
     insert into DISCUSSION (TITLE, BODY, TEAM_ID, STATUS) VALUES ('GENERAL', 'General Discussion', tid, 1);
 end;`;
+    await execute(create_team, {}, options);
+
     const create_assignment = `
 create or replace procedure create_assignment(team_id_var in Number, title in varchar2, assignment_desc in varchar2,
  created_by in varchar2, file_path in varchar2, deadline in DATE)
@@ -166,8 +170,33 @@ begin
 end;
     `;
 
-    await execute(create_team, {}, options);
     await execute(create_assignment, {}, options);
+
+    const pending_assignments_for_new_user = `CREATE OR REPLACE TRIGGER ASSIGN_PENDING_ASSIGNMENTS_TO_NEW_USER
+        AFTER INSERT
+        ON PARTICIPANT
+        FOR EACH ROW
+        WHEN (NEW.ROLE = 'student')
+    DECLARE
+    BEGIN
+        FOR R IN (SELECT * FROM ASSIGNMENTS WHERE TEAM_ID = :NEW.TEAM_ID AND DEADLINE > SYSDATE)
+            LOOP
+                INSERT INTO ASSIGNED_TO (ASSIGNMENT_ID, STUDENT_ID, SUBMISSION_STATUS, SUBMISSION_FILE, SCORE)
+                VALUES (R.ASSIGNMENT_ID, :NEW.USER_ID, 0, null, null);
+            END LOOP;
+    END ;`;
+
+    await execute(pending_assignments_for_new_user, {}, options);
+
+    const delete_assigned_assignments_of_left_user = `CREATE OR REPLACE TRIGGER DELETE_ASSIGNED_ASSIGNMENTS_OF_LEFT_USER
+    AFTER DELETE
+    ON PARTICIPANT
+    FOR EACH ROW
+    WHEN (OLD.ROLE = 'student')
+BEGIN
+    DELETE FROM ASSIGNED_TO WHERE STUDENT_ID = :OLD.USER_ID ;
+END;`;
+    await execute(delete_assigned_assignments_of_left_user, {}, options);
 
     console.log("Procedure Initialized");
 }
