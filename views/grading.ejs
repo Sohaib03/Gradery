@@ -1,0 +1,53 @@
+<%- include('./partials/header.ejs') %>
+<%- include('./partials/navbar.ejs') %>
+<h1 class="title p-4" > Grading <%= ass_info.ASSIGNMENT_TITLE %> </h1>
+<div class="m-5">
+<% for (let i=0; i<submissions.length; i++){ %>
+    <div class="box columns m-2">
+        <div class="column is-1 ">
+            <%= submissions[i].STUDENT_ID %>
+        </div>
+        <div class="column is-3">
+            <%= submissions[i].USERNAME %>
+        </div>
+        <div class="column is-1">
+            <% if (submissions[i].SUBMISSION_STATUS === 0) { %>
+            <i class="fa fa-times"></i>
+            <% } else { %>
+            <i class="fa fa-check"></i>
+            <% } %>
+        </div>
+        <div class="column is-2">
+            <% if (submissions[i].SUBMISSION_STATUS !== 0) { %>
+                <a href="/file/download/<%= submissions[i].SUBMISSION_FILE%>">
+                Download Submission 
+                </a>
+            <% } else { %>
+                <p> Not Submitted Yet </p>
+            <% } %>
+
+        </div>
+        <div class="column is-3">
+            <% if (submissions[i].SCORE) { %>
+            <p> Graded Score : <%= submissions[i].SCORE %>  </p>
+            <% } else {%> 
+            <p> Ungraded </p>
+            <% } %>
+        </div>
+        <div class="column is-2">
+
+
+        <form method="POST" action="/grading/submit/<%= ass_info.ASSIGNMENT_ID %>/<%= submissions[i].STUDENT_ID %>" >
+        <div class="field has-addons">
+            <div class="control">
+                <input class="input" type="text" placeholder="Enter Score" value="<%= submissions[i].SCORE %>" name="score">
+            </div>
+            <div class="control">
+            <button type="submit" class="button is-primary is-pulled-right"> Submit </button>
+            </div>
+        </form>
+    </div>
+<% } %>
+</div>
+
+<%- include('./partials/footer.ejs') %>

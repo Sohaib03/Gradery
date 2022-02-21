@@ -95,6 +95,18 @@ async function deleteAssignment(ass_id) {
 	return (await db.execute(sql, binds, db.options)).rows;
 }
 
+async function allSubs(ass_id) {
+	const sql = `select STUDENT_ID, USERNAME, SUBMISSION_STATUS, SUBMISSION_FILE, SCORE from ASSIGNED_TO A join USERS U on A.STUDENT_ID = U.USER_ID where A.ASSIGNMENT_ID=:ass_id`;
+	const binds = { ass_id };
+	return (await db.execute(sql, binds, db.options)).rows;
+}
+
+async function gradeSubmission(ass_id, std_id, score) {
+	const sql = `UPDATE ASSIGNED_TO SET SCORE=:score WHERE ASSIGNMENT_ID=:ass_id AND STUDENT_ID=:std_id`;
+	const binds = { ass_id, std_id, score };
+	return (await db.execute(sql, binds, db.options)).rows;
+}
+
 module.exports = {
 	getAllNewAssignmentsForStudent,
 	getAllNewAssignmentsForStudentInTeam,
@@ -107,4 +119,6 @@ module.exports = {
 	submitAssignment,
 	getSubmissionStatus,
 	deleteAssignment,
+	allSubs,
+	gradeSubmission,
 };
