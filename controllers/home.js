@@ -10,6 +10,18 @@ async function homeEndpoint(req, res) {
 
     console.log(userTeams);
 
+    userTeams.sort(function (a, b) {
+        var nameA = a.TEAM_NAME.toUpperCase();
+        var nameB = b.TEAM_NAME.toUpperCase();
+        if (nameA < nameB) {
+            return -1;
+        }
+        if (nameA > nameB) {
+            return 1;
+        }
+        return 0;
+    });
+
     const cur_notifications = await notification.getNotificationOfUser(
         req.session.user_id
     );

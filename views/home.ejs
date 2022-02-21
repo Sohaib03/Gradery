@@ -1,44 +1,40 @@
-<%- include('./partials/header.ejs') %>
-<%- include('./partials/navbar.ejs') %>
-<h2> Welcome : <%= username %> </h2>  
+<%- include('./partials/header.ejs') %> <%- include('./partials/navbar.ejs') %>
 
-<h3> Your Teams </h3>
+<h2>Welcome : <%= username %></h2>
+
+<h3>Your Teams</h3>
 
 <div class="cards">
-<% for (let i=0; i<teamsInfo.length; i++){ %>
-  <div class="card">
-    <header class="card-header">
-      <p class="card-header-title">
-        TEAM <%= i+1 %>
-      </p>
-      <button class="card-header-icon" aria-label="more options">
-        <span class="icon">
-          <i class="fas fa-angle-down" aria-hidden="true"></i>
-        </span>
-      </button>
-    </header>
-    <div class="card-content">
-      <div class="content">
-        <a href="/teams/code/<%= teamsInfo[i].TEAM_CODE %>"><p> TEAM NAME : <%= teamsInfo[i].TEAM_NAME %> <p> </a>
-      </div>
+    <% for (let i=0; i < teamsInfo.length; i++){ %>
+    <div class="card">
+        <header class="card-header">
+            <p class="card-header-title">TEAM <%= i+1 %></p>
+        </header>
+        <div class="card-content">
+            <div class="content">
+                <a href="/teams/code/<%= teamsInfo[i].TEAM_CODE %>"
+                    ><p>TEAM NAME : <%= teamsInfo[i].TEAM_NAME %></p>
+                    <p></p
+                ></a>
+            </div>
+        </div>
     </div>
-  </div>
-<% } %>
+    <% } %>
 </div>
 
 <div class="column is-6">
-  <h class="is-size-4"> Notifications </h>
-  <div class="box">
-    <% for (let i = 0; i < userNotifications.length; i++) { %>
-    <div class="list-item">
-      <p> <%= userNotifications[i].TITLE %> </p>
-      <p><%= userNotifications[i].CONTENT %> </p>
-      <p><%= userNotifications[i].TIMESTAMP %> </p>
-      <hr />
+    <h class="is-size-4"> Notifications </h>
+    <div class="box">
+        <% for (let i = 0; i < userNotifications.length; i++) { %>
+        <div class="list-item">
+            <p><%= userNotifications[i].TITLE %></p>
+            <p><%- userNotifications[i].CONTENT %></p>
+            <p><%= userNotifications[i].TIMESTAMP %></p>
+            <hr />
+        </div>
+        <% } %>
     </div>
-    <% } %>
-  </div>
 </div>
 
-<%- include('./partials/notification_below.ejs') %>
-<%- include('./partials/footer.ejs') %>
+<%- include('./partials/notification_below.ejs') %> <%-
+include('./partials/footer.ejs') %>

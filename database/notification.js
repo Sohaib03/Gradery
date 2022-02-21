@@ -30,9 +30,16 @@ async function sendNotificationToUser(user_id, title, content) {
     return (await db.execute(sql, binds, db.options)).rows;
 }
 
+async function deleteNotification(notif_id) {
+    const sql = `DELETE FROM NOTIFICATION WHERE NOTIFICATION_ID = :notif_id`;
+    binds = { notif_id };
+    return (await db.execute(sql, binds, db.options)).rows;
+}
+
 module.exports = {
     getNotificationOfTeam,
     sendNotificationToTeam,
     sendNotificationToUser,
     getNotificationOfUser,
+    deleteNotification,
 };

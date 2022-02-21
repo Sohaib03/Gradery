@@ -65,11 +65,6 @@
             <p class="card-header-title">
             Assignment <%= i+1 %>  <% if (assignments[i].DAYS == 0) {%> <span class="tag is-warning m-2">Less than a day</span> <% } %>
             </p>
-            <button class="card-header-icon" aria-label="more options">
-              <span class="icon">
-                <i class="fas fa-angle-down" aria-hidden="true"></i>
-              </span>
-            </button>
           </header>
           <div class="card-content">
             <div class="content">
@@ -155,9 +150,9 @@
         <label class="label">Team Role</label>
         <div class="select is-rounded">
           <select name="invitedUserRole" class="input">
-            <option>Student</option>
-            <option>Instructor</option>
-            <option>Admin</option>
+            <option value="student">Student</option>
+            <option value="instructor">Instructor</option>
+            <option value="admin">Admin</option>
           </select>
         </div>
         <button class="button is-primary" type="submit"> Invite </button>
