@@ -4,7 +4,6 @@ const auth = require("../routes/auth");
 const user_middleware = require("../middlewares/user_middleware");
 const teams = require("../database/teams");
 const assignmentDB = require("../database/assignments");
-const { redirect } = require("express/lib/response");
 
 router
 	.route("/create/:team_id/:team_code")

@@ -9,6 +9,7 @@ const auth = require("./routes/auth");
 const teams = require("./routes/teams");
 const assignment = require("./routes/assignment");
 const discussion = require("./routes/discussion");
+const grading = require("./routes/grading");
 
 require("dotenv").config();
 
@@ -40,6 +41,7 @@ app.use("/auth", auth.router);
 app.use("/teams", teams.router);
 app.use("/dis", discussion.router);
 app.use("/assignment", assignment.router);
+app.use("/grading", grading.router);
 
 app.get("/file/download/uploads/:path", (req, res) => {
 	const file_path = "./uploads/" + req.params.path;
