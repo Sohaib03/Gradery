@@ -135,9 +135,13 @@ router
 			console.log({ title, desc, d_date, d_time, file });
 
 			if (file) {
-				file_name = "./uploads/" + req.session.username + "_";
-				new Date().getTime() + "_";
-				file.name;
+				file_name =
+					"./uploads/" +
+					req.session.username +
+					"_" +
+					new Date().getTime() +
+					"_" +
+					file.name;
 				file.mv(file_name, (err) => {
 					if (err) {
 						req.session.notification = {

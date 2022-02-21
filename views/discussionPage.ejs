@@ -10,9 +10,8 @@
       <div class="box">
         <% for (let i=0; i<discussion.length; i++) { %>
         <div class="list-item">
-          <p><%= discussion[i].CONTENT %> </p>
-          <p><%= discussion[i].USERNAME%> </p>
-          <p><%= discussion[i].TIMESTAMP %> </p>
+          <p> <span class="cf" > <%= discussion[i].USERNAME%> </span> : <%= discussion[i].CONTENT %> </p>
+          <p class="is-italic sml is-pulled-right"><%= discussion[i].TIMESTAMP %> </p>
           <hr />
         </div>
         <% } %>
