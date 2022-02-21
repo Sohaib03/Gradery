@@ -12,6 +12,13 @@ async function getTeamInfo(team_id) {
     return (await db.execute(sql, binds, db.options)).rows;
 }
 
+async function setTeamInfo(team_id, team_name, team_desc, course_id) {
+    const sql = `UPDATE TEAMS SET TEAM_NAME = :team_name, TEAM_DESC = :team_desc,
+     COURSE_ID = :course_id WHERE TEAM_ID = :team_id`;
+    const binds = { team_id, team_name, team_desc, course_id };
+    return (await db.execute(sql, binds, db.options)).rows;
+}
+
 async function getTeamByCode(team_code) {
     const sql = `SELECT * FROM TEAMS WHERE TEAM_CODE=:team_code`;
     const binds = { team_code: team_code };
@@ -96,6 +103,7 @@ async function getParticipantsOfTeam(team_id) {
 module.exports = {
     getAllTeams,
     getTeamInfo,
+    setTeamInfo,
     getTeamByCode,
     createNewTeam,
     addParticipant,
