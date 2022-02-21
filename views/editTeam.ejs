@@ -1,0 +1,68 @@
+<%- include('./partials/header.ejs') %> <%- include('./partials/navbar.ejs') %>
+
+<section class="hero is-primary">
+    <div class="hero-body">
+        <h3 class="title"><%= team_name %> - <%= team_desc %></h3>
+        <h1 class="subtitle">Team Code : <%= team_code %></h1>
+        <form action="/teams/code/<%= team_code %>/leave" method="POST">
+            <% if(team_role === 'admin') {%>
+            <a
+                class="button is-warning"
+                href="/teams/code/<%= team_code %>/edit"
+                >Edit Team</a
+            >
+            <%}%>
+            <input class="button is-danger" type="submit" value="Leave Team" />
+        </form>
+    </div>
+</section>
+
+<h3 class="title m-5">Edit Team</h3>
+<form method="POST">
+    <div class="columns p-5">
+        <div class="column is-6">
+            <div class="field">
+                <label class="label">Team Name</label>
+                <div class="control">
+                    <input
+                        name="team_name"
+                        class="input"
+                        type="text"
+                        value="<%= team_name %>"
+                    />
+                </div>
+            </div>
+
+            <div class="field">
+                <label class="label">Team Description</label>
+                <div class="control">
+                    <input
+                        name="team_desc"
+                        class="input"
+                        type="text"
+                        value="<%= team_desc %>"
+                    />
+                </div>
+            </div>
+
+            <div class="field">
+                <label class="label"> Select Course : </label>
+                <div class="select">
+                    <select name="course">
+                        <option>Select Course</option>
+
+                        <% for(let i=0; i < allCourses.length; i++) { %>
+                        <option <%= (allCourses[i].COURSE_ID === course_id) ? "selected" : "" %> ><%= allCourses[i].COURSE_ID %></option>
+                        <% } %>
+                    </select>
+                </div>
+            </div>
+
+            <p class="control">
+                <button class="button is-primary" type="submit">Submit</button>
+            </p>
+        </div>
+    </div>
+</form>
+
+<%- include('./partials/footer.ejs') %>
