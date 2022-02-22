@@ -56,7 +56,11 @@
           <% for (let i=0; i<assignments.length; i++) { %>
             <p> </p>
             <a class="box" href="/assignment/<%= assignments[i].ASSIGNMENT_ID %>">
-              <%= assignments[i].ASSIGNMENT_TITLE %>
+              <p><%= assignments[i].ASSIGNMENT_TITLE %></p>
+              <% if (team_role !== 'student'){ %>
+              <p class="sml is-pulled-right">Graded : <%= assignments[i].GRADED %> / <%= assignments[i].ASSIGNEES%> | 
+                Submitted : <%= assignments[i].SUBMITTED %> / <%= assignments[i].ASSIGNEES%> </p>
+              <% } %>
             </a>
             <% } %>
 
@@ -67,6 +71,10 @@
             <p> </p>
             <a class="box" href="/assignment/<%= completed_assignments[i].ASSIGNMENT_ID %>">
               <%= completed_assignments[i].ASSIGNMENT_TITLE %>
+              <% if (team_role !== 'student'){ %>
+              <p class="sml">All Submissions Graded</p>
+              <% } %>
+
             </a>
             <% } %>
 
