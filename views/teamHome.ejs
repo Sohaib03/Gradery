@@ -97,7 +97,7 @@
             </div>
 
             <% } %>
-              <b>Assignments</b><br>
+              <h1 class="is-size-4 p-2"><b>Assignments</b></h1>
 
               <div class="box ">
                 <% for (let i=0; i<assignments.length; i++){ %>
@@ -129,9 +129,8 @@
 
         </div>
 
-
         <div class="">
-          <h1 class="is-size-4"> General </h1>
+          <h1 class="is-size-4 px-2 pt-5"><b>General</b></h1>
           <div class="box">
             <% for (let i=0; i<discussion.length; i++) { %>
               <div class="list-item">
@@ -178,31 +177,39 @@
         </div>
       </div>
       <div class="column is-4">
-        <p class="is-size-6"> Create a New Announcement </p>
-        <form action="/teams/code/notify/<%= team_code %>" method="POST">
-          <label class="label">Title </label>
-          <input name="notif_title" class="input" type="text">
-          <label class="label">Details </label>
-          <input name="notif_content" class="input" type="text">
-          <button class="button is-primary" type="submit"> Notify </button>
-        </form>
-        <h class="is-size-4"> Announcement </h>
-        <div class="box">
-          <% for (let i=0; i<notifications.length; i++) { %>
-            <div class="list-item">
-              <p>
-                <%= notifications[i].TITLE %>
-              </p>
-              <p>
-                <%= notifications[i].CONTENT %>
-              </p>
-              <p>
-                <%= notifications[i].TIMESTAMP %>
-              </p>
-              <hr />
+        <% if (team_role !=="student" ) {%>
+          <h1 class="is-size-4 p-2"><b>Create a New Announcement</b></h1>
+          <form action="/teams/code/<%= team_code %>/notify" method="POST">
+            <label class="label">Title </label>
+            <input name="notif_title" class="input" type="text">
+            <label class="label">Details </label>
+            <input name="notif_content" class="input" type="text">
+            <p class="p-1"></p>
+            <button class="button is-primary" type="submit"> Notify </button>
+          </form>
+          <%}%>
+            <h1 class="is-size-4 px-2 pt-3 pb-2"><b>Announcements</b></h1>
+            <div class="box">
+              <% for (let i=0; i<notifications.length; i++) { %>
+                <div class="list-item">
+                  <p><b>
+                      <%= notifications[i].TITLE %>
+                    </b>
+                  </p>
+                  <p>
+                    <%- notifications[i].CONTENT %>
+                  </p>
+                  <p>
+                    <%= notifications[i].TIMESTAMP %>
+                  </p>
+                  <hr />
+                  <% if (team_role !=="student" ) {%>
+                    <a href="/teams/code/deleteNotification/<%= team_code%>/<%= notifications[i].NOTIFICATION_ID %>"
+                      class="button is-danger is-small">Delete</a>
+                    <%}%>
+                </div>
+                <% } %>
             </div>
-            <% } %>
-        </div>
       </div>
 
       <%- include('./partials/notification_below.ejs') %>
