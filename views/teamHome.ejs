@@ -12,9 +12,11 @@
           <% if(team_role==='admin' ) {%>
             <a class="button is-warning" href="/teams/code/<%= team_code %>/edit">Edit Team</a>
             <%}%>
-              <input class="button is-danger" type="submit" value="Leave Team">
+              <% if(team_role!=='admin' ) {%>
+                <input class="button is-danger" type="submit" value="Leave Team">
+                <%}%>
+                  <a class="cf2 button is-info" href="/resource/<%= team_code %>">Resources</a>
         </form>
-        <p><a class="cf2 button is-info is-small" href="/resource/<%= team_id %>">Resource</a></p>
       </div>
     </section>
 
@@ -41,13 +43,14 @@
         </div>
         <div class="p-2">
           <h2 class="is-size-5 "> Discussions
-            <a class="button is-small is-primary is-light is-pulled-right" href="/dis/create/<%= team_id %>">Add New</a>
+            <a class="button is-small is-primary is-light is-pulled-right" href="/dis/<%= team_code %>/create">Add
+              New</a>
           </h2>
           <% for (let i=0; i<all_discussions.length; i++) { %>
             <h1 class="p-2">
               <%= all_discussions[i].TITLE %>
                 <a class="button is-small is-primary is-light is-pulled-right"
-                  href="/dis/<%=all_discussions[i].DISCUSSION_ID%>/<%= team_id %>">Show</a>
+                  href="/dis/<%= team_code %>/<%=all_discussions[i].DISCUSSION_ID%>">Show</a>
             </h1>
             <% } %>
         </div>
@@ -56,11 +59,14 @@
           <% for (let i=0; i<assignments.length; i++) { %>
             <p> </p>
             <a class="box" href="/assignment/<%= assignments[i].ASSIGNMENT_ID %>">
-              <p><%= assignments[i].ASSIGNMENT_TITLE %></p>
-              <% if (team_role !== 'student'){ %>
-              <p class="sml is-pulled-right">Graded : <%= assignments[i].GRADED %> / <%= assignments[i].ASSIGNEES%> | 
-                Submitted : <%= assignments[i].SUBMITTED %> / <%= assignments[i].ASSIGNEES%> </p>
-              <% } %>
+              <p>
+                <%= assignments[i].ASSIGNMENT_TITLE %>
+              </p>
+              <% if (team_role !=='student' ){ %>
+                <p class="sml is-pulled-right">Graded : <%= assignments[i].GRADED %> / <%= assignments[i].ASSIGNEES%> |
+                      Submitted : <%= assignments[i].SUBMITTED %> / <%= assignments[i].ASSIGNEES%>
+                </p>
+                <% } %>
             </a>
             <% } %>
 
@@ -71,9 +77,9 @@
             <p> </p>
             <a class="box" href="/assignment/<%= completed_assignments[i].ASSIGNMENT_ID %>">
               <%= completed_assignments[i].ASSIGNMENT_TITLE %>
-              <% if (team_role !== 'student'){ %>
-              <p class="sml">All Submissions Graded</p>
-              <% } %>
+                <% if (team_role !=='student' ){ %>
+                  <p class="sml">All Submissions Graded</p>
+                  <% } %>
 
             </a>
             <% } %>
@@ -100,6 +106,12 @@
 
                     <a class="button is-primary is-small" href="/assignment/<%= assignments[i].ASSIGNMENT_ID %>"> View
                     </a>
+                    <% if (team_role !=="student" ) { %>
+                      <a class="button is-danger is-small"
+                        href="/assignment/delete/<%= assignments[i].ASSIGNMENT_ID %>">
+                        Delete
+                      </a>
+                      <% } %>
                   </div>
                 </div>
               </div>

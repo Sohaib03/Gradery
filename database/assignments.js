@@ -139,8 +139,8 @@ async function getAssignmentGradedInTeam(team_id) {
         select A.ASSIGNMENT_ID as ASSIGNMENT_ID, ASSIGNMENT_TITLE, DEADLINE, count(SUBMISSION_FILE) SUBMITTED , count(SCORE) GRADED, count(*) ASSIGNEES
         from ASSIGNMENTS A join ASSIGNED_TO AT on A.ASSIGNMENT_ID = AT.ASSIGNMENT_ID where TEAM_ID = :team_id
         GROUP BY A.ASSIGNMENT_ID, ASSIGNMENT_TITLE, DEADLINE having (count(SCORE) = count(*))
-    `
-    const binds = {team_id};
+    `;
+    const binds = { team_id };
     return (await db.execute(sql, binds, db.options)).rows;
 }
 async function getAssignmentUngradedInTeam(team_id) {
@@ -148,8 +148,8 @@ async function getAssignmentUngradedInTeam(team_id) {
         select A.ASSIGNMENT_ID as ASSIGNMENT_ID, ASSIGNMENT_TITLE, DEADLINE, count(SUBMISSION_FILE) SUBMITTED , count(SCORE) GRADED, count(*) ASSIGNEES
         from ASSIGNMENTS A join ASSIGNED_TO AT on A.ASSIGNMENT_ID = AT.ASSIGNMENT_ID where TEAM_ID = :team_id
         GROUP BY A.ASSIGNMENT_ID, ASSIGNMENT_TITLE, DEADLINE having (count(SCORE) < count(*))
-    `
-    const binds = {team_id};
+    `;
+    const binds = { team_id };
     return (await db.execute(sql, binds, db.options)).rows;
 }
 
