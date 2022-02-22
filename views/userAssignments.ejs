@@ -2,13 +2,15 @@
     <%- include('./partials/navbar.ejs') %>
 
         <div class="columns">
-            <div class="column is-3">
+            <div class="column is-6">
                 <div class="box">
                     <h2 class="has-text-centered is-size-5"> Pending Assignments </h2>
                     <% for (let i=0; i<assignments.length; i++) { %>
                         <p> </p>
                         <a class="box" href="/assignment/<%= assignments[i].ASSIGNMENT_ID %>">
-                            <%= assignments[i].ASSIGNMENT_TITLE %>
+                            <%= assignments[i].ASSIGNMENT_TITLE %><br>
+                                <%= assignments[i].TEAM_NAME%><br>
+                                    <%= assignments[i].HOURS %> hours left.
                         </a>
                         <% } %>
 
@@ -19,6 +21,9 @@
                         <p> </p>
                         <a class="box" href="/assignment/<%= completed_assignments[i].ASSIGNMENT_ID %>">
                             <%= completed_assignments[i].ASSIGNMENT_TITLE %>
+                                <br>
+                                <%= completed_assignments[i].TEAM_NAME%><br>
+                                    Submitted at: <%= completed_assignments[i].SUBMISSION_TIME %>
                         </a>
                         <% } %>
                 </div>

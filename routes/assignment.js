@@ -45,6 +45,11 @@ router.route("/:ass_id").get(auth.authMiddleware, async (req, res) => {
         req.session.user_id,
         ass_info[0].TEAM_ID
     );
+
+    if (team_role.length === 0) {
+        res.redirect("/");
+        return;
+    }
     const submissionStatus = await assignmentDB.getSubmissionStatus(
         ass_id,
         req.session.user_id
@@ -127,6 +132,8 @@ router.route("/").get(auth.authMiddleware, async (req, res) => {
     completed_ass = await assignmentDB.getAllCompletedAssignmentsForStudent(
         req.session.user_id
     );
+
+    console.log(completed_ass);
 
     let context = {
         title: "Assignments",

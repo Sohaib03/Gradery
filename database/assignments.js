@@ -1,13 +1,13 @@
 const db = require("./database");
 
 async function getAllNewAssignmentsForStudent(user_id) {
-    const sql = `SELECT A.ASSIGNMENT_ID as ASSIGNMENT_ID, ASSIGNMENT_TITLE, STUDENT_ID, DEADLINE,
-    TRUNC(DEADLINE - SYSDATE) as DAYS
-    FROM
-    ASSIGNED_TO T JOIN (SELECT ASSIGNMENT_TITLE, ASSIGNMENT_ID, DEADLINE FROM ASSIGNMENTS) A
-        ON (A.ASSIGNMENT_ID = T.ASSIGNMENT_ID) WHERE STUDENT_ID = :user_id 
-                                                 AND SUBMISSION_STATUS = 0`;
-    const binds = { user_id: user_id };
+    const sql = `SELECT ASSIGNMENT_ID, ASSIGNMENT_TITLE, TEAM_NAME, TRUNC(DEADLINE - SYSDATE) * 24 AS HOURS
+    FROM ASSIGNED_TO A_T
+             JOIN ASSIGNMENTS A USING (ASSIGNMENT_ID)
+             JOIN TEAMS T USING (TEAM_ID)
+    WHERE STUDENT_ID = :user_id
+      AND SUBMISSION_STATUS = 0`;
+    const binds = { user_id };
     return (await db.execute(sql, binds, db.options)).rows;
 }
 
@@ -23,8 +23,13 @@ async function getAllNewAssignmentsForStudentInTeam(user_id, team_id) {
 }
 
 async function getAllCompletedAssignmentsForStudent(user_id) {
-    const sql = `SELECT T.ASSIGNMENT_ID, A.ASSIGNMENT_TITLE FROM ASSIGNED_TO T JOIN (SELECT ASSIGNMENT_ID, ASSIGNMENT_TITLE FROM ASSIGNMENTS) A ON (A.ASSIGNMENT_ID = T.ASSIGNMENT_ID) WHERE STUDENT_ID = :user_id AND SUBMISSION_STATUS = 1`;
-    const binds = { user_id: user_id };
+    const sql = `SELECT ASSIGNMENT_ID, ASSIGNMENT_TITLE, TEAM_NAME, SUBMISSION_TIME
+    FROM ASSIGNED_TO A_T
+             JOIN ASSIGNMENTS A USING (ASSIGNMENT_ID)
+             JOIN TEAMS T USING (TEAM_ID)
+    WHERE STUDENT_ID = :user_id
+      AND SUBMISSION_STATUS = 1`;
+    const binds = { user_id };
     return (await db.execute(sql, binds, db.options)).rows;
 }
 
@@ -125,7 +130,7 @@ async function gradeSubmission(ass_id, std_id, score) {
 async function getSubmissionData(ass_id) {
     const sql = `SELECT (count(*) - count(SUBMISSION_FILE)) AS NONSUBMITTED, count(SUBMISSION_FILE) as SUBMITTED
     from ASSIGNED_TO where ASSIGNMENT_ID=:ass_id `;
-    const binds = {ass_id};
+    const binds = { ass_id };
     return (await db.execute(sql, binds, db.options)).rows;
 }
 
