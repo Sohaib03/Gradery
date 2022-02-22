@@ -1,0 +1,40 @@
+<%- include('./partials/header.ejs') %> <%- include('./partials/navbar.ejs') %>
+
+<div class="columns is-centered">
+  <div class="box column is-6">
+    <h1 class="title cf p-5">Chat</h1>
+    <hr>
+    <div class="column p-5 is-12">
+      <% for (let i=0; i<allChats.length; i++) { %>
+      <% if (allChats[i].FROM_USER === user_id) {%>
+      <div style="margin-left: auto;" class="column is-6 message is-info p-2 col ">
+        <p class="cf p-2"> <%= username %> </p>
+        <p class="cf2 p-2 is-size-7"> <%= allChats[i].MESSAGE %> </p>
+      </div>
+      <% } else { %>
+      <div class="column is-6 message is-info p-2 col ">
+        <p class="cf p-2"> <%= other_user %> </p>
+        <p class="cf2 p-2 is-size-7"> <%= allChats[i].MESSAGE %> </p>
+      </div>
+      <% } %>
+
+      <% } %>
+    </div>
+    <div class="columns p-5 is-centered"> 
+      <form action="/chat/send/<%= other_user %>" method="POST">
+        <div class="field has-addons">
+          <div class="control">
+            <input class="input" type="text" name="message" placeholder="Send a message">
+          </div>
+          <div class="control">
+            <button class="button is-primary">Send</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+</div>
+
+<%- include('./partials/notification_below.ejs') %> <%-
+include('./partials/footer.ejs') %>

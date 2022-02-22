@@ -1,9 +1,9 @@
 <%- include('./partials/header.ejs') %> <%- include('./partials/navbar.ejs') %>
 
-<h2>Welcome : <%= username %></h2>
+<div class="columns">
 
-<h3>Your Teams</h3>
-
+<div class="column is-9 p-5">
+    <h3 class="cf is-size-4">Your Teams</h3>
 <div class="cards">
     <% for (let i=0; i < teamsInfo.length; i++){ %>
     <div class="card">
@@ -34,6 +34,44 @@
         </div>
         <% } %>
     </div>
+</div>
+</div>
+<div class="column is-3 p-5">
+    <h2 class="is-size-4 cf">Your Chats</h2>
+    <% for(let i=0; i<latestMessages.length; i++){ %>
+    <% if (latestMessages[i].TO_USER == user_id ) { %>
+    <a class="my-1 message is-primary" href="/chat/<%= latestMessages[i].FROM_USERNAME %>" >
+  <div class="box" >
+        <p class="cf2" > <%= latestMessages[i].FROM_USERNAME.toUpperCase() %> </p>
+        <p class="sml"> <%= latestMessages[i].FROM_USERNAME.toUpperCase() %> :  <%= latestMessages[i].MESSAGE %> </p>
+  </div>
+    </a>
+        <% } else { %>
+    <a class="my-1 message is-primary" href="/chat/<%= latestMessages[i].TO_USERNAME %>" >
+  <div class="box" >
+        <p class="cf2" > <%= latestMessages[i].TO_USERNAME.toUpperCase() %> </p>
+        <p class="sml"> You :  <%= latestMessages[i].MESSAGE %> </p>
+  </div>
+</a>
+
+        <% } %>
+    <% } %>
+
+    <h2 class="is-size-4 cf py-3" > Create a new chat </h2>
+    <div class="columns p-5 is-centered"> 
+      <form action="/chat/create" method="POST">
+        <div class="field has-addons">
+          <div class="control">
+            <input class="input" type="text" name="other_user" placeholder="Username">
+          </div>
+          <div class="control">
+            <button class="button is-primary">Create</button>
+          </div>
+        </div>
+      </form>
+    </div>
+    
+</div>
 </div>
 
 <%- include('./partials/notification_below.ejs') %> <%-
