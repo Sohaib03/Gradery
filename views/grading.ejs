@@ -1,6 +1,9 @@
 <%- include('./partials/header.ejs') %>
 <%- include('./partials/navbar.ejs') %>
-<h1 class="title p-4" > Grading <%= ass_info.ASSIGNMENT_TITLE %> </h1>
+<h1 class="title p-4" > Grading <%= ass_info.ASSIGNMENT_TITLE %> 
+<a class="button is-info is-small is-pulled-right" href="/grading/download/<%= ass_info.ASSIGNMENT_ID %>" >Download All Submissions</a>
+</h1>
+<p>Submitted <%= sub_info.SUBMITTED %> out of <%= sub_info.NONSUBMITTED + sub_info.SUBMITTED %></p>
 <div class="m-5">
 <% for (let i=0; i<submissions.length; i++){ %>
     <div class="box columns m-2">

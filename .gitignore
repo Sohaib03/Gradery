@@ -106,3 +106,5 @@ dist
 # Environment File
 .env
 /*.env
+
+temp/*
