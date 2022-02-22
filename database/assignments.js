@@ -122,6 +122,13 @@ async function gradeSubmission(ass_id, std_id, score) {
     return (await db.execute(sql, binds, db.options)).rows;
 }
 
+async function getSubmissionData(ass_id) {
+    const sql = `SELECT (count(*) - count(SUBMISSION_FILE)) AS NONSUBMITTED, count(SUBMISSION_FILE) as SUBMITTED
+    from ASSIGNED_TO where ASSIGNMENT_ID=:ass_id `;
+    const binds = {ass_id};
+    return (await db.execute(sql, binds, db.options)).rows;
+}
+
 module.exports = {
     getAllNewAssignmentsForStudent,
     getAllNewAssignmentsForStudentInTeam,
@@ -136,5 +143,6 @@ module.exports = {
     getSubmissionStatus,
     deleteAssignment,
     allSubs,
+    getSubmissionData,
     gradeSubmission,
 };
