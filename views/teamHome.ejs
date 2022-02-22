@@ -26,7 +26,8 @@
         <% for (let i=0; i<participants.length; i++) { %>
       <tr>
         <td> <%= participants[i].USERNAME.toUpperCase() %> </td>
-        <td> <%= participants[i].ROLE===0 ? 'Instructor' : 'Student' %> </td>
+        <td> <%= participants[i].ROLE %> </td>
+        
       </tr>
       <% } %>
       </table>

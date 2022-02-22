@@ -213,6 +213,58 @@ end;
     END;`;
     await execute(delete_assigned_assignments_of_left_user, {}, options);
 
+    const notify_when_assigned = `CREATE OR REPLACE TRIGGER NOTIFY_WHEN_ASSIGNED
+    AFTER INSERT
+    ON ASSIGNED_TO
+    FOR EACH ROW
+DECLARE
+    nid              NUMBER := 0;
+    notif_title      VARCHAR2(100) := '';
+    notif_content    VARCHAR2(500) := '';
+    t_name        VARCHAR2(100) := '';
+    t_id          NUMBER := 0;
+    s_id       NUMBER;
+    a_id    NUMBER;
+    a_title VARCHAR2(200) := '';
+    c_name     VARCHAR2(100) := '';
+    c_id       NUMBER := 1;
+    d_line         DATE;
+BEGIN
+    s_id := :NEW.STUDENT_ID;
+    a_id := :NEW.ASSIGNMENT_ID;
+
+    SELECT TEAM_ID
+    INTO t_id
+    FROM ASSIGNMENTS
+    WHERE ASSIGNMENT_ID = a_id;
+
+    SELECT TEAM_NAME
+    INTO t_name
+    FROM TEAMS
+    WHERE TEAM_ID = t_id;
+
+    SELECT ASSIGNMENT_TITLE
+    INTO a_title
+    FROM ASSIGNMENTS
+    WHERE ASSIGNMENT_ID = a_id;
+
+    SELECT CREATED_BY
+    INTO c_id
+    FROM ASSIGNMENTS
+    WHERE ASSIGNMENT_ID = a_id;
+
+    SELECT USERNAME
+    INTO c_name
+    FROM USERS
+    WHERE USER_ID = c_id;
+
+    notif_title := 'New assignment on ' || t_name;
+    notif_content := 'Database ' || a_title || '<br>' ||
+                     'Created by: ' || c_name || '<br>' ||
+                     'Deadline: ' || d_line;
+    nid := CREATE_USER_NOTIFICATION(:NEW.STUDENT_ID, notif_title, notif_content);
+end;`;
+    await execute(notify_when_assigned, {}, options);
     console.log("Procedure Initialized");
 }
 
