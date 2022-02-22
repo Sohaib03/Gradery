@@ -435,7 +435,8 @@ router.route("/code/:code").get(auth.authMiddleware, async (req, res) => {
                 team_id
             );
     } else {
-        assignmentList = await assignments.getAllAssignmentsInTeam(team_id);
+        assignmentList = await assignments.getAssignmentUngradedInTeam(team_id);
+        completed_ass = await assignments.getAssignmentGradedInTeam(team_id);
     }
 
     let context = {
