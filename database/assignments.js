@@ -1,7 +1,12 @@
 const db = require("./database");
 
 async function getAllNewAssignmentsForStudent(user_id) {
-    const sql = `SELECT * FROM ASSIGNED_TO WHERE STUDENT_ID = :user_id AND SUBMISSION_STATUS = 0`;
+    const sql = `SELECT A.ASSIGNMENT_ID as ASSIGNMENT_ID, ASSIGNMENT_TITLE, STUDENT_ID, DEADLINE,
+    TRUNC(DEADLINE - SYSDATE) as DAYS
+    FROM
+    ASSIGNED_TO T JOIN (SELECT ASSIGNMENT_TITLE, ASSIGNMENT_ID, DEADLINE FROM ASSIGNMENTS) A
+        ON (A.ASSIGNMENT_ID = T.ASSIGNMENT_ID) WHERE STUDENT_ID = :user_id 
+                                                 AND SUBMISSION_STATUS = 0`;
     const binds = { user_id: user_id };
     return (await db.execute(sql, binds, db.options)).rows;
 }
@@ -18,7 +23,7 @@ async function getAllNewAssignmentsForStudentInTeam(user_id, team_id) {
 }
 
 async function getAllCompletedAssignmentsForStudent(user_id) {
-    const sql = `SELECT * FROM ASSIGNED_TO WHERE STUDENT_ID = :user_id AND SUBMISSION_STATUS = 1`;
+    const sql = `SELECT T.ASSIGNMENT_ID, A.ASSIGNMENT_TITLE FROM ASSIGNED_TO T JOIN (SELECT ASSIGNMENT_ID, ASSIGNMENT_TITLE FROM ASSIGNMENTS) A ON (A.ASSIGNMENT_ID = T.ASSIGNMENT_ID) WHERE STUDENT_ID = :user_id AND SUBMISSION_STATUS = 1`;
     const binds = { user_id: user_id };
     return (await db.execute(sql, binds, db.options)).rows;
 }
@@ -85,9 +90,9 @@ end;`;
 }
 
 async function submitAssignment(ass_id, std_id, file_path) {
-	sql = `UPDATE ASSIGNED_TO SET SUBMISSION_STATUS=1, SUBMISSION_FILE=:file_path, SUBMISSION_TIME=SYSDATE where ASSIGNMENT_ID=:ass_id and STUDENT_ID=:std_id`;
-	const binds = { ass_id, std_id, file_path };
-	return (await db.execute(sql, binds, db.options)).rows;
+    sql = `UPDATE ASSIGNED_TO SET SUBMISSION_STATUS=1, SUBMISSION_FILE=:file_path, SUBMISSION_TIME=SYSDATE where ASSIGNMENT_ID=:ass_id and STUDENT_ID=:std_id`;
+    const binds = { ass_id, std_id, file_path };
+    return (await db.execute(sql, binds, db.options)).rows;
 }
 
 async function getSubmissionStatus(ass_id, std_id) {
@@ -102,13 +107,13 @@ async function deleteAssignment(ass_id) {
 }
 
 async function allSubs(ass_id) {
-	const sql = `
+    const sql = `
 select STUDENT_ID, USERNAME, SUBMISSION_STATUS, SUBMISSION_FILE, SCORE, DEADLINE - SUBMISSION_TIME as TIME_DELTA
 from ASSIGNED_TO A join USERS U on A.STUDENT_ID = U.USER_ID
 join ASSIGNMENTS A2 on A.ASSIGNMENT_ID = A2.ASSIGNMENT_ID where A.ASSIGNMENT_ID=:ass_id
 `;
-	const binds = { ass_id };
-	return (await db.execute(sql, binds, db.options)).rows;
+    const binds = { ass_id };
+    return (await db.execute(sql, binds, db.options)).rows;
 }
 
 async function gradeSubmission(ass_id, std_id, score) {

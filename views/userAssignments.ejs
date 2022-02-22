@@ -1,0 +1,29 @@
+<%- include('./partials/header.ejs') %>
+    <%- include('./partials/navbar.ejs') %>
+
+        <div class="columns">
+            <div class="column is-3">
+                <div class="box">
+                    <h2 class="has-text-centered is-size-5"> Pending Assignments </h2>
+                    <% for (let i=0; i<assignments.length; i++) { %>
+                        <p> </p>
+                        <a class="box" href="/assignment/<%= assignments[i].ASSIGNMENT_ID %>">
+                            <%= assignments[i].ASSIGNMENT_TITLE %>
+                        </a>
+                        <% } %>
+
+                </div>
+                <div class="box">
+                    <h2 class="has-text-centered is-size-5"> Completed Assignments </h2>
+                    <% for (let i=0; i<completed_assignments.length; i++) { %>
+                        <p> </p>
+                        <a class="box" href="/assignment/<%= completed_assignments[i].ASSIGNMENT_ID %>">
+                            <%= completed_assignments[i].ASSIGNMENT_TITLE %>
+                        </a>
+                        <% } %>
+                </div>
+            </div>
+        </div>
+
+        <%- include('./partials/notification_below.ejs') %>
+            <%- include('./partials/footer.ejs') %>
