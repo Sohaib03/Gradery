@@ -11,6 +11,7 @@ const assignment = require("./routes/assignment");
 const discussion = require("./routes/discussion");
 const grading = require("./routes/grading");
 const resource = require("./routes/resource")
+const chat = require("./routes/chat");
 
 require("dotenv").config();
 
@@ -44,6 +45,7 @@ app.use("/dis", discussion.router);
 app.use("/assignment", assignment.router);
 app.use("/grading", grading.router);
 app.use("/resource", resource.router);
+app.use("/chat", chat.router);
 
 app.get("/file/download/uploads/:path", (req, res) => {
 	const file_path = "./uploads/" + req.params.path;

@@ -1,6 +1,8 @@
 const teams = require("../database/teams");
 const users = require("../database/users");
 const notification = require("../database/notification");
+const chatDB = require("../database/chat");
+
 async function homeEndpoint(req, res) {
     const userTeamIDs = await teams.getAllTeams(req.session.user_id);
     let userTeams = [];
@@ -26,6 +28,9 @@ async function homeEndpoint(req, res) {
         req.session.user_id
     );
 
+    const latestMessages = await chatDB.latestMessages(req.session.user_id);
+    console.log(latestMessages);
+
     const context = {
         title: "Homepage",
         username: req.session.username,
@@ -33,6 +38,8 @@ async function homeEndpoint(req, res) {
         teamsID: userTeamIDs,
         teamsInfo: userTeams,
         userNotifications: cur_notifications,
+        user_id: req.session.user_id,
+        latestMessages,
     };
     console.log(context);
     if (req.session.notification) {
