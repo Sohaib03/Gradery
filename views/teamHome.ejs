@@ -89,96 +89,96 @@
 
       <div class="column is-5">
         <div>
-          <b>Assignments</b><br>
+          <% if (team_role !=="student" ) { %>
+            <div class="p-5">
+              <form action="/assignment/create/<%= team_code %>" method="get" accept-charset="utf-8">
+                <button class="button is-primary">Create Assignment</button>
+              </form>
+            </div>
 
-          <div class="box ">
-            <% for (let i=0; i<assignments.length; i++){ %>
-              <div class="">
-                <header class="card-header">
-                  <p class="card-header-title">
-                    <%= assignments[i].ASSIGNMENT_TITLE %>
-                  </p>
-                </header>
-                <div class="card-content">
-                  <div class="content">
-                    <p> Deadline: <%= assignments[i].DEADLINE %>
-                    </p>
+            <% } %>
+              <b>Assignments</b><br>
 
-                    <a class="button is-primary is-small" href="/assignment/<%= assignments[i].ASSIGNMENT_ID %>"> View
-                    </a>
-                    <% if (team_role !=="student" ) { %>
-                      <a class="button is-danger is-small"
-                        href="/assignment/delete/<%= assignments[i].ASSIGNMENT_ID %>">
-                        Delete
-                      </a>
-                      <% } %>
-                  </div>
-                </div>
-              </div>
-              <% } %>
-          </div>
+              <div class="box ">
+                <% for (let i=0; i<assignments.length; i++){ %>
+                  <div class="">
+                    <header class="card-header">
+                      <p class="card-header-title">
+                        <%= assignments[i].ASSIGNMENT_TITLE %>
+                      </p>
+                    </header>
+                    <div class="card-content">
+                      <div class="content">
+                        <p> Deadline: <%= assignments[i].DEADLINE %>
+                        </p>
 
-        </div>
-
-        <% if (team_role !=="student" ) { %>
-          <div class="p-5">
-            <form action="/assignment/create/<%= team_id %>/<%= team_code %>" method="get" accept-charset="utf-8">
-              <button class="button is-primary">Create Assignment</button>
-            </form>
-          </div>
-
-          <% } %>
-
-
-            <div class="">
-              <h1 class="is-size-4"> General </h1>
-              <div class="box">
-                <% for (let i=0; i<discussion.length; i++) { %>
-                  <div class="list-item">
-                    <p> <span class="cf">
-                        <%= discussion[i].USERNAME%>
-                      </span> : <%= discussion[i].CONTENT %>
-                    </p>
-                    <p class="is-italic sml is-pulled-right">
-                      <%= discussion[i].TIMESTAMP %>
-                    </p>
-                    <hr />
+                        <a class="button is-primary is-small" href="/assignment/<%= assignments[i].ASSIGNMENT_ID %>">
+                          View
+                        </a>
+                        <% if (team_role !=="student" ) { %>
+                          <a class="button is-danger is-small"
+                            href="/assignment/delete/<%= assignments[i].ASSIGNMENT_ID %>">
+                            Delete
+                          </a>
+                          <% } %>
+                      </div>
+                    </div>
                   </div>
                   <% } %>
               </div>
-              <form action="/dis/<%= dis_id %>/<%= team_code %>/<%= team_id %>/1" method="POST">
-                <div class="field has-addons">
-                  <div class="control">
-                    <input class="input" type="text" name="message" placeholder="Send a message">
-                  </div>
-                  <div class="control">
-                    <button class="button is-primary">Send</button>
-                  </div>
-                </div>
-              </form>
 
-              <% if (team_role !=="student" ) { %>
-                <div>
-                  <p class="is-size-4"> Invite User </p>
-                  <form action="/teams/code/<%= team_code %>/invite" method="POST">
-                    <label class="label">Username</label>
-                    <input name="invitedUserName" class="input" type="text">
-                    <label class="label">Team Role</label>
-                    <div class="select is-rounded">
-                      <select name="invitedUserRole" class="input">
-                        <option value="student">Student</option>
-                        <option value="instructor">Instructor</option>
-                        <option value="admin">Admin</option>
-                      </select>
-                    </div>
-                    <button class="button is-primary" type="submit"> Invite </button>
-                  </form>
-                </div>
-                <% } %>
+        </div>
+
+
+        <div class="">
+          <h1 class="is-size-4"> General </h1>
+          <div class="box">
+            <% for (let i=0; i<discussion.length; i++) { %>
+              <div class="list-item">
+                <p> <span class="cf">
+                    <%= discussion[i].USERNAME%>
+                  </span> : <%= discussion[i].CONTENT %>
+                </p>
+                <p class="is-italic sml is-pulled-right">
+                  <%= discussion[i].TIMESTAMP %>
+                </p>
+                <hr />
+              </div>
+              <% } %>
+          </div>
+          <form action="/dis/<%= dis_id %>/<%= team_code %>/<%= team_id %>/1" method="POST">
+            <div class="field has-addons">
+              <div class="control">
+                <input class="input" type="text" name="message" placeholder="Send a message">
+              </div>
+              <div class="control">
+                <button class="button is-primary">Send</button>
+              </div>
             </div>
+          </form>
+
+          <% if (team_role !=="student" ) { %>
+            <div>
+              <p class="is-size-4"> Invite User </p>
+              <form action="/teams/code/<%= team_code %>/invite" method="POST">
+                <label class="label">Username</label>
+                <input name="invitedUserName" class="input" type="text">
+                <label class="label">Team Role</label>
+                <div class="select is-rounded">
+                  <select name="invitedUserRole" class="input">
+                    <option value="student">Student</option>
+                    <option value="instructor">Instructor</option>
+                    <option value="admin">Admin</option>
+                  </select>
+                </div>
+                <button class="button is-primary" type="submit"> Invite </button>
+              </form>
+            </div>
+            <% } %>
+        </div>
       </div>
       <div class="column is-4">
-        <p class="is-size-6"> Create a New Notification </p>
+        <p class="is-size-6"> Create a New Announcement </p>
         <form action="/teams/code/notify/<%= team_code %>" method="POST">
           <label class="label">Title </label>
           <input name="notif_title" class="input" type="text">
@@ -186,7 +186,7 @@
           <input name="notif_content" class="input" type="text">
           <button class="button is-primary" type="submit"> Notify </button>
         </form>
-        <h class="is-size-4"> Notifications </h>
+        <h class="is-size-4"> Announcement </h>
         <div class="box">
           <% for (let i=0; i<notifications.length; i++) { %>
             <div class="list-item">

@@ -423,7 +423,6 @@ router.route("/code/:code").get(auth.authMiddleware, async (req, res) => {
 
     let assignmentList = [],
         completed_ass = [];
-
     if (user_role_in_team === "student") {
         assignmentList = await assignments.getAllNewAssignmentsForStudentInTeam(
             req.session.user_id,

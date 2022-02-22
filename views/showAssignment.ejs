@@ -1,71 +1,80 @@
 <%- include('./partials/header.ejs') %>
-<%- include('./partials/navbar.ejs') %>
-<div class="columns is-centered cf2">
-    <div class="box column is-6 ">
-        <h1 class="title is-size-4 p-2 cf"><%= ass_info.ASSIGNMENT_TITLE %>
-            <p class = "is-pulled-right">
-        <% if(is_submitted){ %>
-            <span class="tag is-primary">Submitted</span>  
-        <% } %>
-        <% if(score){ %>
-            <span class="tag is-warning">Graded</span>
-        <% } %>
+  <%- include('./partials/navbar.ejs') %>
+    <div class="columns is-centered cf2">
+      <div class="box column is-6 ">
+        <h1 class="title is-size-4 p-2 cf">
+          <%= ass_info.ASSIGNMENT_TITLE %>
+            <p class="is-pulled-right">
+              <% if(is_submitted){ %>
+                <span class="tag is-primary">Submitted</span>
+                <% } %>
+                  <% if(score){ %>
+                    <span class="tag is-warning">Graded</span>
+                    <% } %>
             </p>
-        <% if (team_role !== 'student') { %>
-        <a href="/assignment/delete/<%= ass_info.ASSIGNMENT_ID %>" class="button is-danger is-pulled-right"> Delete </a>
-        <% } %>
+            <% if (team_role !=='student' ) { %>
+              <a href="/assignment/delete/<%= ass_info.ASSIGNMENT_ID %>" class="button is-danger is-pulled-right">
+                Delete </a>
+              <% } %>
         </h1>
-        <h1 class="is-size-5 p-2"> Description: </h1>
-        <h1 class="content p-2"><%= ass_info.ASSIGNMENT_DESC %> </h1>
+        <h5 class="is-size-5 p-2"> Description: </h5>
+        <h1 class="content p-2">
+          <%= ass_info.ASSIGNMENT_DESC %>
+        </h1>
+        <a href="/teams/code/<%= team_code%>" class="button is-warning is-light">Go to <%=team_name%></a><br>
         <% if (ass_info.FILE_URL) { %>
-        <a class="button is-light is-primary m-2" href="/file/download/<%= ass_info.FILE_URL%>"> Download File </a>
-        <% } %>
-        <h1 class="is-size-6 p-2 cf3"> Status : <%= (ass_info.DUE ? 'DUE' : 'ONGOING') %> </h1>
-        <% if (team_role === 'student') { %>
-        <h1 class="is-size-6 p-2"> Score : <%= score %> </h1>
-        <% } %>
-        <h2 class="is-size-6 p-2"> Time Left : <%= ass_info.DAYS%> Day(s) <%= ass_info.HOURS %> Hour(s) <%= ass_info.MINS%> Min(s) </h2>
-        <% if (team_role === 'student') { %>
-        <form method="POST"  action="/assignment/submit/<%= ass_info.ASSIGNMENT_ID %>" enctype="multipart/form-data">
+          <a class="button is-light is-primary m-2" href="/file/download/<%= ass_info.FILE_URL%>"> Download File </a>
+          <% } %>
+            <h1 class="is-size-6 p-2 cf3"> Status : <%= (ass_info.DUE ? 'DUE' : 'ONGOING' ) %>
+            </h1>
+            <% if (team_role==='student' ) { %>
+              <h1 class="is-size-6 p-2"> Score : <%= score %>
+              </h1>
+              <% } %>
+                <h2 class="is-size-6 p-2"> Time Left : <%= ass_info.DAYS%> Day(s) <%= ass_info.HOURS %> Hour(s) <%=
+                        ass_info.MINS%> Min(s) </h2>
+                <% if (team_role==='student' ) { %>
+                  <form method="POST" action="/assignment/submit/<%= ass_info.ASSIGNMENT_ID %>"
+                    enctype="multipart/form-data">
 
-    <div id="file-js-example" class="file has-name">
-      <label class="file-label">
-        <input class="file-input" type="file" name="file">
-        <span class="file-cta">
-          <span class="file-icon">
-            <i class="fas fa-upload"></i>
-          </span>
-          <span class="file-label">
-            Choose a file…
-          </span>
-        </span>
-        <span class="file-name">
-          No file uploaded
-        </span>
-      </label>
+                    <div id="file-js-example" class="file has-name">
+                      <label class="file-label">
+                        <input class="file-input" type="file" name="file">
+                        <span class="file-cta">
+                          <span class="file-icon">
+                            <i class="fas fa-upload"></i>
+                          </span>
+                          <span class="file-label">
+                            Choose a file…
+                          </span>
+                        </span>
+                        <span class="file-name">
+                          No file uploaded
+                        </span>
+                      </label>
+                    </div>
+                    <p class="control">
+                      <button class="button is-primary" type="submit">
+                        Submit
+                      </button>
+                    </p>
+                  </form>
+                  <% } else {%>
+                    <a href="/grading/<%= ass_info.ASSIGNMENT_ID %>" class="button is-primary"> Start Grading </a>
+                    <% } %>
+
+      </div>
+
     </div>
-    <p class="control">
-        <button class="button is-primary" type="submit">
-            Submit
-        </button>
-    </p>
-        </form>
-        <% } else {%>
-        <a href="/grading/<%= ass_info.ASSIGNMENT_ID %>" class="button is-primary"> Start Grading </a>
-        <% } %>
+    <script>
+      const fileInput = document.querySelector('#file-js-example input[type=file]');
+      fileInput.onchange = () => {
+        if (fileInput.files.length > 0) {
+          const fileName = document.querySelector('#file-js-example .file-name');
+          fileName.textContent = fileInput.files[0].name;
+        }
+      }
+    </script>
 
-    </div>
-    
-</div>
-<script>
-  const fileInput = document.querySelector('#file-js-example input[type=file]');
-  fileInput.onchange = () => {
-    if (fileInput.files.length > 0) {
-      const fileName = document.querySelector('#file-js-example .file-name');
-      fileName.textContent = fileInput.files[0].name;
-    }
-  }
-</script>
-
-<%- include('./partials/notification_below.ejs') %>
-<%- include('./partials/footer.ejs') %>
+    <%- include('./partials/notification_below.ejs') %>
+      <%- include('./partials/footer.ejs') %>
