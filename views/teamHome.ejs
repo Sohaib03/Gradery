@@ -79,7 +79,13 @@
               <%= completed_assignments[i].ASSIGNMENT_TITLE %>
                 <% if (team_role !=='student' ){ %>
                   <p class="sml">All Submissions Graded</p>
-                  <% } %>
+                  <% } else {%>
+                    <% if (completed_assignments[i].SCORE === null) { %>
+                      <p class="sml">Ungraded</p>
+                    <% } else {%>
+                      <p class="sml">Score : <%= completed_assignments[i].SCORE%> </p>
+                      <% } %>
+                    <% } %>
 
             </a>
             <% } %>

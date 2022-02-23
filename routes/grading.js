@@ -107,9 +107,10 @@ router
             return;
         }
 
-        const team_role = await teams.checkUserInTeam(req.session.user_id);
+        const team_role = await teams.checkUserInTeam(req.session.user_id, team_id);
+        console.log(team_role);
         if (team_role.length === 0 || team_role[0].ROLE === "student") {
-            req.redirect("/");
+            res.redirect("/");
             return;
         }
 
