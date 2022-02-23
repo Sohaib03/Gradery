@@ -1,11 +1,46 @@
 <%- include('./partials/header.ejs') %>
 <%- include('./partials/navbar.ejs') %>
 
+<section class="hero is-primary">
+    <div class="hero-body">
+        <h3 class="title cf">
+            <%= team_name %> - <%= team_desc %>
+        </h3>
+        <h1 class="subtitle cf3"> Team Code : <%= team_code %>
+        </h1>
+        <form action="/teams/code/<%= team_code %>/leave" method="POST">
+            <% if(team_role==='admin' ) {%>
+            <a class="button is-warning" href="/teams/code/<%= team_code %>/edit">Edit Team</a>
+            <%}%>
+              <% if(team_role!=='admin' ) {%>
+            <input class="button is-danger" type="submit" value="Leave Team">
+            <%}%>
+                  <a class="cf2 button is-info" href="/resource/<%= team_code %>">Resources</a>
+        </form>
+    </div>
+</section>
+
 <div class="columns is-centered">
+    <div class="column is-4 p-5">
+        <p class="is-size-4"> Invite User </p>
+        <form action="/teams/code/<%= team_code %>/invite" method="POST">
+            <label class="label">Username</label>
+            <input name="invitedUserName" class="input" type="text">
+            <label class="label">Team Role</label>
+            <div class="select is-rounded">
+                <select name="invitedUserRole" class="input">
+                    <option value="student">Student</option>
+                    <option value="instructor">Instructor</option>
+                    <option value="admin">Admin</option>
+                </select>
+            </div>
+            <button class="button is-primary" type="submit"> Invite </button>
+        </form>
+    </div>
     <div class="column is-4 p-5">
         <article class="panel is-primary">
             <p class="panel-heading has-text-centered">
-                Participants of <%= team_name %>
+                Current Participants
             </p>
             <% for (let i=0; i < participants.length; ++i) {%>
             <a class="panel-block">
@@ -17,7 +52,7 @@
     <div class="column is-4 p-5">
         <article class="panel is-warning">
             <p class="panel-heading has-text-centered">
-                Invited Participants of <%= team_name %>
+                Invited Participants
             </p>
             <% for (let i=0; i < invitedParticipants.length; ++i) {%>
             <div class="panel-block">
