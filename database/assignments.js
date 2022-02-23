@@ -105,6 +105,7 @@ async function getSubmissionStatus(ass_id, std_id) {
     const binds = { ass_id, std_id };
     return (await db.execute(sql, binds, db.options)).rows;
 }
+
 async function deleteAssignment(ass_id) {
     const sql = `DELETE FROM ASSIGNMENTS WHERE ASSIGNMENT_ID=:ass_id`;
     const binds = { ass_id };
@@ -136,19 +137,34 @@ async function getSubmissionData(ass_id) {
 
 async function getAssignmentGradedInTeam(team_id) {
     const sql = `
-        select A.ASSIGNMENT_ID as ASSIGNMENT_ID, ASSIGNMENT_TITLE, DEADLINE, count(SUBMISSION_FILE) SUBMITTED , count(SCORE) GRADED, count(*) ASSIGNEES
-        from ASSIGNMENTS A join ASSIGNED_TO AT on A.ASSIGNMENT_ID = AT.ASSIGNMENT_ID where TEAM_ID = :team_id
-        GROUP BY A.ASSIGNMENT_ID, ASSIGNMENT_TITLE, DEADLINE having (count(SCORE) = count(*))
+    SELECT ASSIGNMENT_ID,
+    ASSIGNMENT_TITLE,
+    DEADLINE,
+    COUNT(SUBMISSION_FILE) SUBMITTED,
+    COUNT(SCORE)           GRADED,
+    COUNT(STUDENT_ID)      ASSIGNEES
+FROM ASSIGNMENTS A
+      LEFT JOIN ASSIGNED_TO AT USING (ASSIGNMENT_ID)
+WHERE TEAM_ID = :team_id
+GROUP BY ASSIGNMENT_ID, ASSIGNMENT_TITLE, DEADLINE
+HAVING (COUNT(SCORE) = COUNT(STUDENT_ID)) AND COUNT(STUDENT_ID) <> 0
+
     `;
     const binds = { team_id };
     return (await db.execute(sql, binds, db.options)).rows;
 }
 async function getAssignmentUngradedInTeam(team_id) {
-    const sql = `
-        select A.ASSIGNMENT_ID as ASSIGNMENT_ID, ASSIGNMENT_TITLE, DEADLINE, count(SUBMISSION_FILE) SUBMITTED , count(SCORE) GRADED, count(*) ASSIGNEES
-        from ASSIGNMENTS A join ASSIGNED_TO AT on A.ASSIGNMENT_ID = AT.ASSIGNMENT_ID where TEAM_ID = :team_id
-        GROUP BY A.ASSIGNMENT_ID, ASSIGNMENT_TITLE, DEADLINE having (count(SCORE) < count(*))
-    `;
+    const sql = `SELECT ASSIGNMENT_ID,
+    ASSIGNMENT_TITLE,
+    DEADLINE,
+    COUNT(SUBMISSION_FILE) SUBMITTED,
+    COUNT(SCORE)           GRADED,
+    COUNT(STUDENT_ID)      ASSIGNEES
+FROM ASSIGNMENTS A
+      LEFT JOIN ASSIGNED_TO AT USING (ASSIGNMENT_ID)
+WHERE TEAM_ID = :team_id
+GROUP BY ASSIGNMENT_ID, ASSIGNMENT_TITLE, DEADLINE
+HAVING (COUNT(SCORE) < COUNT(STUDENT_ID)) OR COUNT(STUDENT_ID) = 0`;
     const binds = { team_id };
     return (await db.execute(sql, binds, db.options)).rows;
 }

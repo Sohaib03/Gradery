@@ -229,6 +229,42 @@ router
     });
 
 router
+    .route("/code/deleteNotification/:code/:notif_id")
+    .get(auth.authMiddleware, async (req, res) => {
+        const team_code = req.params.code;
+        const notif_id = req.params.notif_id;
+
+        // Check if team_exists
+        let team_info = await teams.getTeamByCode(team_code);
+        if (team_info.length === 0) {
+            // Team Doesnt exist. Notify User
+            res.redirect("/");
+            return;
+        }
+
+        const user_team_info = await teams.checkUserInTeam(
+            req.session.user_id,
+            team_info[0].TEAM_ID
+        );
+        // Check if user is in given team
+        if (user_team_info.length === 0) {
+            // Team Exists but User has not joined team
+            res.redirect("/teams/join");
+            return;
+        }
+        const user_role_in_team = user_team_info[0].ROLE;
+
+        if (user_role_in_team === "student") {
+            res.redirect("/teams/code/" + team_code);
+            return;
+        }
+
+        await notification.deleteNotification(notif_id);
+
+        res.redirect("/teams/code/" + team_code);
+    });
+
+router
     .route("/code/:code/invite")
     .post(auth.authMiddleware, async (req, res) => {
         const team_code = req.params.code;
@@ -423,7 +459,6 @@ router.route("/code/:code").get(auth.authMiddleware, async (req, res) => {
 
     let assignmentList = [],
         completed_ass = [];
-
     if (user_role_in_team === "student") {
         assignmentList = await assignments.getAllNewAssignmentsForStudentInTeam(
             req.session.user_id,

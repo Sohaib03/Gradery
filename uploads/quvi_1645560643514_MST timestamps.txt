@@ -1,0 +1,8 @@
+0:00 - Intro
+0:34 - What is a Minimum Spanning Tree (MST)
+4:06 - Lemma required for MST algorithms
+7:47 - Proof of the lemma
+12:28 - Kruskal's Algorithm for finding MST
+19:19 - Time Complexity of Kruskal's Algorithm
+21:27 - Prim's Algorithm for finding MST
+26:37 - Time Complexity of Prim's Algorithm

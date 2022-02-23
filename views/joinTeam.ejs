@@ -1,23 +1,23 @@
 <%- include('./partials/header.ejs') %>
 <%- include('./partials/navbar.ejs') %>
 
-<h3 class="title"> Create Team </h3>
+<h3 class="columns is-centered title py-5 cf"> Join a Team with Code </h3>
 <form method="POST">
-<div class="columns">
-    <div class="column is-6">
-<div class="field">
-  <label class="label"> Team Code</label>
-  <div class="control">
-    <input name="team_code" class="input" type="text" >
+  <div class="columns p-5 is-centered">
+    <div class="column is-6 box">
+      <div class="field">
+        <label class="label p-2"> Team Code</label>
+        <div class="control px-2">
+          <input name="team_code" class="input" type="text">
+        </div>
+      </div>
+      <p class="control columns is-centered p-2">
+        <button class="button is-primary" type="submit">
+          Submit
+        </button>
+      </p>
+    </div>
   </div>
-</div>
-                  <p class="control">
-                    <button class="button is-primary" type="submit">
-                        Submit
-                    </button>
-                  </p>
-</div>
-</div>
 </form>
 
 <%- include('./partials/footer.ejs') %>

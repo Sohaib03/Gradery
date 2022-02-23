@@ -1,59 +1,73 @@
 <%- include('./partials/header.ejs') %>
-<%- include('./partials/navbar.ejs') %>
-<h1 class="title p-4" > Grading <%= ass_info.ASSIGNMENT_TITLE %> 
-<a class="button is-info is-small is-pulled-right" href="/grading/download/<%= ass_info.ASSIGNMENT_ID %>" >Download All Submissions</a>
-</h1>
-<p>Submitted <%= sub_info.SUBMITTED %> out of <%= sub_info.NONSUBMITTED + sub_info.SUBMITTED %></p>
-<div class="m-5">
-<% for (let i=0; i<submissions.length; i++){ %>
-    <div class="box columns m-2">
-        <div class="column is-1 ">
-            <%= submissions[i].STUDENT_ID %>
-        </div>
-        <div class="column is-2">
-            <%= submissions[i].USERNAME.toUpperCase() %>
-        </div>
-        <div class="column is-3">
-            <% if (submissions[i].SUBMISSION_STATUS === 0) { %>
-            <i class="fa fa-times"></i>
-            <% } else { %>
-            <i class="fa fa-check"></i>
-            <%= Math.floor(submissions[i].TIME_DELTA * 24 * 60) %> <%= submissions[i].TIME_DELTA >= 0 ? 'Before' : 'After' %> Deadline
-            <% } %>
-        </div>
-        <div class="column is-2">
-            <% if (submissions[i].SUBMISSION_STATUS !== 0) { %>
-                <a href="/file/download/<%= submissions[i].SUBMISSION_FILE%>">
-                Download Submission 
-                </a>
-            <% } else { %>
-                <p> Not Submitted Yet </p>
-            <% } %>
+    <%- include('./partials/navbar.ejs') %>
+        <h1 class="title cf p-4"> Grading: <%= ass_info.ASSIGNMENT_TITLE %>
+                <a class="button is-info is-small is-pulled-right"
+                    href="/grading/download/<%= ass_info.ASSIGNMENT_ID %>">Download All Submissions</a>
+        </h1>
 
-        </div>
-        <div class="column is-2">
-            <% if (submissions[i].SCORE) { %>
-            <p> Graded Score : <%= submissions[i].SCORE %>  </p>
-            <% } else {%> 
-            <p> Ungraded </p>
-            <% } %>
-        </div>
-        <div class="column is-2">
+        <p class="px-5">
+            <a href="/assignment/<%= ass_info.ASSIGNMENT_ID%>" class="button is-primary is-regular is-light">Back to "
+                <%= ass_info.ASSIGNMENT_TITLE%>"</a>
+            <a href="/teams/code/<%= team_code%>" class="button is-warning is-regular is-light">Go to
+                <%= team_name%>
+            </a><br>
+            Submitted <%= sub_info.SUBMITTED %> out of <%= sub_info.NONSUBMITTED + sub_info.SUBMITTED %>
+        </p>
+        <div class="m-5">
+            <% for (let i=0; i<submissions.length; i++){ %>
+                <div class="box columns m-2">
+                    <div class="column is-1 ">
+                        <%= submissions[i].STUDENT_ID %>
+                    </div>
+                    <div class="column is-2">
+                        <%= submissions[i].USERNAME.toUpperCase() %>
+                    </div>
+                    <div class="column is-3">
+                        <% if (submissions[i].SUBMISSION_STATUS===0) { %>
+                            <i class="fa fa-times"></i>
+                            <% } else { %>
+                                <i class="fa fa-check"></i>
+                                <%= Math.floor(submissions[i].TIME_DELTA * 24 * 60) %>
+                                    <%= submissions[i].TIME_DELTA>= 0 ? 'Before' : 'After' %> Deadline
+                                        <% } %>
+                    </div>
+                    <div class="column is-2">
+                        <% if (submissions[i].SUBMISSION_STATUS !==0) { %>
+                            <a href="/file/download/<%= submissions[i].SUBMISSION_FILE%>">
+                                Download Submission
+                            </a>
+                            <% } else { %>
+                                <p> Not Submitted Yet </p>
+                                <% } %>
+
+                    </div>
+                    <div class="column is-2">
+                        <% if (submissions[i].SCORE) { %>
+                            <p> Graded Score : <%= submissions[i].SCORE %>
+                            </p>
+                            <% } else {%>
+                                <p> Ungraded </p>
+                                <% } %>
+                    </div>
+                    <div class="column is-2">
 
 
-        <form method="POST" action="/grading/submit/<%= ass_info.ASSIGNMENT_ID %>/<%= submissions[i].STUDENT_ID %>" >
-        <div class="field has-addons">
-            <div class="control">
-                <input class="input" type="text" placeholder="Enter Score" value="<%= submissions[i].SCORE %>" name="score" />
-            </div>
-            <div class="control">
-            <button type="submit" class="button is-primary is-pulled-right"> Submit </button>
-            </div>
+                        <form method="POST"
+                            action="/grading/submit/<%= ass_info.ASSIGNMENT_ID %>/<%= submissions[i].STUDENT_ID %>">
+                            <div class="field has-addons">
+                                <div class="control">
+                                    <input class="input" type="text" placeholder="Enter Score"
+                                        value="<%= submissions[i].SCORE %>" name="score" />
+                                </div>
+                                <div class="control">
+                                    <button type="submit" class="button is-primary is-pulled-right"> Submit
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <% } %>
         </div>
-        </form>
-        </div>
-    </div>
-<% } %>
-</div>
 
-<%- include('./partials/footer.ejs') %>
+        <%- include('./partials/footer.ejs') %>

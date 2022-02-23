@@ -1,58 +1,67 @@
-<%- include('./partials/header.ejs') %> <%- include('./partials/navbar.ejs') %>
+<%- include('./partials/header.ejs') %>
+<%- include('./partials/navbar.ejs') %>
 
-<div class="columns">
+<div class="p-5 columns">
 
-<div class="column is-9 p-5">
+  <div class="column is-9 p-5">
     <h3 class="cf is-size-4">Your Teams</h3>
-<div class="cards">
-    <% for (let i=0; i < teamsInfo.length; i++){ %>
-        <a class="box" href="/teams/code/<%= teamsInfo[i].TEAM_CODE %>">
-            <article class="message is-primary">
-                <div class="message-body">
-                    <h1 class="title is-size-6 cf"> <%= teamsInfo[i].TEAM_NAME %> </h1>
-            </div>
-            </article>
-        </a>
-    <% } %>
-</div>
+    <div class="cards">
+      <% for (let i=0; i < teamsInfo.length; i++){ %>
+      <a class="box m-3" href="/teams/code/<%= teamsInfo[i].TEAM_CODE %>">
+        <article class="message is-primary">
+          <div class="message-body">
+            <h1 class="title is-size-6 cf"> <%= teamsInfo[i].TEAM_NAME %> </h1>
+          </div>
+        </article>
+      </a>
+      <% } %>
+    </div>
 
-<div class="column is-3">
-    <h class="is-size-4"> Notifications </h>
-    <div class="box">
-        <% for (let i = 0; i < userNotifications.length; i++) { %>
-        <div class="list-item">
-            <p><b><%= userNotifications[i].TITLE %></b></p>
-            <p><%- userNotifications[i].CONTENT %></p>
-            <p><%= userNotifications[i].TIMESTAMP %></p>
-            <hr />
+    <div class="column is-6">
+      <h class="is-size-4"> Notifications </h>
+      <div class="box">
+        <% for (let i=0; i < userNotifications.length; i++) { %>
+        <div class="">
+          <a href="/deleteNotification/<%= userNotifications[i].NOTIFICATION_ID %>" 
+            class="delete is-danger is-medium is-pulled-right">Delete</a>
+          <p class="cf is-size-6"> <%= userNotifications[i].TITLE %> </p>
+          <p class="p-5"> <%- userNotifications[i].CONTENT %> </p>
+          <p class="p-1 sml"> <%= userNotifications[i].TIMESTAMP %> </p>
         </div>
         <% } %>
+      </div>
     </div>
-</div>
-</div>
-<div class="column is-3 p-5">
+  </div>
+  <div class="column is-3 p-5">
     <h2 class="is-size-4 cf">Your Chats</h2>
     <% for(let i=0; i<latestMessages.length; i++){ %>
-    <% if (latestMessages[i].TO_USER == user_id ) { %>
-    <a class="my-1 message is-primary" href="/chat/<%= latestMessages[i].FROM_USERNAME %>" >
-  <div class="box" >
-        <p class="cf2" > <%= latestMessages[i].FROM_USERNAME.toUpperCase() %> </p>
-        <p class="sml"> <%= latestMessages[i].FROM_USERNAME.toUpperCase() %> :  <%= latestMessages[i].MESSAGE %> </p>
-  </div>
+    <% if (latestMessages[i].TO_USER==user_id ) { %>
+    <a class="my-1 message is-primary" href="/chat/<%= latestMessages[i].FROM_USERNAME %>">
+      <div class="box">
+        <p class="cf2">
+          <%= latestMessages[i].FROM_USERNAME.toUpperCase() %>
+        </p>
+        <p class="sml">
+          <%= latestMessages[i].FROM_USERNAME.toUpperCase() %> : <%= latestMessages[i].MESSAGE %>
+        </p>
+      </div>
     </a>
-        <% } else { %>
-    <a class="my-1 message is-primary" href="/chat/<%= latestMessages[i].TO_USERNAME %>" >
-  <div class="box" >
-        <p class="cf2" > <%= latestMessages[i].TO_USERNAME.toUpperCase() %> </p>
-        <p class="sml"> You :  <%= latestMessages[i].MESSAGE %> </p>
-  </div>
-</a>
+    <% } else { %>
+    <a class="my-1 message is-primary" href="/chat/<%= latestMessages[i].TO_USERNAME %>">
+      <div class="box">
+        <p class="cf2">
+          <%= latestMessages[i].TO_USERNAME.toUpperCase() %>
+        </p>
+        <p class="sml"> You : <%= latestMessages[i].MESSAGE %>
+        </p>
+      </div>
+    </a>
 
-        <% } %>
+    <% } %>
     <% } %>
 
-    <h2 class="is-size-4 cf py-3" > Create a new chat </h2>
-    <div class="columns p-5 is-centered"> 
+    <h2 class="is-size-4 cf py-3"> Create a new chat </h2>
+    <div class="columns p-5 is-centered">
       <form action="/chat/create" method="POST">
         <div class="field has-addons">
           <div class="control">
@@ -64,9 +73,8 @@
         </div>
       </form>
     </div>
-    
-</div>
-</div>
 
-<%- include('./partials/notification_below.ejs') %> <%-
-include('./partials/footer.ejs') %>
+  </div>
+</div>
+<%- include('./partials/notification_below.ejs') %>
+<%- include('./partials/footer.ejs') %>
