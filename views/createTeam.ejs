@@ -1,9 +1,11 @@
 <%- include('./partials/header.ejs') %> <%- include('./partials/navbar.ejs') %>
 
-<h3 class="title m-5">Create Team</h3>
+<h3 class="columns is-centered title m-5 cf">Create a New Team</h3>
+<div class="columns is-centered">
+    <div class="column is-6">
 <form method="POST">
-    <div class="columns p-5">
-        <div class="column is-6">
+    <div class="columns is-centered is-6 p-5">
+        <div class="column box px-5">
             <div class="field">
                 <label class="label"> Team Name</label>
                 <div class="control">
@@ -31,11 +33,12 @@
                 </div>
             </div>
 
-            <p class="control">
+            <p class="control columns is-centered my-3">
                 <button class="button is-primary" type="submit">Submit</button>
             </p>
         </div>
     </div>
-</form>
+</form></div>
+</div>
 
 <%- include('./partials/footer.ejs') %>

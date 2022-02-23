@@ -176,37 +176,35 @@
             <% } %>
         </div>
       </div>
-      <div class="column is-4">
+      <div class="column is-4 py-5">
         <% if (team_role !=="student" ) {%>
-          <h1 class="is-size-4 p-2"><b>Create a New Announcement</b></h1>
+          <h1 class="columns is-centered is-size-4 py-2 cf"><b>Create a New Announcement</b></h1>
+          <div class="px-2">
           <form action="/teams/code/<%= team_code %>/notify" method="POST">
             <label class="label">Title </label>
             <input name="notif_title" class="input" type="text">
             <label class="label">Details </label>
             <input name="notif_content" class="input" type="text">
             <p class="p-1"></p>
-            <button class="button is-primary" type="submit"> Notify </button>
+            <button class="button is-primary mb-5" type="submit"> Notify </button>
           </form>
+          </div>
           <%}%>
-            <h1 class="is-size-4 px-2 pt-3 pb-2"><b>Announcements</b></h1>
+            <h1 class="columns is-size-4 px-2 pt-3 pb-2 is-centered cf"><b>Announcements</b></h1>
             <div class="box">
               <% for (let i=0; i<notifications.length; i++) { %>
-                <div class="list-item">
-                  <p><b>
-                      <%= notifications[i].TITLE %>
-                    </b>
-                  </p>
-                  <p>
-                    <%- notifications[i].CONTENT %>
-                  </p>
-                  <p>
-                    <%= notifications[i].TIMESTAMP %>
-                  </p>
-                  <hr />
+                <div class="py-2">
+                  <article class="message is-info">
+                  <div class="message-body">
+                  <p class="cf is-size-5 pb-3"> <%= notifications[i].TITLE %> </p>
+                  <p class="is-size-6"> <%- notifications[i].CONTENT %> </p>
+                  <p class="sml py-2"> <%= notifications[i].TIMESTAMP %> </p>
                   <% if (team_role !=="student" ) {%>
                     <a href="/teams/code/deleteNotification/<%= team_code%>/<%= notifications[i].NOTIFICATION_ID %>"
-                      class="button is-danger is-small">Delete</a>
+                      class="button is-danger is-small is-light">Delete</a>
                     <%}%>
+                  </div>
+                  </article>
                 </div>
                 <% } %>
             </div>
