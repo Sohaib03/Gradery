@@ -34,6 +34,7 @@ router
             role: req.session.role,
             team_name: team_name,
             team_desc: team_desc,
+            team_code: team_code,
         };
         res.render("createAssignment", context);
     });

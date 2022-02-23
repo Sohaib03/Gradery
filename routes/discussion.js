@@ -94,6 +94,7 @@ router
             username: req.session.username,
             role: req.session.ROLE,
             team_name: team_info[0].TEAM_NAME,
+            team_code,
         };
 
         res.render("newDiscussion", context);
@@ -167,6 +168,7 @@ router
             team_role: team_role[0].ROLE,
             team_name: team_info[0].TEAM_NAME,
             team_desc: team_info[0].TEAM_DESC,
+            dis_status: dis_info[0].STATUS,
             team_id: team_id,
             dis_title: dis_info[0].TITLE,
             dis_content: dis_info[0].BODY,

@@ -1,62 +1,67 @@
 <%- include('./partials/header.ejs') %>
-  <%- include('./partials/navbar.ejs') %>
-    <section class="hero is-primary">
-      <div class="hero-body">
+<%- include('./partials/navbar.ejs') %>
+<section class="hero is-primary">
+    <div class="hero-body">
         <h3 class="title cf">
-          <%= team_name %> - <%= team_desc %>
+            <%= team_name %> - <%= team_desc %>
         </h3>
         <h1 class="subtitle cf3"> Team Code : <%= team_code %>
         </h1>
         <form action="/teams/code/<%= team_code %>/leave" method="POST">
-          <a class="cf2 button is-warning" href="/teams/code/<%= team_code %>"> Back to Team </a>
-          <a class="cf2 button is-info" href="/resource/<%= team_code %>">Resources</a>
+            <a class="cf2 button is-warning" href="/teams/code/<%= team_code %>"> Back to Team </a>
+            <a class="cf2 button is-info" href="/resource/<%= team_code %>">Resources</a>
         </form>
-      </div>
-    </section>
+    </div>
+</section>
+
+<div class="columns is-centered">
+
     <div class="p-5">
 
-      <form action="/dis/<%= team_code %>/delete/<%= dis_id %>" method="POST">
-        <% if(team_role!=="student" ) {%>
-          <input class="button is-danger is-small" type="submit" value="Delete Discussion">
-          <%}%>
+        <form action="/dis/<%= team_code %>/delete/<%= dis_id %>" method="POST">
+            <% if(team_role!=="student" && dis_status !== 1) {%>
+            <input class="button is-danger is-small" type="submit" value="Delete Discussion">
+            <%}%>
       </form>
 
     </div>
     <div class="column is-6 is-centered">
       <h1 class="is-size-4">
         <%= dis_title %>
-      </h1>
-      <p class="content ">
-        <%= dis_content %>
-      </p>
-      <div class="box">
-        <% for (let i=0; i<discussion.length; i++) { %>
-          <div class="list-item">
-            <p> <span class="cf">
-                <%= discussion[i].USERNAME%>
-              </span> : <%= discussion[i].CONTENT %>
+            </h1>
+            <p class="content ">
+                <%= dis_content %>
             </p>
-            <p class="is-italic sml is-pulled-right">
-              <%= discussion[i].TIMESTAMP %>
-            </p>
-            <hr />
-          </div>
-          <% } %>
-      </div>
-      <form action="/dis/<%= team_code %>/<%= dis_id %>/0" method="POST">
-        <div class="field has-addons">
-          <div class="control">
-            <input class="input" type="text" name="message" placeholder="Send a message">
-          </div>
-          <div class="control">
-            <button class="button is-primary">Send</button>
-          </div>
-        </div>
-      </form>
 
+            <form action="/dis/<%= team_code %>/<%= dis_id %>/0" method="POST">
+                <div class="field has-addons">
+                    <div class="control">
+                        <input class="input" type="text" name="message" placeholder="Send a message">
+                    </div>
+                    <div class="control">
+                        <button class="button is-primary">Send</button>
+                    </div>
+                </div>
+            </form>
 
-
+            <div class="box">
+                <% for (let i=0; i<discussion.length; i++) { %>
+                <div class="list-item">
+                    <p> <span class="cf">
+                            <%= discussion[i].USERNAME%>
+                        </span> : <%= discussion[i].CONTENT %>
+                    </p>
+                    <p class="is-italic sml is-pulled-right">
+                        <%= discussion[i].TIMESTAMP %>
+                    </p>
+                    <hr />
+                </div>
+                <% } %>
+            </div>
 
     </div>
 
-    <%- include('./partials/footer.ejs') %>
+
+</div>
+
+<%- include('./partials/footer.ejs') %>

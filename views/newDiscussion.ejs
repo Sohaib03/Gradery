@@ -1,35 +1,37 @@
 <%- include('./partials/header.ejs') %>
-    <%- include('./partials/navbar.ejs') %>
-        <div class="p-5">
-            <h3 class="title"> Create New Discussion Forum for <%=team_name%>
-            </h3>
-            <form method="POST">
-                <div class="columns">
-                    <div class="column is-6">
-                        <div class="field">
-                            <label class="label"> Discussion Title </label>
-                            <div class="control">
-                                <input name="dis_title" class="input" type="text">
-                            </div>
-                        </div>
-
-                        <div class="field">
-                            <label class="label"> Discussion Body</label>
-                            <div class="control">
-                                <input name="dis_content" class="input" type="text">
-                            </div>
-                        </div>
-
-
-                        <p class="control">
-                            <button class="button is-primary" type="submit">
-                                Submit
-                            </button>
-                        </p>
+<%- include('./partials/navbar.ejs') %>
+<div class="p-5">
+    <h3 class="title has-text-centered cf"> Create New Discussion Forum for <%=team_name%>
+    </h3>
+    <form method="POST">
+        <div class="columns is-centered">
+            <div class="column is-6">
+                <a class="button is-small is-danger is-light is-pulled-right" href="/teams/code/<%= team_code%>">Back to
+                    Team</a><br>
+                <div class="field">
+                    <label class="label"> Discussion Title </label>
+                    <div class="control">
+                        <input name="dis_title" class="input" type="text">
                     </div>
                 </div>
-            </form>
 
+                <div class="field">
+                    <label class="label"> Discussion Body</label>
+                    <div class="control">
+                        <input name="dis_content" class="input" type="text">
+                    </div>
+                </div>
+
+
+                <p class="control">
+                    <button class="button is-primary" type="submit">
+                        Submit
+                    </button>
+                </p>
+            </div>
         </div>
+    </form>
 
-        <%- include('./partials/footer.ejs') %>
+</div>
+
+<%- include('./partials/footer.ejs') %>

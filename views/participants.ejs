@@ -33,14 +33,19 @@
     </div>
     <%}%>
     <div class="column is-4 p-5">
-        <article class="panel is-primary">
+        <article class="panel is-info">
             <p class="panel-heading has-text-centered">
                 Current Participants
             </p>
             <% for (let i=0; i < participants.length; ++i) {%>
-    <a class="panel-block">
-        <%=participants[i].USERNAME%>
-    </a>
+    <div class="panel-block">
+        <%=participants[i].USERNAME%> - <%=participants[i].ROLE%>
+        <form action="/teams/code/<%=team_code%>/deleteParticipant/<%=participants[i].USER_ID%>" style="margin-left: auto;" method="POST">
+            <% if (team_role !== "student" && participants[i].USERNAME !== username && participants[i].ROLE !== "admin") {%>
+            <button class="button is-danger is-small is-light" type="submit">Delete</button>
+            <% } %>
+        </form>
+    </div>
     <%}%>
         </article>
     </div>
@@ -51,8 +56,8 @@
             </p>
             <% for (let i=0; i < invitedParticipants.length; ++i) {%>
     <div class="panel-block">
-        <form action="/teams/code/<%=team_code%>/deleteInvitation/<%=invitedParticipants[i].USER_ID%>" method="POST">
-            <%=invitedParticipants[i].USERNAME%> - <%=invitedParticipants[i].ROLE%><br>
+        <%=invitedParticipants[i].USERNAME%> - <%=invitedParticipants[i].ROLE%>
+        <form action="/teams/code/<%=team_code%>/deleteInvitation/<%=invitedParticipants[i].USER_ID%>" style="margin-left: auto;" method="POST">
             <% if (team_role !== "student") {%>
             <button class="button is-danger is-small is-light" type="submit">Delete</button>
             <% } %>

@@ -1,24 +1,26 @@
 <%- include('./partials/header.ejs') %>
-    <%- include('./partials/navbar.ejs') %>
+<%- include('./partials/navbar.ejs') %>
 
-        <section class="hero is-primary">
-            <div class="hero-body">
-                <h3 class="title cf">
-                    <%= team_name %> - <%= team_desc %>
-                </h3>
-                <h1 class="subtitle cf2">Team Code : <%= team_code %>
-                </h1>
-                <form action="/teams/code/<%= team_code %>/delete" method="POST">
-                    <a class="button is-warning" href="/teams/code/<%= team_code %>">Back To Team</a>
-                    <input class="button is-danger" type="submit" value="Delete Team" />
-                </form>
-            </div>
-        </section>
+<section class="hero is-primary">
+    <div class="hero-body">
+        <h3 class="title cf">
+            <%= team_name %> - <%= team_desc %>
+        </h3>
+        <h1 class="subtitle cf2">Team Code : <%= team_code %>
+        </h1>
+        <form action="/teams/code/<%= team_code %>/delete" method="POST">
+            <a class="button is-warning" href="/teams/code/<%= team_code %>">Back To Team</a>
+            <input class="button is-danger" type="submit" value="Delete Team" />
+        </form>
+    </div>
+</section>
 
-        <h3 class="title m-5">Edit Team</h3>
+<div class="columns is-centered">
+    <div class="column is-6">
+        <h3 class="title m-5 cf has-text-centered">Edit Team</h3><br>
         <form method="POST">
-            <div class="columns p-5">
-                <div class="column is-6">
+            <div class="p-5">
+                <div class="">
                     <div class="field">
                         <label class="label">Team Name</label>
                         <div class="control">
@@ -40,10 +42,10 @@
                                 <option>Select Course</option>
 
                                 <% for(let i=0; i < allCourses.length; i++) { %>
-                                    <option <%=(allCourses[i].COURSE_ID===course_id) ? "selected" : "" %> ><%=
+                                <option <%=(allCourses[i].COURSE_ID===course_id) ? "selected" : "" %>><%=
                                             allCourses[i].COURSE_ID %>
-                                    </option>
-                                    <% } %>
+                                </option>
+                                <% } %>
                             </select>
                         </div>
                     </div>
@@ -54,5 +56,6 @@
                 </div>
             </div>
         </form>
-
-        <%- include('./partials/footer.ejs') %>
+    </div>
+</div>
+<%- include('./partials/footer.ejs') %>

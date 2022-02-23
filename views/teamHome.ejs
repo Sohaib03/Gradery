@@ -28,7 +28,7 @@
             </a>
         </div>
         <div class="p-2">
-            <h2 class="is-size-5 "> Discussions
+            <h2 class="is-size-4 cf"> Discussions
                 <a class="button is-small is-primary is-light is-pulled-right" href="/dis/<%= team_code %>/create">Add
                     New
                 </a>
@@ -89,7 +89,7 @@
             </div>
 
             <% } %>
-            <h1 class="is-size-4 p-2"><b>Assignments</b></h1>
+            <h1 class="is-size-4 p-2 cf">Assignments</h1>
 
             <div class="box ">
                 <% for (let i=0; i<assignments.length; i++){ %>
@@ -121,7 +121,19 @@
         </div>
 
         <div class="">
-            <h1 class="is-size-4 px-2 pt-5"><b>General</b></h1>
+            <h1 class="is-size-4 px-2 pt-5 cf">General</h1>
+            <div class="columns is-centered py-4">
+                <form action="/dis/<%= team_code %>/<%= dis_id %>/1" method="POST">
+                    <div class="field has-addons">
+                        <div class="control">
+                            <input class="input" type="text" name="message" placeholder="Send a message">
+                        </div>
+                        <div class="control">
+                            <button class="button is-primary">Send</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
             <div class="box">
                 <% for (let i=0; i<discussion.length; i++) { %>
                 <div class="list-item">
@@ -136,21 +148,11 @@
                 </div>
                 <% } %>
             </div>
-            <form action="/dis/<%= dis_id %>/<%= team_code %>/<%= team_id %>/1" method="POST">
-                <div class="field has-addons">
-                    <div class="control">
-                        <input class="input" type="text" name="message" placeholder="Send a message">
-                    </div>
-                    <div class="control">
-                        <button class="button is-primary">Send</button>
-                    </div>
-                </div>
-            </form>
         </div>
     </div>
     <div class="column is-4 py-5">
         <% if (team_role !=="student" ) {%>
-        <h1 class="columns is-centered is-size-4 py-2 cf"><b>Create a New Announcement</b></h1>
+        <h1 class="columns is-centered is-size-4 py-2 cf">Create a New Announcement</h1>
         <div class="px-2">
             <form action="/teams/code/<%= team_code %>/notify" method="POST">
                 <label class="label">Title </label>
@@ -162,7 +164,7 @@
             </form>
         </div>
         <%}%>
-            <h1 class="columns is-size-4 px-2 pt-3 pb-2 is-centered cf"><b>Announcements</b></h1>
+            <h1 class="columns is-size-4 px-2 pt-3 pb-2 is-centered cf">Announcements</h1>
             <div class="box">
               <% for (let i=0; i<notifications.length; i++) { %>
         <div class="py-2">

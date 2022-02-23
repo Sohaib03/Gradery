@@ -33,7 +33,7 @@ async function getDiscussionMessage(dis_id) {
         join DISCUSSION D on M.DISCUSSION_ID = D.DISCUSSION_ID
         join USERS U on M.FROM_USER = U.USER_ID
         where D.DISCUSSION_ID = :dis_id
-        order by TIMESTAMP`;
+        order by TIMESTAMP DESC`;
     const binds = { dis_id };
     return (await db.execute(sql, binds, db.options)).rows;
 }
@@ -44,7 +44,7 @@ async function getDefaultDiscussion(team_id) {
         join TEAMS T on D.TEAM_ID = T.TEAM_ID
         join USERS U on M.FROM_USER = U.USER_ID
         where T.TEAM_ID = :team_id and D.STATUS = 1
-        order by TIMESTAMP`;
+        order by TIMESTAMP DESC`;
     const binds = { team_id };
     return (await db.execute(sql, binds, db.options)).rows;
 }
