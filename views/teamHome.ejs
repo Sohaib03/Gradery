@@ -1,70 +1,53 @@
 <%- include('./partials/header.ejs') %>
-  <%- include('./partials/navbar.ejs') %>
+<%- include('./partials/navbar.ejs') %>
 
-    <section class="hero is-primary">
-      <div class="hero-body">
+<section class="hero is-primary">
+    <div class="hero-body">
         <h3 class="title cf">
-          <%= team_name %> - <%= team_desc %>
+            <%= team_name %> - <%= team_desc %>
         </h3>
         <h1 class="subtitle cf3"> Team Code : <%= team_code %>
         </h1>
         <form action="/teams/code/<%= team_code %>/leave" method="POST">
-          <% if(team_role==='admin' ) {%>
+            <% if(team_role==='admin' ) {%>
             <a class="button is-warning" href="/teams/code/<%= team_code %>/edit">Edit Team</a>
             <%}%>
               <% if(team_role!=='admin' ) {%>
-                <input class="button is-danger" type="submit" value="Leave Team">
-                <%}%>
+            <input class="button is-danger" type="submit" value="Leave Team">
+            <%}%>
                   <a class="cf2 button is-info" href="/resource/<%= team_code %>">Resources</a>
         </form>
-      </div>
-    </section>
+    </div>
+</section>
 
-    <div class="columns">
-      <div class="column is-3">
-        <div>
-          <table class="column table">
-            <tr>
-              <th> Participants </th>
-              <th> Role </th>
-            </tr>
-            <% for (let i=0; i<participants.length; i++) { %>
-              <tr>
-                <td>
-                  <%= participants[i].USERNAME.toUpperCase() %>
-                </td>
-                <td>
-                  <%= participants[i].ROLE %>
-                </td>
-
-              </tr>
-              <% } %>
-          </table>
-        </div>
+<div class="columns">
+    <div class="column is-3">
+        <a href="/teams/code/<%= team_code%>/participants">
+            Participants
+        </a>
         <div class="p-2">
-          <h2 class="is-size-5 "> Discussions
-            <a class="button is-small is-primary is-light is-pulled-right" href="/dis/<%= team_code %>/create">Add
-              New</a>
-          </h2>
-          <% for (let i=0; i<all_discussions.length; i++) { %>
+            <h2 class="is-size-5 "> Discussions
+                <a class="button is-small is-primary is-light is-pulled-right" href="/dis/<%= team_code %>/create">Add
+                    New</a>
+            </h2>
+            <% for (let i=0; i<all_discussions.length; i++) { %>
             <h1 class="p-2">
-              <%= all_discussions[i].TITLE %>
-                <a class="button is-small is-primary is-light is-pulled-right"
-                  href="/dis/<%= team_code %>/<%=all_discussions[i].DISCUSSION_ID%>">Show</a>
+                <%= all_discussions[i].TITLE %>
+                <a class="button is-small is-primary is-light is-pulled-right" href="/dis/<%= team_code %>/<%=all_discussions[i].DISCUSSION_ID%>">Show</a>
             </h1>
             <% } %>
         </div>
         <div class="box">
-          <h2 class="has-text-centered is-size-5"> Pending Assignments </h2>
-          <% for (let i=0; i<assignments.length; i++) { %>
+            <h2 class="has-text-centered is-size-5"> Pending Assignments </h2>
+            <% for (let i=0; i<assignments.length; i++) { %>
             <p> </p>
             <a class="box" href="/assignment/<%= assignments[i].ASSIGNMENT_ID %>">
-              <p>
-                <%= assignments[i].ASSIGNMENT_TITLE %>
-              </p>
-              <% if (team_role !=='student' ){ %>
+                <p>
+                    <%= assignments[i].ASSIGNMENT_TITLE %>
+                </p>
+                <% if (team_role !=='student' ){ %>
                 <p class="sml is-pulled-right">Graded : <%= assignments[i].GRADED %> / <%= assignments[i].ASSIGNEES%> |
-                      Submitted : <%= assignments[i].SUBMITTED %> / <%= assignments[i].ASSIGNEES%>
+                    Submitted : <%= assignments[i].SUBMITTED %> / <%= assignments[i].ASSIGNEES%>
                 </p>
                 <% } %>
             </a>
@@ -72,11 +55,11 @@
 
         </div>
         <div class="box">
-          <h2 class="has-text-centered is-size-5"> Completed Assignments </h2>
-          <% for (let i=0; i<completed_assignments.length; i++) { %>
+            <h2 class="has-text-centered is-size-5"> Completed Assignments </h2>
+            <% for (let i=0; i<completed_assignments.length; i++) { %>
             <p> </p>
             <a class="box" href="/assignment/<%= completed_assignments[i].ASSIGNMENT_ID %>">
-              <%= completed_assignments[i].ASSIGNMENT_TITLE %>
+                <%= completed_assignments[i].ASSIGNMENT_TITLE %>
                 <% if (team_role !=='student' ){ %>
                   <p class="sml">All Submissions Graded</p>
                   <% } else {%>
@@ -91,130 +74,128 @@
             <% } %>
 
         </div>
-      </div>
+    </div>
 
-      <div class="column is-5">
+    <div class="column is-5">
         <div>
-          <% if (team_role !=="student" ) { %>
+            <% if (team_role !=="student" ) { %>
             <div class="p-5">
-              <form action="/assignment/create/<%= team_code %>" method="get" accept-charset="utf-8">
-                <button class="button is-primary">Create Assignment</button>
-              </form>
+                <form action="/assignment/create/<%= team_code %>" method="get" accept-charset="utf-8">
+                    <button class="button is-primary">Create Assignment</button>
+                </form>
             </div>
 
             <% } %>
-              <h1 class="is-size-4 p-2"><b>Assignments</b></h1>
+            <h1 class="is-size-4 p-2"><b>Assignments</b></h1>
 
-              <div class="box ">
+            <div class="box ">
                 <% for (let i=0; i<assignments.length; i++){ %>
-                  <div class="">
+                <div class="">
                     <header class="card-header">
-                      <p class="card-header-title">
-                        <%= assignments[i].ASSIGNMENT_TITLE %>
-                      </p>
+                        <p class="card-header-title">
+                            <%= assignments[i].ASSIGNMENT_TITLE %>
+                        </p>
                     </header>
                     <div class="card-content">
-                      <div class="content">
-                        <p> Deadline: <%= assignments[i].DEADLINE %>
-                        </p>
+                        <div class="content">
+                            <p> Deadline: <%= assignments[i].DEADLINE %>
+                            </p>
 
-                        <a class="button is-primary is-small" href="/assignment/<%= assignments[i].ASSIGNMENT_ID %>">
-                          View
-                        </a>
-                        <% if (team_role !=="student" ) { %>
-                          <a class="button is-danger is-small"
-                            href="/assignment/delete/<%= assignments[i].ASSIGNMENT_ID %>">
-                            Delete
-                          </a>
-                          <% } %>
-                      </div>
+                            <a class="button is-primary is-small" href="/assignment/<%= assignments[i].ASSIGNMENT_ID %>">
+                                View
+                            </a>
+                            <% if (team_role !=="student" ) { %>
+                            <a class="button is-danger is-small" href="/assignment/delete/<%= assignments[i].ASSIGNMENT_ID %>">
+                                Delete
+                            </a>
+                            <% } %>
+                        </div>
                     </div>
-                  </div>
-                  <% } %>
-              </div>
+                </div>
+                <% } %>
+            </div>
 
         </div>
 
         <div class="">
-          <h1 class="is-size-4 px-2 pt-5"><b>General</b></h1>
-          <div class="box">
-            <% for (let i=0; i<discussion.length; i++) { %>
-              <div class="list-item">
-                <p> <span class="cf">
-                    <%= discussion[i].USERNAME%>
-                  </span> : <%= discussion[i].CONTENT %>
-                </p>
-                <p class="is-italic sml is-pulled-right">
-                  <%= discussion[i].TIMESTAMP %>
-                </p>
-                <hr />
-              </div>
-              <% } %>
-          </div>
-          <form action="/dis/<%= dis_id %>/<%= team_code %>/<%= team_id %>/1" method="POST">
-            <div class="field has-addons">
-              <div class="control">
-                <input class="input" type="text" name="message" placeholder="Send a message">
-              </div>
-              <div class="control">
-                <button class="button is-primary">Send</button>
-              </div>
-            </div>
-          </form>
-
-          <% if (team_role !=="student" ) { %>
-            <div>
-              <p class="is-size-4"> Invite User </p>
-              <form action="/teams/code/<%= team_code %>/invite" method="POST">
-                <label class="label">Username</label>
-                <input name="invitedUserName" class="input" type="text">
-                <label class="label">Team Role</label>
-                <div class="select is-rounded">
-                  <select name="invitedUserRole" class="input">
-                    <option value="student">Student</option>
-                    <option value="instructor">Instructor</option>
-                    <option value="admin">Admin</option>
-                  </select>
+            <h1 class="is-size-4 px-2 pt-5"><b>General</b></h1>
+            <div class="box">
+                <% for (let i=0; i<discussion.length; i++) { %>
+                <div class="list-item">
+                    <p> <span class="cf">
+                            <%= discussion[i].USERNAME%>
+                        </span> : <%= discussion[i].CONTENT %>
+                    </p>
+                    <p class="is-italic sml is-pulled-right">
+                        <%= discussion[i].TIMESTAMP %>
+                    </p>
+                    <hr />
                 </div>
-                <button class="button is-primary" type="submit"> Invite </button>
-              </form>
+                <% } %>
+            </div>
+            <form action="/dis/<%= dis_id %>/<%= team_code %>/<%= team_id %>/1" method="POST">
+                <div class="field has-addons">
+                    <div class="control">
+                        <input class="input" type="text" name="message" placeholder="Send a message">
+                    </div>
+                    <div class="control">
+                        <button class="button is-primary">Send</button>
+                    </div>
+                </div>
+            </form>
+
+            <% if (team_role !=="student" ) { %>
+            <div>
+                <p class="is-size-4"> Invite User </p>
+                <form action="/teams/code/<%= team_code %>/invite" method="POST">
+                    <label class="label">Username</label>
+                    <input name="invitedUserName" class="input" type="text">
+                    <label class="label">Team Role</label>
+                    <div class="select is-rounded">
+                        <select name="invitedUserRole" class="input">
+                            <option value="student">Student</option>
+                            <option value="instructor">Instructor</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                    </div>
+                    <button class="button is-primary" type="submit"> Invite </button>
+                </form>
             </div>
             <% } %>
         </div>
-      </div>
-      <div class="column is-4 py-5">
+    </div>
+    <div class="column is-4 py-5">
         <% if (team_role !=="student" ) {%>
-          <h1 class="columns is-centered is-size-4 py-2 cf"><b>Create a New Announcement</b></h1>
-          <div class="px-2">
-          <form action="/teams/code/<%= team_code %>/notify" method="POST">
-            <label class="label">Title </label>
-            <input name="notif_title" class="input" type="text">
-            <label class="label">Details </label>
-            <input name="notif_content" class="input" type="text">
-            <p class="p-1"></p>
-            <button class="button is-primary mb-5" type="submit"> Notify </button>
-          </form>
-          </div>
-          <%}%>
+        <h1 class="columns is-centered is-size-4 py-2 cf"><b>Create a New Announcement</b></h1>
+        <div class="px-2">
+            <form action="/teams/code/<%= team_code %>/notify" method="POST">
+                <label class="label">Title </label>
+                <input name="notif_title" class="input" type="text">
+                <label class="label">Details </label>
+                <input name="notif_content" class="input" type="text">
+                <p class="p-1"></p>
+                <button class="button is-primary mb-5" type="submit"> Notify </button>
+            </form>
+        </div>
+        <%}%>
             <h1 class="columns is-size-4 px-2 pt-3 pb-2 is-centered cf"><b>Announcements</b></h1>
             <div class="box">
               <% for (let i=0; i<notifications.length; i++) { %>
-                <div class="py-2">
-                  <article class="message is-info">
-                  <div class="message-body">
-                  <p class="cf is-size-5 pb-3"> <%= notifications[i].TITLE %> </p>
-                  <p class="is-size-6"> <%- notifications[i].CONTENT %> </p>
-                  <p class="sml py-2"> <%= notifications[i].TIMESTAMP %> </p>
-                  <% if (team_role !=="student" ) {%>
-                    <a href="/teams/code/deleteNotification/<%= team_code%>/<%= notifications[i].NOTIFICATION_ID %>"
-                      class="button is-danger is-small is-light">Delete</a>
+        <div class="py-2">
+            <article class="message is-info">
+                <div class="message-body">
+                    <p class="cf is-size-5 pb-3"> <%= notifications[i].TITLE %> </p>
+                    <p class="is-size-6"> <%- notifications[i].CONTENT %> </p>
+                    <p class="sml py-2"> <%= notifications[i].TIMESTAMP %> </p>
+                    <% if (team_role !=="student" ) {%>
+                    <a href="/teams/code/deleteNotification/<%= team_code%>/<%= notifications[i].NOTIFICATION_ID %>" class="button is-danger is-small is-light">Delete</a>
                     <%}%>
                   </div>
                   </article>
                 </div>
                 <% } %>
-            </div>
-      </div>
+                </div>
+        </div>
 
-      <%- include('./partials/notification_below.ejs') %>
+        <%- include('./partials/notification_below.ejs') %>
         <%- include('./partials/footer.ejs') %>

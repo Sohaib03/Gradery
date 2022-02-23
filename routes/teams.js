@@ -355,8 +355,6 @@ router
         res.redirect("/teams/code/" + team_code + "/participants");
     });
 
-router.route("/code/:code/");
-
 router
     .route("/code/:code/leave")
     .post(auth.authMiddleware, async (req, res) => {

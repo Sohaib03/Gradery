@@ -1,10 +1,10 @@
 <%- include('./partials/header.ejs') %>
 <%- include('./partials/navbar.ejs') %>
 
-<div class="columns">
-    <div class="column p-5">
+<div class="columns is-centered">
+    <div class="column is-4 p-5">
         <article class="panel is-primary">
-            <p class="panel-heading">
+            <p class="panel-heading has-text-centered">
                 Participants of <%= team_name %>
             </p>
             <% for (let i=0; i < participants.length; ++i) {%>
@@ -14,16 +14,18 @@
             <%}%>
         </article>
     </div>
-    <div class="column p-5">
+    <div class="column is-4 p-5">
         <article class="panel is-warning">
-            <p class="panel-heading">
+            <p class="panel-heading has-text-centered">
                 Invited Participants of <%= team_name %>
             </p>
             <% for (let i=0; i < invitedParticipants.length; ++i) {%>
             <div class="panel-block">
                 <form action="/teams/code/<%=team_code%>/deleteInvitation/<%=invitedParticipants[i].USER_ID%>" method="POST">
                     <%=invitedParticipants[i].USERNAME%> - <%=invitedParticipants[i].ROLE%><br>
+                    <% if (team_role !== "student") {%>
                     <button class="button is-danger is-small is-light" type="submit">Delete</button>
+                    <% } %>
                 </form>
             </div>
             <%}%>
