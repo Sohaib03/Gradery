@@ -17,10 +17,10 @@
       <% } %>
     </div>
 
-    <div class="column is-6">
-      <h class="is-size-4"> Notifications </h>
-      <div class="box">
+    <div class="column px-1 my-3 is-6">
+      <h class="is-size-4 cf"> Your Notifications </h>
         <% for (let i=0; i < userNotifications.length; i++) { %>
+      <div class="box">
         <div class="">
           <a href="/deleteNotification/<%= userNotifications[i].NOTIFICATION_ID %>" 
             class="delete is-danger is-medium is-pulled-right">Delete</a>
@@ -28,8 +28,8 @@
           <p class="p-5"> <%- userNotifications[i].CONTENT %> </p>
           <p class="p-1 sml"> <%= userNotifications[i].TIMESTAMP %> </p>
         </div>
-        <% } %>
       </div>
+        <% } %>
     </div>
   </div>
   <div class="column is-3 p-5">
