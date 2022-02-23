@@ -13,8 +13,11 @@
                     <% } %>
             </p>
             <% if (team_role !=='student' ) { %>
-              <a href="/assignment/delete/<%= ass_info.ASSIGNMENT_ID %>" class="button is-danger is-pulled-right">
+              <a href="/assignment/delete/<%= ass_info.ASSIGNMENT_ID %>"  class="button is-danger is-pulled-right">
                 Delete </a>
+              <a href="/assignment/edit/<%= ass_info.ASSIGNMENT_ID %>/<%= team_code %>"   class="mx-2 button is-warning is-pulled-right">
+                Edit </a>
+
               <% } %>
         </h1>
         <h5 class="is-size-5 p-2"> Description: </h5>

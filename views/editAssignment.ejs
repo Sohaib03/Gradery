@@ -1,0 +1,63 @@
+<%- include('./partials/header.ejs') %>
+<%- include('./partials/navbar.ejs') %>
+
+<h3 class="title m-5 cf has-text-centered">Edit Assignment : <%= ass_info.ASSIGNMENT_TITLE %>
+</h3>
+<form method="POST" enctype="multipart/form-data">
+    <div class="columns is-centered">
+        <div class="column is-6">
+            <a class="button is-small is-danger is-light is-pulled-right" href="/teams/code/<%= team_code%>">Back to
+                Team</a><br>
+            <div class="field">
+                <label class="label">Title</label>
+                <div class="control">
+                    <input name="title" class="input" type="text" value="<%= ass_info.ASSIGNMENT_TITLE %>" />
+                </div>
+            </div>
+
+            <div class="field">
+                <label class="label">Description</label>
+                <div class="control">
+                    <input name="desc" class="input" type="text" value="<%= ass_info.ASSIGNMENT_DESC %>" />
+                </div>
+            </div>
+            <div class="field">
+                <label class="label">Deadline</label>
+                <div class="control">
+                    <input name="deadline" class="input" type="datetime-local" />
+                </div>
+            </div>
+
+            <div id="file-js-example" class="file has-name">
+                <label class="file-label">
+                    <input class="file-input" type="file" name="file" />
+                    <span class="file-cta">
+                        <span class="file-icon">
+                            <i class="fas fa-upload"></i>
+                        </span>
+                        <span class="file-label"> Choose a file… </span>
+                    </span>
+                    <span class="file-name"> <%= ass_info.FILE_URL %> </span>
+                </label>
+            </div>
+
+            <p class="control py-2">
+                <button class="button is-primary" type="submit">Submit</button>
+            </p>
+        </div>
+    </div>
+</form>
+<script>
+    const fileInput = document.querySelector(
+        "#file-js-example input[type=file]"
+    );
+    fileInput.onchange = () => {
+        if (fileInput.files.length > 0) {
+            const fileName = document.querySelector(
+                "#file-js-example .file-name"
+            );
+            fileName.textContent = fileInput.files[0].name;
+        }
+    };
+</script>
+<%- include('./partials/footer.ejs') %>
