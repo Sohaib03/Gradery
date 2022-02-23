@@ -8,22 +8,16 @@
         </h3>
         <h1 class="subtitle cf3"> Team Code : <%= team_code %>
         </h1>
-        <form action="/teams/code/<%= team_code %>/leave" method="POST">
-            <% if(team_role==='admin' ) {%>
-            <a class="button is-warning" href="/teams/code/<%= team_code %>/edit">Edit Team</a>
-            <%}%>
-              <% if(team_role!=='admin' ) {%>
-            <input class="button is-danger" type="submit" value="Leave Team">
-            <%}%>
-                  <a class="cf2 button is-info" href="/resource/<%= team_code %>">Resources</a>
-        </form>
+        <a class="button is-warning" href="/teams/code/<%= team_code %>">Back To Team</a>
+        <a class="cf2 button is-info" href="/resource/<%= team_code %>">Resources</a>
     </div>
 </section>
 
 <div class="columns is-centered">
+    <% if (team_role !== "student") {%>
     <div class="column is-4 p-5">
         <p class="is-size-4"> Invite User </p>
-        <form action="/teams/code/<%= team_code %>/invite" method="POST">
+        <form action="/teams/code/<%= team_code %>/participants/invite" method="POST">
             <label class="label">Username</label>
             <input name="invitedUserName" class="input" type="text">
             <label class="label">Team Role</label>
@@ -37,16 +31,17 @@
             <button class="button is-primary" type="submit"> Invite </button>
         </form>
     </div>
+    <%}%>
     <div class="column is-4 p-5">
         <article class="panel is-primary">
             <p class="panel-heading has-text-centered">
                 Current Participants
             </p>
             <% for (let i=0; i < participants.length; ++i) {%>
-            <a class="panel-block">
-                <%=participants[i].USERNAME%>
-            </a>
-            <%}%>
+    <a class="panel-block">
+        <%=participants[i].USERNAME%>
+    </a>
+    <%}%>
         </article>
     </div>
     <div class="column is-4 p-5">
@@ -55,15 +50,15 @@
                 Invited Participants
             </p>
             <% for (let i=0; i < invitedParticipants.length; ++i) {%>
-            <div class="panel-block">
-                <form action="/teams/code/<%=team_code%>/deleteInvitation/<%=invitedParticipants[i].USER_ID%>" method="POST">
-                    <%=invitedParticipants[i].USERNAME%> - <%=invitedParticipants[i].ROLE%><br>
-                    <% if (team_role !== "student") {%>
-                    <button class="button is-danger is-small is-light" type="submit">Delete</button>
-                    <% } %>
-                </form>
-            </div>
-            <%}%>
+    <div class="panel-block">
+        <form action="/teams/code/<%=team_code%>/deleteInvitation/<%=invitedParticipants[i].USER_ID%>" method="POST">
+            <%=invitedParticipants[i].USERNAME%> - <%=invitedParticipants[i].ROLE%><br>
+            <% if (team_role !== "student") {%>
+            <button class="button is-danger is-small is-light" type="submit">Delete</button>
+            <% } %>
+        </form>
+    </div>
+    <%}%>
         </article>
     </div>
 </div>

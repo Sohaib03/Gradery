@@ -22,13 +22,14 @@
 
 <div class="columns">
     <div class="column is-3">
-        <a href="/teams/code/<%= team_code%>/participants">
+        <a href="/teams/code/<%= team_code%>/participants" class="button is-link is-outlined">
             Participants
         </a>
         <div class="p-2">
             <h2 class="is-size-5 "> Discussions
                 <a class="button is-small is-primary is-light is-pulled-right" href="/dis/<%= team_code %>/create">Add
-                    New</a>
+                    New
+                </a>
             </h2>
             <% for (let i=0; i<all_discussions.length; i++) { %>
             <h1 class="p-2">
@@ -61,14 +62,14 @@
             <a class="box" href="/assignment/<%= completed_assignments[i].ASSIGNMENT_ID %>">
                 <%= completed_assignments[i].ASSIGNMENT_TITLE %>
                 <% if (team_role !=='student' ){ %>
-                  <p class="sml">All Submissions Graded</p>
-                  <% } else {%>
-                    <% if (completed_assignments[i].SCORE === null) { %>
-                      <p class="sml">Ungraded</p>
-                    <% } else {%>
-                      <p class="sml">Score : <%= completed_assignments[i].SCORE%> </p>
-                      <% } %>
-                    <% } %>
+                <p class="sml">All Submissions Graded</p>
+                <% } else {%>
+                <% if (completed_assignments[i].SCORE === null) { %>
+                <p class="sml">Ungraded</p>
+                <% } else {%>
+                <p class="sml">Score : <%= completed_assignments[i].SCORE%> </p>
+                <% } %>
+                <% } %>
 
             </a>
             <% } %>
@@ -143,25 +144,6 @@
                     </div>
                 </div>
             </form>
-
-            <% if (team_role !=="student" ) { %>
-            <div>
-                <p class="is-size-4"> Invite User </p>
-                <form action="/teams/code/<%= team_code %>/invite" method="POST">
-                    <label class="label">Username</label>
-                    <input name="invitedUserName" class="input" type="text">
-                    <label class="label">Team Role</label>
-                    <div class="select is-rounded">
-                        <select name="invitedUserRole" class="input">
-                            <option value="student">Student</option>
-                            <option value="instructor">Instructor</option>
-                            <option value="admin">Admin</option>
-                        </select>
-                    </div>
-                    <button class="button is-primary" type="submit"> Invite </button>
-                </form>
-            </div>
-            <% } %>
         </div>
     </div>
     <div class="column is-4 py-5">
