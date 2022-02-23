@@ -85,21 +85,15 @@ async function checkUserInTeam(user_id, team_id) {
 }
 
 async function getParticipantsOfTeam(team_id) {
-    // const sql = `SELECT * FROM PARTICIPANT WHERE TEAM_ID=:team_id`;
-    // let binds = {
-    //     team_id,
-    // };
-    // let result = (await db.execute(sql, binds, db.options)).rows;
-    // let user_ids = [];
-    // for (let i = 0; i < result.length; i++) {
-    //     user_ids.push(result[i].USER_ID);
-    // }
-    // const sql2 = `SELECT * FROM USERS WHERE USER_ID in (${user_ids})`;
-    // binds = {};
-    // result = (await db.execute(sql2, binds, db.options)).rows;
-    // return result;
-
     const sql = `SELECT P.USER_ID, U.USERNAME, P.ROLE FROM PARTICIPANT P JOIN USERS U ON P.TEAM_ID = :team_id AND P.USER_ID = U.USER_ID`;
+    let binds = { team_id };
+    let r = (await db.execute(sql, binds, db.options)).rows;
+    return r;
+}
+
+async function getInvitedParticipantsOfTeam(team_id) {
+    const sql = `SELECT USER_ID, I.ROLE, USERNAME
+    FROM INVITATION I JOIN USERS U USING (USER_ID) WHERE TEAM_ID = :team_id`;
     let binds = { team_id };
     let r = (await db.execute(sql, binds, db.options)).rows;
     return r;
@@ -115,5 +109,6 @@ module.exports = {
     addParticipantWithCode,
     checkUserInTeam,
     getParticipantsOfTeam,
+    getInvitedParticipantsOfTeam,
     deleteParticipant,
 };

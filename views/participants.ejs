@@ -1,0 +1,33 @@
+<%- include('./partials/header.ejs') %>
+<%- include('./partials/navbar.ejs') %>
+
+<div class="columns">
+    <div class="column p-5">
+        <article class="panel is-primary">
+            <p class="panel-heading">
+                Participants of <%= team_name %>
+            </p>
+            <% for (let i=0; i < participants.length; ++i) {%>
+            <a class="panel-block">
+                <%=participants[i].USERNAME%>
+            </a>
+            <%}%>
+        </article>
+    </div>
+    <div class="column p-5">
+        <article class="panel is-warning">
+            <p class="panel-heading">
+                Invited Participants of <%= team_name %>
+            </p>
+            <% for (let i=0; i < invitedParticipants.length; ++i) {%>
+            <div class="panel-block">
+                <form action="/teams/code/<%=team_code%>/deleteInvitation/<%=invitedParticipants[i].USER_ID%>" method="POST">
+                    <%=invitedParticipants[i].USERNAME%> - <%=invitedParticipants[i].ROLE%><br>
+                    <button class="button is-danger is-small is-light" type="submit">Delete</button>
+                </form>
+            </div>
+            <%}%>
+        </article>
+    </div>
+</div>
+<%- include('./partials/footer.ejs') %>
