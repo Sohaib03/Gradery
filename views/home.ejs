@@ -6,19 +6,13 @@
     <h3 class="cf is-size-4">Your Teams</h3>
 <div class="cards">
     <% for (let i=0; i < teamsInfo.length; i++){ %>
-    <div class="card">
-        <header class="card-header">
-            <p class="card-header-title">TEAM <%= i+1 %></p>
-        </header>
-        <div class="card-content">
-            <div class="content">
-                <a href="/teams/code/<%= teamsInfo[i].TEAM_CODE %>"
-                    ><p>TEAM NAME : <%= teamsInfo[i].TEAM_NAME %></p>
-                    <p></p
-                ></a>
+        <a class="box" href="/teams/code/<%= teamsInfo[i].TEAM_CODE %>">
+            <article class="message is-primary">
+                <div class="message-body">
+                    <h1 class="title is-size-6 cf"> <%= teamsInfo[i].TEAM_NAME %> </h1>
             </div>
-        </div>
-    </div>
+            </article>
+        </a>
     <% } %>
 </div>
 
