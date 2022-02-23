@@ -34,7 +34,7 @@ async function getAllCompletedAssignmentsForStudent(user_id) {
 }
 
 async function getAllCompletedAssignmentsForStudentInTeam(user_id, team_id) {
-    const sql = `SELECT T.ASSIGNMENT_ID, A.ASSIGNMENT_TITLE FROM ASSIGNED_TO T JOIN (SELECT ASSIGNMENT_ID, ASSIGNMENT_TITLE FROM ASSIGNMENTS WHERE TEAM_ID = :team_id) A ON (A.ASSIGNMENT_ID = T.ASSIGNMENT_ID) WHERE STUDENT_ID = :user_id AND SUBMISSION_STATUS = 1`;
+    const sql = `SELECT T.ASSIGNMENT_ID, A.ASSIGNMENT_TITLE, T.SCORE FROM ASSIGNED_TO T JOIN (SELECT ASSIGNMENT_ID, ASSIGNMENT_TITLE FROM ASSIGNMENTS WHERE TEAM_ID = :team_id) A ON (A.ASSIGNMENT_ID = T.ASSIGNMENT_ID) WHERE STUDENT_ID = :user_id AND SUBMISSION_STATUS = 1`;
     const binds = { user_id: user_id, team_id: team_id };
     return (await db.execute(sql, binds, db.options)).rows;
 }

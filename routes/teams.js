@@ -552,6 +552,7 @@ router.route("/code/:code").get(auth.authMiddleware, async (req, res) => {
                 req.session.user_id,
                 team_id
             );
+            console.log({completed_ass});
     } else {
         assignmentList = await assignments.getAssignmentUngradedInTeam(team_id);
         completed_ass = await assignments.getAssignmentGradedInTeam(team_id);
