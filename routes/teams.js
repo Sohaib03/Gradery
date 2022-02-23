@@ -319,6 +319,45 @@ router
     });
 
 router
+    .route("/code/:code/deleteInvitation/:invited_participant_id")
+    .post(auth.authMiddleware, async (req, res) => {
+        const team_code = req.params.code;
+        // Check if team_exists
+        let team_info = await teams.getTeamByCode(team_code);
+        if (team_info.length === 0) {
+            // Team Doesnt exist. Notify User
+            res.redirect("/");
+            return;
+        }
+        const team_id = team_info[0].TEAM_ID;
+        const user_team_info = await teams.checkUserInTeam(
+            req.session.user_id,
+            team_id
+        );
+        console.log(user_team_info);
+        // Check if user is in given team
+        if (user_team_info.length === 0) {
+            // Team Exists but User has not joined team
+            res.redirect("/teams/join");
+            return;
+        }
+        const user_role_in_team = user_team_info[0].ROLE;
+
+        if (user_role_in_team === "student") {
+            res.redirect("/teams/code/" + team_code);
+            return;
+        }
+
+        const invitedUserID = req.params.invited_participant_id;
+
+        let r = await invitation.deleteInvitation(invitedUserID, team_id);
+
+        res.redirect("/teams/code/" + team_code + "/participants");
+    });
+
+router.route("/code/:code/");
+
+router
     .route("/code/:code/leave")
     .post(auth.authMiddleware, async (req, res) => {
         const team_code = req.params.code;
@@ -421,6 +460,52 @@ router.route("/code/:code/edit").post(auth.authMiddleware, async (req, res) => {
     );
     res.redirect("/teams/code/" + team_code);
 });
+
+router
+    .route("/code/:code/participants")
+    .get(auth.authMiddleware, async (req, res) => {
+        const team_code = req.params.code;
+        // Check if team_exists
+        let team_info = await teams.getTeamByCode(team_code);
+        if (team_info.length === 0) {
+            // Team Doesnt exist. Notify User
+            res.redirect("/");
+            return;
+        }
+        const team_id = team_info[0].TEAM_ID;
+        const user_team_info = await teams.checkUserInTeam(
+            req.session.user_id,
+            team_id
+        );
+        console.log(user_team_info);
+        // Check if user is in given team
+        if (user_team_info.length === 0) {
+            // Team Exists but User has not joined team
+            res.redirect("/teams/join");
+            return;
+        }
+        const user_role_in_team = user_team_info[0].ROLE;
+
+        const participants = await teams.getParticipantsOfTeam(team_id);
+        const invitedParticipants = await teams.getInvitedParticipantsOfTeam(
+            team_id
+        );
+
+        let context = {
+            title: "Participants of " + team_info[0].TEAM_NAME,
+            username: req.session.username,
+            role: req.session.role,
+            team_code: team_code,
+            team_name: team_info[0].TEAM_NAME,
+            team_id: team_id,
+            team_desc: team_info[0].TEAM_DESC,
+            team_role: user_role_in_team,
+            participants: participants,
+            invitedParticipants: invitedParticipants,
+        };
+
+        res.render("participants.ejs", context);
+    });
 
 router.route("/code/:code").get(auth.authMiddleware, async (req, res) => {
     const team_code = req.params.code;
