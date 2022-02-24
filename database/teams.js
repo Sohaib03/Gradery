@@ -99,6 +99,13 @@ async function getInvitedParticipantsOfTeam(team_id) {
     return r;
 }
 
+async function deleteTeam(team_id) {
+    const sql = `DELETE FROM TEAMS WHERE TEAM_ID = :team_id`;
+    let binds = { team_id };
+    let r = (await db.execute(sql, binds, db.options)).rows;
+    return r;
+}
+
 module.exports = {
     getAllTeams,
     getTeamInfo,
@@ -111,4 +118,5 @@ module.exports = {
     getParticipantsOfTeam,
     getInvitedParticipantsOfTeam,
     deleteParticipant,
+    deleteTeam,
 };
