@@ -61,7 +61,7 @@ You need to have oracle database installed to run this project.
 
 + Start SQLPlus
 + Create a new user and grant it dba permissions
-+ Download the SQL Dump File. [Click Here](https://www.google.com) to Download
++ Download the SQL Dump File. [Click Here](https://github.com/Sohaib03/Gradery/blob/main/SQLDump/dump.sql) to Download
 + Use the SQL Dump File to populate the tables
 
 
