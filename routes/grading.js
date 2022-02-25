@@ -62,6 +62,7 @@ router.route("/:ass_id").get(auth.authMiddleware, async (req, res) => {
 router.route("/download/:ass_id").get(auth.authMiddleware, async (req, res) => {
 	const ass_id = req.params.ass_id;
 	const ass_info = await assignmentDB.getAssignmentById(ass_id);
+	console.log(ass_info);
 	if (ass_info.length === 0) {
 		res.redirect("/");
 		return;
@@ -70,12 +71,14 @@ router.route("/download/:ass_id").get(auth.authMiddleware, async (req, res) => {
 	const team_id = ass_info[0].TEAM_ID;
 	const team_info = await teams.getTeamInfo(team_id);
 
+	console.log(team_info);
+
 	if (team_info.length === 0) {
 		res.redirect("/");
 		return;
 	}
 
-	const team_role = await teams.checkUserInTeam(req.session.user_id);
+	const team_role = await teams.checkUserInTeam(req.session.user_id,team_info[0].TEAM_ID);
 	if (team_role.length === 0 || team_role[0].ROLE === "student") {
 		res.redirect("/");
 		return;
