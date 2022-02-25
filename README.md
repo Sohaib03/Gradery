@@ -3,36 +3,48 @@
 Gradery is a **learning management system** to simplify learning.  It allows students to connect with their peers and instructors. It provides an efficient classroom management system by allowing instructors to **assign assignments**, **provide resources** and **make announcements**. Gradery makes sure you dont miss out any notifications from any team.
 
 
-### Table of Contents   
-<br> 
+------------
 
-    1. [ Gradery ] (#gradery)
-    2. [ Contributors ] (#contributors)
-    3. [ Supervisor ] (#supervisor)
-    4. [ Dependencies ] (#dependencies)
-    5. [ Installation ] (#installation)
-    .... * [ Source ] (#source)
-    .... * [ Database ] (#database)
-    .... * [ Credentials ] (#credentials)
-    .... * [ Node Setup ] (#node-setup)
-    6. [ License ] (#license)
+
+### Table of Contents   
+
+    1. [Gradery](#gradery)
+    2. [Contributors](#contributors)
+    3. [Supervisor](#supervisor)
+    4. [Dependencies](#dependencies)
+    5. [Installation](#installation)
+ 	.... * [Source](#source)
+    .... * [Database](#database)
+    .... * [Credentials](#credentials)
+    .... * [Node Setup](#node-setup)
+    6. [License](#license)
+
+------------
+
 
 ### Contributors
-<br> 
-+ [1805007 - Mehbubul Hasan Al Quvi] (https://github.com/quvi007)
-+ [1805026 - Sohaib] (https://github.com/Sohaib03)
+
+- [1805007 - Mehbubul Hasan Al Quvi](https://github.com/quvi007)
+- [1805026 - Sohaib](https://github.com/Sohaib03)
+
+
+------------
 
 
 ### Supervisor
-<br>
-+ [Tahmid Hasan] (https://tahmid04.github.io/)
+
+- [Tahmid Hasan](https://tahmid04.github.io/)
+
+------------
+
 
 ### Dependencies
-<br>
-+ NodeJS
-+ OracleDB (19.0.0) 
+
+- NodeJS
+- OracleDB (19.0.0) 
 
 
+------------
 
 ### Installation
 <br>
@@ -60,7 +72,7 @@ The **.env** file in the source code contains the necessary HOST, USERNAME and P
 
 #### Node Setup
 
-To install all the packages required by node. You need to run the following commands in the root directory of the project.
+To install all the packages required by node, we need to run the following commands in the root directory of the project.
 
 ```bash
 npm install
