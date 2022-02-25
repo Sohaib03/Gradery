@@ -7,17 +7,16 @@ Gradery is a **learning management system** to simplify learning.  It allows stu
 
 
 ### Table of Contents   
-
-    1. [Gradery](#gradery)
-    2. [Contributors](#contributors)
-    3. [Supervisor](#supervisor)
-    4. [Dependencies](#dependencies)
-    5. [Installation](#installation)
- 	.... * [Source](#source)
-    .... * [Database](#database)
-    .... * [Credentials](#credentials)
-    .... * [Node Setup](#node-setup)
-    6. [License](#license)
+1. [Gradery](#gradery)
+2. [Contributors](#contributors)
+3. [Supervisor](#supervisor)
+4. [Dependencies](#dependencies)
+5. [Installation](#installation)
+   - [Source](#source)
+   - [Database](#database)
+   - [Credentials](#credentials)
+   - [Node Setup](#node-setup)
+6. [License](#license)
 
 ------------
 
@@ -77,6 +76,7 @@ To install all the packages required by node, we need to run the following comma
 ```bash
 npm install
 ```
+------------
 
 #### License
 
